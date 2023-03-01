@@ -1,10 +1,9 @@
 import React, {Component} from "react";
 import './App.css';
-import StudentEdit from './StudentEdit';
-import StudentList from "./StudentList";
-import Home from './Home';
+import StudentEdit from './components/StudentEdit';
+import StudentList from "./components/StudentList";
+import Home from './components/Home';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import AppNavbar from "./AppNavbar";
 
 class App extends Component {
 
