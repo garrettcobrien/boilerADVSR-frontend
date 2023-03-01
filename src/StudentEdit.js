@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { Button, Container, Form, FormGroup, Input, Label } from 'reactstrap';
+import AppNavbar from './AppNavbar';
 
 class StudentEdit extends Component {
 
@@ -56,7 +57,7 @@ class StudentEdit extends Component {
         const title = <h2>{item.id ? 'Edit Client' : 'Add Client'}</h2>;
     
         return <div>
-            
+            <AppNavbar/>
             <Container>
                 {title}
                 <Form onSubmit={this.handleSubmit}>
