@@ -16,28 +16,6 @@ class StudentEdit extends Component {
         },
     };
 
-    async componentDidMount() {
-        if (this.props.match.params.id !== 'new') {
-            const student = await (await fetch(`/students/${this.props.match.params.id}`)).json();
-            this.setState({item: student});
-        }
-    }
-
-    async handleSubmit(event) {
-        event.preventDefault();
-        const {item} = this.state;
-    
-        await fetch('/students' + (item.id ? '/' + item.id : ''), {
-            method: (item.id) ? 'PUT' : 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(item),
-        });
-        this.props.history.push('/students');
-    }
-
     constructor(props) {
         super(props);
         this.state = {
@@ -45,6 +23,13 @@ class StudentEdit extends Component {
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    async componentDidMount() {
+        if (this.props.match.params.id !== 'new') {
+            const student = await (await fetch(`/students/${this.props.match.params.id}`)).json();
+            this.setState({item: student});
+        }
     }
     
     handleChange(event) {
@@ -69,11 +54,26 @@ class StudentEdit extends Component {
     
         this.setState({ validate });
     }
+
+    async handleSubmit(event) {
+        event.preventDefault();
+        const {item} = this.state;
     
-      submitForm(e) {
+        await fetch('/students' + (item.id ? '/' + item.id : ''), {
+            method: (item.id) ? 'PUT' : 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(item),
+        });
+        this.props.history.push('/students');
+    }
+    
+    submitForm(e) {
         e.preventDefault();
         console.log(`Email: ${this.state.email}`);
-      }
+    }
 
     render() {
         const {item} = this.state;
@@ -86,12 +86,12 @@ class StudentEdit extends Component {
                 <Form onSubmit={this.handleSubmit}>
                     <FormGroup>
                         <Label for="firstName">first name</Label>
-                        <Input type="text" name="firstName" id="firstName" value={item.firstName || ''}
+                        <Input type="fristName" name="firstName" id="firstName" value={item.firstName || ''}
                                onChange={this.handleChange} autoComplete="firstname"/>
                     </FormGroup>
                     <FormGroup>
                         <Label for="lastName">last name</Label>
-                        <Input type="text" name="lastName" id="lastName" value={item.lastName || ''}
+                        <Input type="lastName" name="lastName" id="lastName" value={item.lastName || ''}
                                onChange={this.handleChange} autoComplete="lastname"/>
                     </FormGroup>
                     <FormGroup>
