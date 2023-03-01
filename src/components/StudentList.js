@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Button, ButtonGroup, Container, Table } from 'reactstrap';
 import { Link } from 'react-router-dom';
+import AppNavbar from './AppNavbar';
 
 class StudentList extends Component {
 
@@ -51,6 +52,7 @@ class StudentList extends Component {
     
         return (
             <div>
+                <AppNavbar/>
                 <Container fluid>
                     <div className="float-right">
                         <Button color="success" tag={Link} to="/students/new">Add Student</Button>
