@@ -25,11 +25,12 @@ class Login extends Component{
     }
 
     handleInputChange(event) {
-        event.preventDefault();
-        const target = event.target;
-        this.setState({
-          [target.name]: target.value,
-        });
+        const { target } = event;
+        const value = target.type === 'checkbox' ? target.checked : target.value;
+        const { name } = target;
+        let item = {...this.state.item};
+        item[name] = value;
+        this.setState({item});
       }
 
     async handleSubmit (e) {
@@ -64,8 +65,10 @@ class Login extends Component{
                                onChange={this.handleInputChange} autoComplete="password"/>
                     </FormGroup>
                     <FormGroup>
-                        <Button size="sm" color="primary" tag={Link} to={"/students/new/"}>Create Account</Button>
                         <Button color="primary" type="submit" tag={Link} to={"/students/dashboard/" + item.email}>Login</Button>{' '}
+                        <div>
+                            <Link to="/students/new/" >Dont have an account Signup here!</Link>
+                        </div>
                     </FormGroup>
                 </Form>
             </Container>
