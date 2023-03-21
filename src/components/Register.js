@@ -6,7 +6,6 @@ import React, { Component } from 'react';
 import { Link, Redirect, withRouter } from 'react-router-dom';
 import { Button, Container, Form, FormGroup, Input, Label, FormFeedback } from 'reactstrap';
 import AppNavbar from './AppNavbar';
-//import './StudentEdit.css';
 
 class Register extends Component {
 
@@ -28,13 +27,6 @@ class Register extends Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     } 
-
-    // async componentDidMount() {
-    //     if (this.props.match.params.id !== 'new') {
-    //         const student = await (await fetch(`/students/${this.props.match.params.id}`)).json();
-    //         this.setState({item: student});
-    //     }
-    // }
     
     //create handle change for each input
     handleChange(event) {

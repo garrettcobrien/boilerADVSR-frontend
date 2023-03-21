@@ -1,34 +1,49 @@
 import { Component } from "react";
+import StudentService from '../services/StudentService'
+
 
 class Dashbaord extends Component {
-    emptyItem = {
-        firstName: '',
-        lastName: '',
-        email: '',
-        password: '',
-    };
 
     constructor(props) {
         super(props);
         this.state = {
-            item: this.emptyItem
+            id: this.props.match.params.id,
+            student: {}
         };
         
     }
 
-    async componentDidMount() {
-        const student = await (await fetch(`/students/dashboard/${this.props.match.params.id}`)).json();
-        this.setState({item: student});
+    componentDidMount(){
+        StudentService.getStudentById(this.state.id).then( res => {
+            this.setState({student: res.data});
+        })
     }
 
 
     render() {
-        const {item} = this.state;
-        return <div>
-            {item.firstName}
-            {'\n'}
-            {item.email}
-        </div>
+        return (
+            <div>
+                <br></br>
+                <div className = "card col-md-6 offset-md-3">
+                    <h3 className = "text-center"> View Student Details</h3>
+                    <div className = "card-body">
+                        <div className = "row">
+                            <label> Student First Name: </label>
+                            <div> { this.state.student.firstName }</div>
+                        </div>
+                        <div className = "row">
+                            <label> Student Last Name: </label>
+                            <div> { this.state.student.lastName }</div>
+                        </div>
+                        <div className = "row">
+                            <label> Student Email ID: </label>
+                            <div> { this.state.student.email }</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        )
     }
 }
 

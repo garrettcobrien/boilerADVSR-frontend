@@ -21,7 +21,7 @@ class Login extends Component{
         };
 
         this.handleInputChange = this.handleInputChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
+        this.loginStudent = this.loginStudent.bind(this);
     }
 
     handleInputChange(event) {
@@ -31,31 +31,21 @@ class Login extends Component{
         let item = {...this.state.item};
         item[name] = value;
         this.setState({item});
-      }
+    }
 
-    async handleSubmit (e) {
-        e.preventDefault();
-        const {item} = this.state;
-        await fetch('/students' + (item.id ? '/' + item.id : ''), {
-            method: (item.id) ? 'PUT' : 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(item),
-        });
-        /* Send them too create their profile page */
-        this.props.history.push('/students/dashboard');
-    };
+    loginStudent(id){
+        //implement attemping to get the first to see if it exists before sending them to dashboard
+        this.props.history.push(`/students/dashboard/${id}`);
+    }
 
     render () {
         const {item} = this.state;
         return (
             <Container>
                 <h1>Login</h1>
-                <Form onSubmit={this.handleSubmit}>
+                <Form>
                     <FormGroup>
-                        <Label for="email">email</Label>
+                        <Label for="email">Email</Label>
                         <Input type="email" name="email" id="email" value={item.email}
                                onChange={this.handleInputChange} autoComplete="email"/>
                     </FormGroup>
@@ -65,7 +55,7 @@ class Login extends Component{
                                onChange={this.handleInputChange} autoComplete="password"/>
                     </FormGroup>
                     <FormGroup>
-                        <Button color="primary" type="submit" tag={Link} to={"/students/dashboard/" + item.email}>Login</Button>{' '}
+                        <Button style={{marginLeft: "10px"}} onClick={ () => this.loginStudent(item.email)} className="btn btn-info">View </Button>
                         <div>
                             <Link to="/students/new/" >Dont have an account Signup here!</Link>
                         </div>
