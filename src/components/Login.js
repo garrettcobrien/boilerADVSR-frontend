@@ -6,6 +6,7 @@ import React, { Component } from "react";
 import { Link, Redirect, withRouter } from 'react-router-dom';
 import { Button, Container, Form, FormGroup, Input, Label, FormFeedback } from 'reactstrap';
 import { useNavigate } from "react-router-dom";
+import StudentService from "../services/StudentService";
 
 
 class Login extends Component{
@@ -33,9 +34,24 @@ class Login extends Component{
         this.setState({item});
     }
 
-    loginStudent(id){
+    loginStudent(student){
         //implement attemping to get the first to see if it exists before sending them to dashboard
-        this.props.history.push(`/students/dashboard/${id}`);
+        //this.props.history.push(`/students/dashboard/${id}`);
+        StudentService.loginStudent(student.email, student.password).then(
+            () => {
+                this.props.history.push('students/dashboard/');
+            },
+            (error) => {
+                const resMessage =
+                  (error.response &&
+                    error.response.data &&
+                    error.response.data.message) ||
+                  error.message ||
+                  error.toString();
+      
+                console.log({resMessage});
+              }
+        );
     }
 
     render () {
@@ -55,7 +71,7 @@ class Login extends Component{
                                onChange={this.handleInputChange} autoComplete="password"/>
                     </FormGroup>
                     <FormGroup>
-                        <Button style={{marginLeft: "10px"}} onClick={ () => this.loginStudent(item.email)} className="btn btn-info">View </Button>
+                        <Button style={{marginLeft: "10px"}} onClick={ () => this.loginStudent(item)} className="btn btn-info">View </Button>
                         <div>
                             <Link to="/students/new/" >Dont have an account Signup here!</Link>
                         </div>

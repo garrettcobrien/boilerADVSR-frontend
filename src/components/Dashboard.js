@@ -13,7 +13,7 @@ class Dashbaord extends Component {
         
     }
 
-    componentDidMount(){
+    componentDidMount() {
         StudentService.getStudentById(this.state.id).then( res => {
             this.setState({student: res.data});
         })
