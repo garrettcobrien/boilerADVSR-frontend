@@ -30,6 +30,10 @@ class StudentService {
     deleteStudent(studentId){
         return axios.delete(STUDENT_API_BASE_URL + '/' + studentId);
     }
+
+    getSuggestedSemester(studentId) {
+        return axios.get(STUDENT_API_BASE_URL + '/' + studentId + '/plan/courses/suggestedSemester')
+    }
 }
 
 export default new StudentService()
