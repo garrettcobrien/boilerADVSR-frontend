@@ -35,7 +35,7 @@ class Login extends Component{
 
     loginStudent(id){
         //implement attemping to get the first to see if it exists before sending them to dashboard
-        this.props.history.push(`/students/dashboard/${id}`);
+        this.props.history.push(`/students/landingpage/${id}`);
     }
 
     render () {

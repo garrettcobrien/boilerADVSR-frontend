@@ -6,6 +6,7 @@ import React, { Component } from 'react';
 import { Link, Redirect, withRouter } from 'react-router-dom';
 import { Button, Container, Form, FormGroup, Input, Label, FormFeedback } from 'reactstrap';
 import AppNavbar from './AppNavbar';
+import StudentService from '../services/StudentService';
 
 class Register extends Component {
 
@@ -52,30 +53,23 @@ class Register extends Component {
         this.setState({ validate });
     }
 
-    async handleSubmit(event) {
-        event.preventDefault();
-        const {item} = this.state;
     
-        await fetch('/students' + (item.id ? '/' + item.id : ''), {
-            method: (item.id) ? 'PUT' : 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(item),
-        });
+
+    handleSubmit(item) {   
         /* Send them too create their profile page */
-        this.props.history.push('/students/dashboard');
+        StudentService.createStudent(item).then( res => {
+            this.setState({student: res.data});
+        })
+        this.props.history.push(`/students/landingpage/${item.email}`);
     }
     
 
     render() {
         const {item} = this.state;
-    
         return <div>
             <Container>
                 <h1>Welcome New Student</h1>
-                <Form onSubmit={this.handleSubmit}>
+                <Form>
                     <FormGroup>
                         <Label for="firstName">first name</Label>
                         <Input type="fristName" name="firstName" id="firstName" value={item.firstName || ''}
@@ -109,7 +103,7 @@ class Register extends Component {
                                onChange={this.handleChange} autoComplete="password"/>
                     </FormGroup>
                     <FormGroup>
-                        <Button color="primary" type="submit" tag={Link} to={"/students/dashboard/" + item.email}>Create</Button>{' '}
+                        <Button color="primary" type="submit" onClick={ () => this.handleSubmit(item)} >Create</Button>{' '}
                     </FormGroup>
                 </Form>
             </Container>
@@ -117,4 +111,4 @@ class Register extends Component {
     }
 
 }
-export default withRouter(Register);
+export default Register;
