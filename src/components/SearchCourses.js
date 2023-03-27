@@ -10,6 +10,7 @@ class SearchCourses extends Component {
             student: {},
 
             courses: [],
+            coursesSuggested: [],
             reviews: [],
             currentCourse: null,
             currentIndex: -1,
@@ -19,14 +20,15 @@ class SearchCourses extends Component {
         this.onChangeSearchDepartment = this.onChangeSearchDepartment.bind(this);
         this.setActiveCourse = this.setActiveCourse.bind(this);
         this.searchDepartment = this.searchDepartment.bind(this);
+        this.toLandingpage = this.toLandingpage.bind(this);
     }
 
-    componentDidMount(){
+    componentDidMount() {
         StudentService.getStudentById(this.state.id).then( res => {
             this.setState({student: res.data});
         })
         StudentService.getSuggestedSemester(this.state.id).then( res => {
-            this.setState({courses: res.data});
+            this.setState({coursesSuggested: res.data});
         })
     }
 
@@ -58,19 +60,22 @@ class SearchCourses extends Component {
         });
     }
 
-
+    toLandingpage(id) {
+        this.props.history.push(`/students/landingpage/${id}`);
+    }
 
     render() {
-        const { searchDepartment, courses, currentCourse, currentIndex } = this.state;
+        const { searchDepartment, courses, coursesSuggested, currentCourse, currentIndex, id } = this.state;
         return (
             <div>
+                <button onClick={ () => this.toLandingpage(id)}>Back to landing page</button>
                 <br></br>
                 <div className="col-md-8">
                     <br></br>
                     <h4>Suggested Courses List</h4>
                     <ul className="list-group">
-                        {courses &&
-                            courses.map((course, index) => (
+                        {coursesSuggested &&
+                            coursesSuggested.map((course, index) => (
                                 <li
                                     className={
                                         "list-group-item " + 
@@ -182,7 +187,7 @@ class SearchCourses extends Component {
                     ) : (
                         <div>
                         <br />
-                            <p>Please click on a Tutorial...</p>
+                            <p>Please click on a Course...</p>
                         </div>
                     )}
                 </div>

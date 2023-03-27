@@ -30,31 +30,34 @@ class LandingPage extends Component {
     render() {
         const {student} = this.state;
         return (
-            <div className = "card col-md-6 offset-md-3">
-                <h3 className = "text-center"> View Student Details</h3>
-                <div className = "card-body">
-                    <div className = "row">
-                        <label> Welcome Back! </label>
-                        <div> { student.firstName }</div>
+            <div>
+                <br></br>
+                <div className = "card col-md-6 offset-md-3">
+                    <h3 className = "text-center">Home</h3>
+                    <div className = "card-body">
+                        <div className = "row">
+                            <label> Welcome Back! </label>
+                            <div> { student.firstName }</div>
+                        </div>
                     </div>
+                    <br></br>
+                    <div>What would you like to do: </div>
+                    <br></br>
+                    <button
+                            className="btn btn-outline-secondary"
+                            type="button"
+                            onClick={ () => this.toSearchCourses(student.email)}
+                        >
+                            Search Courses
+                    </button>
+                    <button
+                            className="btn btn-outline-secondary"
+                            type="button"
+                            onClick={ () => this.toProfile(student.email)}
+                        >
+                            Profile
+                    </button>
                 </div>
-                <br></br>
-                <div>What would you like to do: </div>
-                <br></br>
-                <button
-                        className="btn btn-outline-secondary"
-                        type="button"
-                        onClick={ () => this.toSearchCourses(student.email)}
-                    >
-                        Search Courses
-                </button>
-                <button
-                        className="btn btn-outline-secondary"
-                        type="button"
-                        onClick={ () => this.toProfile(student.email)}
-                    >
-                        Profile
-                </button>
             </div>
         );
     }

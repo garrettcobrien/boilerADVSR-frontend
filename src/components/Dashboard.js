@@ -21,6 +21,7 @@ class Dashbaord extends Component {
         this.onChangeSearchDepartment = this.onChangeSearchDepartment.bind(this);
         this.setActiveCourse = this.setActiveCourse.bind(this);
         this.searchDepartment = this.searchDepartment.bind(this);
+        this.toLandingpage = this.toLandingpage.bind(this);
     }
 
     componentDidMount(){
@@ -60,12 +61,15 @@ class Dashbaord extends Component {
         });
     }
 
-
+    toLandingpage(id) {
+        this.props.history.push(`/students/landingpage/${id}`);
+    }
 
     render() {
-        const { student } = this.state;
+        const { student, id } = this.state;
         return (
             <div>
+                <button onClick={ () => this.toLandingpage(id)}>Back to landing page</button>
                 <br></br>
                 <div className = "card col-md-6 offset-md-3">
                     <h3 className = "text-center"> View Student Details</h3>

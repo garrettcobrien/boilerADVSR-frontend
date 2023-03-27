@@ -60,7 +60,7 @@ class Register extends Component {
         StudentService.createStudent(item).then( res => {
             this.setState({student: res.data});
         })
-        this.props.history.push(`/students/landingpage/${item.email}`);
+        this.props.history.push(`/`);
     }
     
 
