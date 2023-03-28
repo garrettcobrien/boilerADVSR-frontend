@@ -1,11 +1,12 @@
 import React, {Component} from "react";
 import './App.css';
-import StudentEdit from './components/StudentEdit';
-import StudentList from "./components/StudentList";
 import CourseList from "./components/CourseList";
-
-import Home from './components/Home';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import Register from "./components/Register";
+import Dashbaord from "./components/Dashboard";
+import Login from "./components/Login";
+import SearchCourses from "./components/SearchCourses";
+import LandingPage from "./components/LandingPage";
 
 class App extends Component {
 
@@ -13,10 +14,11 @@ class App extends Component {
     return (
         <Router>
           <Switch>
-            <Route path='/' exact={true} component={Home}/>
-            <Route path='/students' exact={true} component={StudentList}/>
-            <Route path='/courses' exact={true} component={CourseList}/>
-            <Route path='/students/:id' component={StudentEdit}/>
+            <Route path='/' exact component={Login} />
+            <Route path='/students/new' component={Register} />
+            <Route path='/students/landingpage/:id' component={LandingPage} />
+            <Route path='/students/dashboard/:id' component={Dashbaord} />
+            <Route path='/students/courses/:id' component={SearchCourses} />
           </Switch>
         </Router>
     );
