@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import './App.css';
+import CourseList from "./components/CourseList";
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Register from "./components/Register";
 import Dashbaord from "./components/Dashboard";
