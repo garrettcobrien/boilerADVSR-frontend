@@ -1,5 +1,7 @@
 import { Component } from "react";
 import StudentService from "../services/StudentService";
+import { Container, ThemeProvider, Grid, Typography, Button } from "@mui/material";
+import theme from '../theme'
 
 class LandingPage extends Component {
     constructor(props) {
@@ -31,8 +33,10 @@ class LandingPage extends Component {
         const {student} = this.state;
         return (
             <div>
+                <ThemeProvider theme={theme}>
+                <Container sx={{padding: 15}}>
+                {/* <div>
                 <br></br>
-                <div className = "card col-md-6 offset-md-3">
                     <h3 className = "text-center">Home</h3>
                     <div className = "card-body">
                         <div className = "row">
@@ -57,7 +61,21 @@ class LandingPage extends Component {
                         >
                             Profile
                     </button>
-                </div>
+                </div> */}
+                <Grid container spacing={0} direction="column" alignItems="center" style={{ minHeight: '100vh' }}>
+                <Grid item xs={3}>
+                    <Typography sx={{ fontWeight: 10000, fontSize: 50, marginBottom: 5 }} color="secondary">Welcome Back</Typography>
+                </Grid>
+                <Grid item xs={3}>
+                    <Typography variant="h5" color='#ffffff'>What would you like to do?</Typography>
+                </Grid>
+                <Grid item xs={3}>
+                    <Button onClick={ () => this.toSearchCourses(student.email)} color="secondary" variant="contained" size="large" sx={{m: 4 }} style={{fontSize: '24px', maxWidth: '180px', maxHeight: '180px', minWidth: '180px', minHeight: '180px'}}>Search Courses</Button>
+                    <Button onClick={ () => this.toProfile(student.email)} color="secondary" variant="contained" size="large" sx={{m: 4 }} style={{fontSize: '24px', maxWidth: '180px', maxHeight: '180px', minWidth: '180px', minHeight: '180px'}}>View My Profile</Button>
+                </Grid>
+            </Grid>
+                </Container>
+                </ThemeProvider>
             </div>
         );
     }

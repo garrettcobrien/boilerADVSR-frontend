@@ -4,10 +4,12 @@
 */
 import React, { Component } from 'react';
 import { Link, Redirect, withRouter } from 'react-router-dom';
-import { Button, Container, Form, FormGroup, Input, Label, FormFeedback } from 'reactstrap';
+import {Form, FormGroup, Input, Label, FormFeedback } from 'reactstrap';
+import { Container, ThemeProvider } from '@mui/system';
 import AppNavbar from './AppNavbar';
 import StudentService from '../services/StudentService';
-
+import { Typography, Button } from '@mui/material';
+import theme from '../theme'
 class Register extends Component {
 
     emptyItem = {
@@ -67,22 +69,23 @@ class Register extends Component {
 
     render() {
         const {item} = this.state;
-        return <div>
-            <Container>
-                <h1>Welcome New Student</h1>
+        return (<div>
+            <ThemeProvider theme={theme}>
+            <Container sx={{padding: 15}}>
+                <Typography sx={{ fontWeight: 10000, fontSize: 50, marginBottom: 5 }} color="secondary">Welcome New Student</Typography>
                 <Form>
                     <FormGroup>
-                        <Label for="firstName">first name</Label>
+                        <Typography color='#ffffff'><Label for="firstName">First Name</Label></Typography>
                         <Input type="fristName" name="firstName" id="firstName" value={item.firstName || ''}
                                onChange={this.handleChange} autoComplete="firstname"/>
                     </FormGroup>
                     <FormGroup>
-                        <Label for="lastName">last name</Label>
+                        <Typography color='#ffffff'><Label for="lastName">Last Name</Label></Typography>
                         <Input type="lastName" name="lastName" id="lastName" value={item.lastName || ''}
                                onChange={this.handleChange} autoComplete="lastname"/>
                     </FormGroup>
                     <FormGroup>
-                        <Label for="email">email</Label>
+                        <Typography color='#ffffff'><Label for="email">Email Address</Label></Typography>
                         <Input type="email" name="email" id="email"  
                                valid={item.validate.emailState === "has-success"}
                                invalid={item.validate.emailState === "has-danger"}
@@ -99,16 +102,17 @@ class Register extends Component {
                             </FormFeedback>
                     </FormGroup>
                     <FormGroup>
-                        <Label for="password">Password</Label>
+                        <Typography color='#ffffff'><Label for="password">Password</Label></Typography>
                         <Input type="password" name="password" id="password" value={item.password || ''}
                                onChange={this.handleChange} autoComplete="password"/>
                     </FormGroup>
                     <FormGroup>
-                        <Button color="primary" type="submit" onClick={ () => this.handleSubmit(item)} >Create</Button>{' '}
+                        <Button style={{marginTop: 10}} variant="contained" color="secondary" type="submit" onClick={ () => this.handleSubmit(item)} >Create</Button>{' '}
                     </FormGroup>
                 </Form>
             </Container>
-        </div>
+            </ThemeProvider>
+        </div>)
     }
 
 }

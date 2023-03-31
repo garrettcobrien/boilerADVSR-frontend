@@ -1,7 +1,8 @@
 import { Component } from "react";
 import CourseService from "../services/CourseService";
 import StudentService from '../services/StudentService'
-
+import {Container, ThemeProvider, Button, Typography, Card, Grid } from '@mui/material'
+import theme from '../theme'
 
 class Dashbaord extends Component {
 
@@ -69,27 +70,27 @@ class Dashbaord extends Component {
         const { student, id } = this.state;
         return (
             <div>
-                <button onClick={ () => this.toLandingpage(id)}>Back to landing page</button>
-                <br></br>
-                <div className = "card col-md-6 offset-md-3">
-                    <h3 className = "text-center"> View Student Details</h3>
-                    <div className = "card-body">
-                        <div className = "row">
-                            <label> Student First Name: </label>
-                            <div> { student.firstName }</div>
-                        </div>
-                        <div className = "row">
-                            <label> Student Last Name: </label>
-                            <div> { student.lastName }</div>
-                        </div>
-                        <div className = "row">
-                            <label> Student Email ID: </label>
-                            <div> { student.email }</div>
-                        </div>
-                    </div>
+                <ThemeProvider theme={theme}>
+                <Container sx={{padding: 10, justifyContent: "center"}}>
+                    <Card sx={{justifyContent: "center", maxWidth: '100vh'}}>
+                        <Grid container spacing={0} direction="column" alignItems="center" style={{ minHeight: '50vh'}}>
+                            <Grid item>
+                                <Typography sx={{ fontWeight: 10000, fontSize: 50, marginBottom: 5 }} color='#ffffff'>Profile Details</Typography>
+                            </Grid>
+                            <Grid item>
+                                <Typography> Student First Name: </Typography> <div> { student.firstName }</div>
+                            </Grid>
+                            <Grid item>
+                                <Typography> Student Last Name: </Typography> <div> { student.lastName }</div>
+                            </Grid>
+                            <Grid item>
+                                <Typography> Student Email: </Typography> <div> { student.email }</div>
+                            </Grid>
+                        </Grid>
                     <br></br>
-                </div>
-                
+                    </Card>
+                </Container>
+                </ThemeProvider>
             </div>
         );
     }
