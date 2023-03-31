@@ -3,9 +3,7 @@
     (student or teacher)
 */
 import React, { Component } from 'react';
-import { Link, Redirect, withRouter } from 'react-router-dom';
 import { Button, Container, Form, FormGroup, Input, Label, FormFeedback } from 'reactstrap';
-import AppNavbar from './AppNavbar';
 import StudentService from '../services/StudentService';
 
 class Register extends Component {
@@ -31,7 +29,6 @@ class Register extends Component {
     
     //create handle change for each input
     handleChange(event) {
-        
         const { target } = event;
         const value = target.type === 'checkbox' ? target.checked : target.value;
         const { name } = target;
