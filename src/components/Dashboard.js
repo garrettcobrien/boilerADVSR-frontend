@@ -1,5 +1,5 @@
 import { Component } from "react";
-import CourseService from "../services/CourseService";
+import { Button, ButtonGroup, Table } from "reactstrap";
 import StudentService from '../services/StudentService'
 
 
@@ -12,61 +12,64 @@ class Dashbaord extends Component {
             student: {},
 
             courses: [],
-            reviews: [],
             currentCourse: null,
-            currentIndex: -1,
-            searchDepartment: ""
+            linkedin: ""
         };
-
-        this.onChangeSearchDepartment = this.onChangeSearchDepartment.bind(this);
-        this.setActiveCourse = this.setActiveCourse.bind(this);
-        this.searchDepartment = this.searchDepartment.bind(this);
         this.toLandingpage = this.toLandingpage.bind(this);
+        this.toPlanofstudy = this.toPlanofstudy.bind(this);
+        this.toEditProfile = this.toEditProfile.bind(this);
+        this.remove = this.remove.bind(this);
+        this.delete = this.delete.bind(this);
     }
 
-    componentDidMount(){
+    componentDidMount() {
+        console.log("dashboard");
         StudentService.getStudentById(this.state.id).then( res => {
             this.setState({student: res.data});
+            this.setState({courses: res.data.backLog});
         })
-        StudentService.getSuggestedSemester(this.state.id).then( res => {
-            this.setState({courses: res.data});
-        })
-    }
-
-    onChangeSearchDepartment(e) {
-        const searchDepartment = e.target.value;
-        
-        this.setState({
-            searchDepartment: searchDepartment
-        });
-    }
-
-    setActiveCourse(course, index) {
-        this.setState({
-            currentCourse: course,
-            currentIndex: index
-        });
-    }
-
-    searchDepartment() {
-        CourseService.getDepartment(this.state.searchDepartment)
-        .then(response => {
-            this.setState({
-                courses: response.data
-            });
-            console.log(response.data);
-        })
-        .catch(e => {
-            console.log(e);
-        });
+        this.forceUpdate();
     }
 
     toLandingpage(id) {
         this.props.history.push(`/students/landingpage/${id}`);
     }
 
+    toPlanofstudy(id) {
+        this.props.history.push(`/students/planofstudy/${id}`);
+    }
+    toEditProfile(id) {
+        this.props.history.push(`/students/editprofile/${id}`);
+    }
+    delete(id) {
+        StudentService.deleteStudent(id);
+        this.props.history.push('/');
+    }
+
+    remove(courseID) {
+        let updatedStudents = [...this.state.courses].filter(i => i.courseID !== courseID);
+        this.setState({courses: updatedStudents});
+        
+    }
+
     render() {
-        const { student, id } = this.state;
+        const { student, id, isLoading, courses } = this.state;
+        if (isLoading) {
+            return <p>Loading...</p>;
+        }
+
+        const courseList = courses.map(course => {
+            return <tr key={course.courseID}>
+                <td style={{whiteSpace: 'nowrap'}}>{course.courseID}</td>
+                
+                <td>
+                    <ButtonGroup>
+                        <Button size="sm" color="danger" onClick={() => this.remove(course.courseID)}>Delete</Button>
+                    </ButtonGroup>
+                </td>
+            </tr>
+        });
+
         return (
             <div>
                 <button onClick={ () => this.toLandingpage(id)}>Back to landing page</button>
@@ -86,10 +89,33 @@ class Dashbaord extends Component {
                             <label> Student Email ID: </label>
                             <div> { student.email }</div>
                         </div>
+                        <div className="row">
+                            <label>About Me: </label>
+                            <div>{student.aboutMe}</div>
+                        </div>
+                        <div className="row">
+                            <label>LinkedIn: </label>
+                            <a href={student.linkedIn}>LinkedIn</a>
+                        </div>
                     </div>
                     <br></br>
+                    <h3>Course Backlog</h3>
+                        <Table className="mt-4">
+                            <thead>
+                            <tr>
+                                <th width="50%">Name</th>
+                                <th width="50%">Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {courseList}
+                            </tbody>
+                        </Table>
+                    <br></br>
+                    <button onClick={ () => this.toEditProfile(id)}>Edit Your Profile</button>
+                    <button onClick={ () => this.toPlanofstudy(id)}>View Plan of Study</button>
+                    <button onClick={ () => this.delete(id)}>Delete Account</button>
                 </div>
-                
             </div>
         );
     }

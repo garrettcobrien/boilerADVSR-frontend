@@ -3,9 +3,9 @@
     to create a new account
 */
 import React, { Component } from "react";
-import { Link, Redirect, withRouter } from 'react-router-dom';
-import { Button, Container, Form, FormGroup, Input, Label, FormFeedback } from 'reactstrap';
-import { useNavigate } from "react-router-dom";
+import { Link } from 'react-router-dom';
+import { Button, Container, Form, FormGroup, Input, Label } from 'reactstrap';
+import StudentService from "../services/StudentService";
 
 
 class Login extends Component{
@@ -35,8 +35,15 @@ class Login extends Component{
 
     loginStudent(id){
         //implement attemping to get the first to see if it exists before sending them to dashboard
-        this.props.history.push(`/students/landingpage/${id}`);
+        StudentService.getStudentById(id).then( res => {
+            this.setState({item: res.data});
+            this.props.history.push(`/students/landingpage/${id}`);
+        }).catch(function (error) {
+            alert("Incorrect email or password");
+            console.log(error.toJSON());
+        });
     }
+
 
     render () {
         const {item} = this.state;

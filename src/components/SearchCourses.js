@@ -14,21 +14,24 @@ class SearchCourses extends Component {
             reviews: [],
             currentCourse: null,
             currentIndex: -1,
-            searchDepartment: ""
+            searchDepartment: "",
+            text: "",
+            rating:""
         };
 
         this.onChangeSearchDepartment = this.onChangeSearchDepartment.bind(this);
         this.setActiveCourse = this.setActiveCourse.bind(this);
         this.searchDepartment = this.searchDepartment.bind(this);
         this.toLandingpage = this.toLandingpage.bind(this);
+        this.addReview = this.addReview.bind(this);
+        this.handleInput = this.handleInput.bind(this);
+        this.addCourse = this.addCourse.bind(this);
+        this.getSuggestedSemester = this.getSuggestedSemester.bind(this);
     }
 
     componentDidMount() {
         StudentService.getStudentById(this.state.id).then( res => {
             this.setState({student: res.data});
-        })
-        StudentService.getSuggestedSemester(this.state.id).then( res => {
-            this.setState({coursesSuggested: res.data});
         })
     }
 
@@ -60,19 +63,49 @@ class SearchCourses extends Component {
         });
     }
 
+    addReview(courseID, id, text, rating) {
+        CourseService.addReview(courseID, id, text, rating);
+    }
+
     toLandingpage(id) {
         this.props.history.push(`/students/landingpage/${id}`);
     }
 
+    handleInput (event) {
+        const value = event.target.value;
+        console.log(value);
+        this.setState({
+          ...this.state,
+          [event.target.name]: value,
+        });
+      }
+    
+    addCourse(id, currentCourse) {
+        StudentService.addToBacklog(id, currentCourse);
+    }
+
+    getSuggestedSemester(id, sort) {
+        StudentService.getSuggestedSemester(id, sort).then( res => {
+            this.setState({coursesSuggested: res.data});
+        });
+        this.forceUpdate();
+    }
+
     render() {
-        const { searchDepartment, courses, coursesSuggested, currentCourse, currentIndex, id } = this.state;
+        const { searchDepartment, courses, coursesSuggested, currentCourse, currentIndex, id, text, rating} = this.state;
         return (
             <div>
+                
                 <button onClick={ () => this.toLandingpage(id)}>Back to landing page</button>
                 <br></br>
                 <div className="col-md-8">
                     <br></br>
                     <h4>Suggested Courses List</h4>
+                    <select onChange={ (e) => this.getSuggestedSemester(id, e.target.value)}>
+                        <option>Please Choose a Sorting Option</option>
+                        <option key="rating" value="rating">Rating</option>
+                        <option key="avgGPA" value="avgGPA">Avereage Gpa</option>
+                    </select>
                     <ul className="list-group">
                         {coursesSuggested &&
                             coursesSuggested.map((course, index) => (
@@ -133,6 +166,10 @@ class SearchCourses extends Component {
                         <div>
                             <h4>Course</h4>
                         <div>
+                            <br></br>
+                            <button type="button" onClick={ () => this.addCourse(id, currentCourse)}>Add to course backlog</button>
+                        </div>
+                        <div>
                             <label>
                                 <strong>Title:</strong>
                             </label>{" "}
@@ -181,8 +218,13 @@ class SearchCourses extends Component {
                                         </li>
                                     ))}
                             </ul>
+                            <form onSubmit={ () => this.addReview(currentCourse.courseID, id, text, rating)}>
+                                <input type="text" name="text" id="text" placeholder="Enter review" value={text} onChange={this.handleInput}/>
+                                <input type="text" name="rating" id="rating" placeholder="Enter rating" value={rating} onChange={this.handleInput}/>
+                                <button type="submit">Submit</button>
+                            </form>
                         </div>
-
+                        <br></br>
                         </div>
                     ) : (
                         <div>
