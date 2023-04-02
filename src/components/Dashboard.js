@@ -1,5 +1,6 @@
 import { Component } from "react";
 import { Button, ButtonGroup, Table } from "reactstrap";
+import CourseService from "../services/CourseService";
 import StudentService from '../services/StudentService'
 
 
@@ -10,7 +11,8 @@ class Dashbaord extends Component {
         this.state = {
             id: this.props.match.params.id,
             student: {},
-
+            planOfStudy: {},
+            degrees: [],
             courses: [],
             currentCourse: null,
             linkedin: ""
@@ -27,6 +29,10 @@ class Dashbaord extends Component {
         StudentService.getStudentById(this.state.id).then( res => {
             this.setState({student: res.data});
             this.setState({courses: res.data.backLog});
+        })
+        StudentService.getPlanofStudy(this.state.id).then( res => {
+            this.setState({planOfStudy: res.data});
+            this.setState({degrees: res.data.degrees})
         })
         this.forceUpdate();
     }
@@ -46,14 +52,18 @@ class Dashbaord extends Component {
         this.props.history.push('/');
     }
 
-    remove(courseID) {
-        let updatedStudents = [...this.state.courses].filter(i => i.courseID !== courseID);
-        this.setState({courses: updatedStudents});
+    remove(id, courseID) {
+        // let updatedStudents = [...this.state.courses].filter(i => i.courseID !== courseID);
+        // this.setState({courses: updatedStudents});
         
+            StudentService.removeBacklog(id, courseID).then( res => {
+                this.setState({courses: res.data});
+            })
+        this.props.history.push(`/students/landingpage/${id}`);
     }
 
     render() {
-        const { student, id, isLoading, courses } = this.state;
+        const { student, id, isLoading, courses, degrees } = this.state;
         if (isLoading) {
             return <p>Loading...</p>;
         }
@@ -64,7 +74,7 @@ class Dashbaord extends Component {
                 
                 <td>
                     <ButtonGroup>
-                        <Button size="sm" color="danger" onClick={() => this.remove(course.courseID)}>Delete</Button>
+                        <Button size="sm" color="danger" onClick={() => this.remove(id, course.courseID)}>Delete</Button>
                     </ButtonGroup>
                 </td>
             </tr>
@@ -97,6 +107,12 @@ class Dashbaord extends Component {
                             <label>LinkedIn: </label>
                             <a href={student.linkedIn}>LinkedIn</a>
                         </div>
+                        {degrees && 
+                            degrees.map((degree, index) => (
+                                <div>
+                                {degree.degreeType}-{degree.degreeTitle}
+                                </div>
+                            ))}
                     </div>
                     <br></br>
                     <h3>Course Backlog</h3>

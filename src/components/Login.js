@@ -22,6 +22,7 @@ class Login extends Component{
 
         this.handleInputChange = this.handleInputChange.bind(this);
         this.loginStudent = this.loginStudent.bind(this);
+        this.forgotPassword = this.forgotPassword.bind(this);
     }
 
     handleInputChange(event) {
@@ -44,6 +45,16 @@ class Login extends Component{
         });
     }
 
+    forgotPassword(id) {
+        StudentService.getStudentById(id).then( res => {
+            alert("Request to change password has been set!");
+            StudentService.resetPasswordLink();
+        }).catch(function (error) {
+            alert("Account does not exist");
+            console.log(error.toJSON());
+        });
+    }
+
 
     render () {
         const {item} = this.state;
@@ -62,7 +73,9 @@ class Login extends Component{
                                onChange={this.handleInputChange} autoComplete="password"/>
                     </FormGroup>
                     <FormGroup>
-                        <Button style={{marginLeft: "10px"}} onClick={ () => this.loginStudent(item.email)} className="btn btn-info">View </Button>
+                        <Button style={{marginLeft: "10px"}} onClick={ () => this.loginStudent(item.email)} className="btn btn-info">Login</Button>
+                        <Button style={{marginLeft: "10px"}} onClick={ () => this.forgotPassword(item.email)} className="btn btn-info">Forgot Password</Button>
+
                         <div>
                             <Link to="/students/new/" >Dont have an account Signup here!</Link>
                         </div>

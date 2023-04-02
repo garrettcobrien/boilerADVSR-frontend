@@ -68,6 +68,20 @@ class StudentService {
     getCompletedSemesters(studentId) {
         return axios.get(STUDENT_API_BASE_URL + '/' + studentId + '/plan/semesters');
     }
+
+    //reset password link sent to email
+    resetPasswordLink() {
+        return axios.get(STUDENT_API_BASE_URL + '/change/pass');
+    }
+
+    //reset password
+    resetPassword(password, email) {
+        return axios.put(STUDENT_API_BASE_URL + '/changepass=' + email, password)
+    }
+
+    removeBacklog(id, courseID) {
+        return axios.post(STUDENT_API_BASE_URL + '/' + id + '/plan/removebacklog/' + courseID);
+    }
 }
 
 export default new StudentService()

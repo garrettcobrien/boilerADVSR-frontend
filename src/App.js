@@ -8,6 +8,7 @@ import SearchCourses from "./components/SearchCourses";
 import LandingPage from "./components/LandingPage";
 import PlanOfSudy from "./components/PlanOfStudy";
 import EditProfile from "./components/EditProfile";
+import PasswordReset from "./components/PasswordReset";
 
 class App extends Component {
 
@@ -22,6 +23,7 @@ class App extends Component {
             <Route  path='/students/courses/:id' component={SearchCourses} />
             <Route  path='/students/editprofile/:id' component={EditProfile} />
             <Route  path='/students/planofstudy/:id' component={PlanOfSudy} />
+            <Route  path='/students/change/pass=:email' component={PasswordReset} />
           </Switch>
         </Router>
     );

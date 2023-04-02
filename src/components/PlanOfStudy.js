@@ -18,6 +18,7 @@ class PlanOfSudy extends Component {
     componentDidMount() {
         StudentService.getStudentById(this.state.id).then( res => {
             this.setState({student: res.data});
+            //this.setState({planOfStudy: res.data.planOfStudy});
         });
         StudentService.getCompletedSemesters(this.state.id).then( res => {
             this.setState({semesters: res.data});
@@ -32,7 +33,7 @@ class PlanOfSudy extends Component {
     }
 
     render() {
-        const {  id, student, planOfSudy, semesters, coursesIncomplete } = this.state;
+        const {  id, student, planOfStudy, semesters, coursesIncomplete } = this.state;
         return(
             <div>
                 <button onClick={ () => this.toDashboard(id)}>Back to Profile Page</button>
