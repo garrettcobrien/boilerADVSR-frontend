@@ -23,7 +23,7 @@ class App extends Component {
             <Route  path='/students/courses/:id' component={SearchCourses} />
             <Route  path='/students/editprofile/:id' component={EditProfile} />
             <Route  path='/students/planofstudy/:id' component={PlanOfSudy} />
-            <Route  path='/students/change/pass=:email' component={PasswordReset} />
+            <Route  path='/students/change/pass=:id' component={PasswordReset} />
           </Switch>
         </Router>
     );

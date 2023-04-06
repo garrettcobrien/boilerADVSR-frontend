@@ -70,13 +70,13 @@ class StudentService {
     }
 
     //reset password link sent to email
-    resetPasswordLink() {
-        return axios.get(STUDENT_API_BASE_URL + '/change/pass');
+    resetPasswordLink(id) {
+        return axios.get(STUDENT_API_BASE_URL + '/change/pass/' + id);
     }
 
     //reset password
-    resetPassword(password, email) {
-        return axios.put(STUDENT_API_BASE_URL + '/changepass=' + email, password)
+    resetPassword(password, id) {
+        return axios.put(STUDENT_API_BASE_URL + '/change/pass/' + id + '/' + password)
     }
 
     removeBacklog(id, courseID) {

@@ -9,6 +9,7 @@ class PasswordReset extends Component {
             password: '',
             student: {}
         }
+        this.handlePasswordChange = this.handlePasswordChange.bind(this);
     }
 
     componentDidMount() {
@@ -17,7 +18,7 @@ class PasswordReset extends Component {
         });   
     }
 
-    handleChange(event) {
+    handlePasswordChange(event) {
         const target = event.target;
         const value = target.value;
         const name = target.name;
@@ -30,7 +31,7 @@ class PasswordReset extends Component {
 
     handleSubmit(password, id) {
         StudentService.resetPassword(password, id).then( res => {
-            this.setState({student: res.data});
+
         });
         this.props.history.push(`/`);
     }
@@ -40,7 +41,7 @@ class PasswordReset extends Component {
         return (
             <div>
                 <input type="password" name="password" id="password" value={student.password || ''}
-                    onChange={this.handleChange} placeholder="Enter your new password" />
+                    onChange={this.handlePasswordChange} placeholder="Enter your new password" />
                 <button type="submit" onClick={ () => this.handleSubmit(student.password, id)}>Reset Password</button>
             </div>
         )

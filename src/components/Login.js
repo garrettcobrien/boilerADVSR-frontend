@@ -47,8 +47,8 @@ class Login extends Component{
 
     forgotPassword(id) {
         StudentService.getStudentById(id).then( res => {
-            alert("Request to change password has been set!");
-            StudentService.resetPasswordLink();
+            StudentService.resetPasswordLink(id);
+            //alert("Request to change password has been set!");
         }).catch(function (error) {
             alert("Account does not exist");
             console.log(error.toJSON());
