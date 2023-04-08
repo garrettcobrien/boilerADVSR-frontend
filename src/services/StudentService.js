@@ -82,6 +82,27 @@ class StudentService {
     removeBacklog(id, courseID) {
         return axios.post(STUDENT_API_BASE_URL + '/' + id + '/plan/removebacklog/' + courseID);
     }
+
+    //Get all connections
+    getConnections(id) {
+        return axios.get(STUDENT_API_BASE_URL + '/' + id + '/connections');
+    }
+
+    //request to connect to someone
+    requestConnection(id, connectionID) {
+        return axios.put(STUDENT_API_BASE_URL + '/' + id + '/connection/request/' + connectionID);
+    }
+
+    //accept request
+    handleRequest(id, connectionID) {
+        return axios({
+            method: 'put',
+            url: STUDENT_API_BASE_URL + '/' + id + '/connection/handle/' + connectionID,
+            data: {
+                status: "accept"
+            }
+        });
+    }
 }
 
 export default new StudentService()

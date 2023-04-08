@@ -67,6 +67,10 @@ class SearchCourses extends Component {
         CourseService.addReview(courseID, id, text, rating);
     }
 
+    addQuestion(courseID, id, text, rating, desc) {
+        CourseService.addQuestion(courseID, id, text, rating, desc);
+    }
+
     toLandingpage(id) {
         this.props.history.push(`/students/landingpage/${id}`);
     }
@@ -198,8 +202,6 @@ class SearchCourses extends Component {
                             <label>
                                 <strong>Reviews:</strong>
                             </label>{" "}
-                            
-
                             <ul >
                                 {currentCourse.reviews &&
                                     currentCourse.reviews.map((review, index) => (
@@ -225,6 +227,50 @@ class SearchCourses extends Component {
                             </form>
                         </div>
                         <br></br>
+                        <label>
+                            <strong>Discussions:</strong>
+                        </label>{" "}
+                        <div>
+                            
+                            {currentCourse.discussion &&
+                                currentCourse.discussion.map((question, index) => (
+                                    <ul key={index}>
+                                        <div>
+                                            <p>Question ID: {question.id}</p>
+                                        </div>
+                                        <div>
+                                            <p>Name of questioner: {question.userID}</p>
+                                        </div>
+                                        <div>
+                                            <p>Review: {question.text}</p>
+                                        </div>
+                                        <div>
+                                            {question.responses &&
+                                                question.responses.map((response) => (
+                                                    <ul><li>
+                                                        <div>
+                                                            <p>Name of response: {response.userID}</p>
+                                                        </div>
+                                                        <div>
+                                                            <p>Answer: {response.text}</p>
+                                                        </div>
+                                                    </li></ul>
+                                                ))
+                                            }
+                                        </div>
+                                        <>Post a Response</>
+                                        <form onSubmit={ () => this.addQuestion(currentCourse.courseID, id, text, question.id)}>
+                                            <input type="text" name="text" id="text" placeholder="Enter your response here" value={text} onChange={this.handleInput}/>
+                                            <button type="submit">Submit</button>
+                                        </form>
+                                    </ul>
+                                ))}
+                            <>Post a Question</>
+                            <form onSubmit={ () => this.addQuestion(currentCourse.courseID, id, text, "")}>
+                                <input type="text" name="text" id="text" placeholder="Enter question" value={text} onChange={this.handleInput}/>
+                                <button type="submit">Submit</button>
+                            </form>
+                        </div>
                         </div>
                     ) : (
                         <div>

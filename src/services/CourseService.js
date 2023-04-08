@@ -32,6 +32,35 @@ class CourseService {
             }
         });
     }
+
+    addQuestion(courseID, id, text, discID) {
+        if (discID === "") {
+            return axios({
+                method: 'put',
+                url: COURSE_API_BASE_URL + '/' + courseID + '/addquestion',
+                data: {
+                    studentID: id,
+                    question: text,
+                    type: "Question",
+                    discussion: "Question"
+                }
+            });
+        }
+        else {
+            return axios({
+                method: 'put',
+                url: COURSE_API_BASE_URL + '/' + courseID + '/addquestion',
+                data: {
+                    studentID: id,
+                    question: text,
+                    type: "Response",
+                    discussion: discID
+                }
+            });
+        }
+    }
+
+
 }
 
 export default new CourseService()

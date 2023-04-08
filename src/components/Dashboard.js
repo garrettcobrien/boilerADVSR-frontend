@@ -15,13 +15,17 @@ class Dashbaord extends Component {
             degrees: [],
             courses: [],
             currentCourse: null,
-            linkedin: ""
+            linkedin: "",
+            text: ""
         };
         this.toLandingpage = this.toLandingpage.bind(this);
         this.toPlanofstudy = this.toPlanofstudy.bind(this);
         this.toEditProfile = this.toEditProfile.bind(this);
         this.remove = this.remove.bind(this);
         this.delete = this.delete.bind(this);
+        this.handleInput = this.handleInput.bind(this);
+        this.addRequest = this.addRequest.bind(this);
+        this.handleRequest = this.handleRequest.bind(this);
     }
 
     componentDidMount() {
@@ -29,12 +33,23 @@ class Dashbaord extends Component {
         StudentService.getStudentById(this.state.id).then( res => {
             this.setState({student: res.data});
             this.setState({courses: res.data.backLog});
-        })
+        });
         StudentService.getPlanofStudy(this.state.id).then( res => {
             this.setState({planOfStudy: res.data});
-            this.setState({degrees: res.data.degrees})
-        })
+            this.setState({degrees: res.data.degrees});
+        });
+        
+        
         this.forceUpdate();
+    }
+
+    handleInput (event) {
+        const value = event.target.value;
+        console.log(value);
+        this.setState({
+          ...this.state,
+          [event.target.name]: value,
+        });
     }
 
     toLandingpage(id) {
@@ -53,17 +68,24 @@ class Dashbaord extends Component {
     }
 
     remove(id, courseID) {
-        // let updatedStudents = [...this.state.courses].filter(i => i.courseID !== courseID);
-        // this.setState({courses: updatedStudents});
-        
             StudentService.removeBacklog(id, courseID).then( res => {
                 this.setState({courses: res.data});
             })
         this.props.history.push(`/students/landingpage/${id}`);
     }
 
+    handleRequest(id, connectionID) {
+        StudentService.handleRequest(id, connectionID);
+        this.props.history.push(`/students/landingpage/${id}`);
+    }
+    
+    addRequest(id, text) {
+        StudentService.requestConnection(id, text);
+        this.props.history.push(`/students/landingpage/${id}`);
+    }
+
     render() {
-        const { student, id, isLoading, courses, degrees } = this.state;
+        const { student, id, isLoading, courses, degrees, text } = this.state;
         if (isLoading) {
             return <p>Loading...</p>;
         }
@@ -79,6 +101,19 @@ class Dashbaord extends Component {
                 </td>
             </tr>
         });
+
+        const requestList = student.connectionRequests?.map(request => {
+            return <tr key={request}>
+                <td style={{whiteSpace: 'nowrap'}}>{request}</td>
+                
+                <td>
+                    <ButtonGroup>
+                        <Button size="sm" color="danger" onClick={() => this.handleRequest(id, request)}>Accept</Button>
+                    </ButtonGroup>
+                </td>
+            </tr>
+        });
+    
 
         return (
             <div>
@@ -127,6 +162,24 @@ class Dashbaord extends Component {
                             {courseList}
                             </tbody>
                         </Table>
+                    <br></br>
+                    <h3>Active Connections:</h3>
+                        {student.connectionsIds &&
+                            student.connectionsIds.map((request, index) => (
+                                <div key={index}>
+                                    {request}
+                                </div>
+                            ))}
+                    <br></br>
+                    <h3>Current Requests:</h3>
+                    <div>{student.connectionRequests && requestList}</div>
+                    <div>
+                        <>Send Friend Request</>
+                        <form onSubmit={ () => this.addRequest(id, text)}>
+                            <input type="text" name="text" id="text" placeholder="Enter question" value={text} onChange={this.handleInput}/>
+                            <button type="submit">Submit</button>
+                        </form>
+                    </div>
                     <br></br>
                     <button onClick={ () => this.toEditProfile(id)}>Edit Your Profile</button>
                     <button onClick={ () => this.toPlanofstudy(id)}>View Plan of Study</button>
