@@ -9,18 +9,24 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import Stack from "@mui/material/Stack";
+import Tooltip from "@mui/material/Tooltip";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ChatIcon from "@mui/icons-material/Chat";
 import EmailIcon from "@mui/icons-material/Email";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import DeleteIcon from "@mui/icons-material/Delete";
+import RedditIcon from "@mui/icons-material/Reddit";
+import TwitterIcon from "@mui/icons-material/Twitter";
+import FacebookIcon from "@mui/icons-material/Facebook";
+import GoogleIcon from "@mui/icons-material/Google";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import EditIcon from "@mui/icons-material/Edit";
 import Drawer from "@mui/material/Drawer";
 import Divider from "@mui/material/Divider";
 import List from "@mui/material/List";
-import Stack from "@mui/material/Stack";
-import Avatar from "@mui/material/Avatar";
 import { mainListItems, secondaryListItems } from "./listItems";
+import profilePic from "./profilepic.jpeg";
 
 import {
   ThemeProvider,
@@ -35,11 +41,14 @@ import {
   Container,
   Button,
   ButtonGroup,
+  Card,
+  CardMedia,
+  Avatar,
+  Link,
+  TextField,
 } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-
-class Dashboard extends Component {
+class Search extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -61,6 +70,7 @@ class Dashboard extends Component {
     this.onChangeSearchDepartment = this.onChangeSearchDepartment.bind(this);
     this.setActiveCourse = this.setActiveCourse.bind(this);
     this.searchDepartment = this.searchDepartment.bind(this);
+    this.toLandingpage = this.toLandingpage.bind(this);
   }
 
   componentDidMount() {
@@ -104,8 +114,12 @@ class Dashboard extends Component {
       });
   }
 
-  toDashboard(id) {
-    this.props.history.push(`/students/dashboard/${id}`);
+  toLandingpage(id) {
+    this.props.history.push(`/students/landingpage/${id}`);
+  }
+
+  toCoursepage(idDept, idNum) {
+    this.props.history.push(`/course/${idDept}/${idNum}/${this.state.id}`);
   }
 
   toPlanofstudy(id) {
@@ -143,26 +157,69 @@ class Dashboard extends Component {
     this.setAnchorElUser(null);
   }
 
+  delete(id) {
+    StudentService.deleteStudent(id);
+    this.props.history.push("/");
+  }
+
+  remove(courseID) {
+    let updatedStudents = [...this.state.courses].filter(
+      (i) => i.courseID !== courseID
+    );
+    this.setState({ courses: updatedStudents });
+  }
+
   render() {
     const courseList = this.state.courses.map((course) => {
       return (
-        <tr key={course.courseID}>
-          <td style={{ whiteSpace: "nowrap" }}>{course.courseID}</td>
+        // <tr key={course.courseID}>
+        //   <td style={{ whiteSpace: "nowrap" }}>{course.courseID}</td>
 
-          <td>
-            <ButtonGroup>
-              <Button
-                size="sm"
-                color="danger"
-                onClick={() => this.remove(course.courseID)}
-              >
-                Delete
-              </Button>
-            </ButtonGroup>
-          </td>
-        </tr>
+        //   <td>
+        //     <ButtonGroup>
+        //       <Button
+        //         size="sm"
+        //         color="danger"
+        //         onClick={() => this.remove(course.courseID)}
+        //       >
+        //         Delete
+        //       </Button>
+        //     </ButtonGroup>
+        //   </td>
+        // </tr>
+
+        <TableRow>
+          <TableCell sx={{ color: "#EBD99F" }}>
+            <b>{course.courseID}</b>
+          </TableCell>
+          <TableCell>{course.courseTitle}</TableCell>
+          <TableCell sx={{ color: "#EBD99F" }}>
+            <b>{course.creditHours}</b>
+          </TableCell>
+          <TableCell>
+            <Button
+              onClick={() => {
+                this.toCoursepage(
+                  course.courseIdDepartment,
+                  course.courseIdNumber
+                );
+              }}
+            >
+              View
+            </Button>
+          </TableCell>
+          <TableCell>
+            <IconButton onClick={() => this.remove(course.courseID)}>
+              <DeleteIcon sx={{ color: "#ffffff" }} />
+            </IconButton>
+          </TableCell>
+        </TableRow>
       );
     });
+
+    const linkedInUrl = "" + this.state.student.linkedIn;
+    const linkedInUsername = linkedInUrl.substring(28, linkedInUrl.length - 1);
+    var emailLink = "mailto:" + this.state.student.email;
 
     return (
       <ThemeProvider theme={theme}>
@@ -238,12 +295,7 @@ class Dashboard extends Component {
                 </Button>
               </ButtonGroup>
 
-              <Button
-                color="inherit"
-                onClick={() => {
-                  this.toDashboard(this.state.student.email);
-                }}
-              >
+              <Button color="inherit">
                 <Badge badgeContent={4} color="secondary">
                   <Avatar
                     variant="circle"
@@ -290,25 +342,15 @@ class Dashboard extends Component {
                     }}
                   >
                     <Typography color="secondary" variant="h3" fontWeight={700}>
-                      Welcome Back {this.state.student.firstName}
+                      Search for a Course
                     </Typography>
-                    <Typography variant="h6" fontWeight={500} color="text">
-                      What would you like to do?
-                    </Typography>
-                    <Stack paddingTop={2} spacing={2}>
-                      <Button color="secondary" variant="contained">
-                        Find a Course
-                      </Button>
-                      <Button color="secondary" variant="contained">
-                        Suggest a Semester
-                      </Button>
-                      <Button color="secondary" variant="contained">
-                        Review a Course
-                      </Button>
-                      <Button color="secondary" variant="contained">
-                        View My Profile
-                      </Button>
-                    </Stack>
+                    <Grid container spacing={1}>
+                        <Grid item xs={0} md={2} lg={3}></Grid>
+                        <Grid item xs={6} md={4} lg={3}><TextField></TextField></Grid>
+                        <Grid item xs={6} md={4} lg={3}><TextField></TextField></Grid>
+                        <Grid item xs={0} md={2} lg={3}></Grid>
+                    </Grid>
+                    
                   </Paper>
                 </Grid>
                 <Grid item xs={0} md={2} lg={3}></Grid>
@@ -322,4 +364,4 @@ class Dashboard extends Component {
   }
 }
 
-export default Dashboard;
+export default Search;

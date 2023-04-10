@@ -1,6 +1,8 @@
 import { Component } from "react";
 import CourseService from "../services/CourseService";
 import StudentService from "../services/StudentService";
+import { Container, Typography, Button, ThemeProvider, MenuItem, Select, Card, InputLabel, TextField} from "@mui/material";
+import theme from '../theme'
 
 class SearchCourses extends Component {
     constructor(props) {
@@ -95,54 +97,50 @@ class SearchCourses extends Component {
         const { searchDepartment, courses, coursesSuggested, currentCourse, currentIndex, id, text, rating} = this.state;
         return (
             <div>
-                
-                <button onClick={ () => this.toLandingpage(id)}>Back to landing page</button>
+                <ThemeProvider theme={theme}>
+                <Container component="main" maxwidth="xs" alignItems="center" justifyContent="center" sx={{padding: 15}}>
+                <Button onClick={ () => this.toLandingpage(id)}>Back to landing page</Button>
                 <br></br>
-                <div className="col-md-8">
-                    <br></br>
-                    <h4>Suggested Courses List</h4>
-                    <select onChange={ (e) => this.getSuggestedSemester(id, e.target.value)}>
-                        <option>Please Choose a Sorting Option</option>
-                        <option key="rating" value="rating">Rating</option>
-                        <option key="avgGPA" value="avgGPA">Avereage Gpa</option>
-                    </select>
-                    <ul className="list-group">
-                        {coursesSuggested &&
-                            coursesSuggested.map((course, index) => (
-                                <li
-                                    className={
-                                        "list-group-item " + 
-                                        (index === currentIndex ? "active" : "")
-                                    }
-                                    onClick={ () => this.setActiveCourse(course, index)}
-                                    key={index}
-                                >
-                                    {course.courseID}
-                                </li>
-                            ))}
-                    </ul>
-                </div>
+                    <Card alignItems="center" justifyContent="center" sx={{padding: 5}}>
+                        <br></br>
+                        <Typography variant="h3">Suggested Courses List</Typography>
+                        <InputLabel>Sorting Category</InputLabel>
+                        <Select label="Please Select a Sorting Category" onChange={ (e) => this.getSuggestedSemester(id, e.target.value)}>
+                            <MenuItem key="rating" value="rating">Rating</MenuItem>
+                            <MenuItem key="avgGPA" value="avgGPA">Average GPA</MenuItem>
+                        </Select>
+                        <ul className="list-group">
+                            {coursesSuggested &&
+                                coursesSuggested.map((course, index) => (
+                                    <li
+                                        className={
+                                            "list-group-item " + 
+                                            (index === currentIndex ? "active" : "")
+                                        }
+                                        onClick={ () => this.setActiveCourse(course, index)}
+                                        key={index}
+                                    >
+                                       <Typography color="primary"> {course.courseID} </Typography>
+                                    </li>
+                                ))}
+                        </ul>
                 <br></br>
-                <input
+                <TextField
                     type="text"
-                    className="form-control"
+                    variant="outlined"
                     placeholder="Search by department"
                     value={searchDepartment}
                     onChange={this.onChangeSearchDepartment}
                 />
                 <div className="input-group-append">
-                    <button
-                        className="btn btn-outline-secondary"
-                        type="button"
-                        onClick={this.searchDepartment}
-                    >
+                    <Button sx={{margin: 2}} type="button" variant="contained" onClick={this.searchDepartment}>
                         Search
-                    </button>
-
+                    </Button>          
                 </div>
+                </Card>
                 <br></br>
                 <div className="col-md-8">
-                    <h4>Searched Courses List</h4>
+                    <Typography>Searched Courses List</Typography>
                     
                     <ul className="list-group">
                         {courses &&
@@ -164,40 +162,40 @@ class SearchCourses extends Component {
                 <div className="col-md-6">
                     {currentCourse ? (
                         <div>
-                            <h4>Course</h4>
+                            <Typography>Course</Typography>
                         <div>
                             <br></br>
-                            <button type="button" onClick={ () => this.addCourse(id, currentCourse)}>Add to course backlog</button>
+                            <Button type="button" onClick={ () => this.addCourse(id, currentCourse)}>Add to course backlog</Button>
                         </div>
                         <div>
-                            <label>
+                            <Typography>
                                 <strong>Title:</strong>
-                            </label>{" "}
+                            </Typography>{" "}
                             {currentCourse.courseID}
                         </div>
                         <div>
-                            <label>
+                            <Typography>
                                 <strong>Description:</strong>
-                            </label>{" "}
+                            </Typography>{" "}
                             {currentCourse.courseTitle}
                         </div>
                         <div>
-                            <label>
+                            <Typography>
                                 <strong>Average Rating:</strong>
-                            </label>{" "}
+                            </Typography>{" "}
                             {currentCourse.averageRating}
                         </div>
                         <div>
-                            <label>
+                            <Typography>
                                 <strong>Average GPA:</strong>
-                            </label>{" "}
+                            </Typography>{" "}
                             {currentCourse.averageGPA}
                         </div>
 
                         <div>
-                            <label>
+                            <Typography>
                                 <strong>Reviews:</strong>
-                            </label>{" "}
+                            </Typography>{" "}
                             
 
                             <ul >
@@ -233,6 +231,8 @@ class SearchCourses extends Component {
                         </div>
                     )}
                 </div>
+                </Container>
+                </ThemeProvider>
             </div>
         );
     }

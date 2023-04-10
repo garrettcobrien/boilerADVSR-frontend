@@ -1,7 +1,8 @@
 import { Component } from "react";
 import StudentService from "../services/StudentService";
-import { Button, Container, Form, FormGroup, Input, Label, FormFeedback } from 'reactstrap';
-
+import { Form, FormGroup, Input, Label, FormFeedback } from 'reactstrap';
+import { ThemeProvider, Container, Typography } from "@mui/material";
+import theme from '../theme'
 class PlanOfSudy extends Component {
     constructor(props) {
         super(props);
@@ -35,12 +36,12 @@ class PlanOfSudy extends Component {
         const {  id, student, planOfSudy, semesters, coursesIncomplete } = this.state;
         return(
             <div>
-                <button onClick={ () => this.toDashboard(id)}>Back to Profile Page</button>
-                <Container>
+                <ThemeProvider theme={theme}>
+                <Container component="main" maxwidth="xs" alignItems="center" justifyContent="center" sx={{padding: 15}}>
                  <div className="table">
-                    <h2>Plan of Study</h2>
-                    <h3>Cumulative GPA: {student.gpa}</h3>
-                    <h4>Completed Semesters:</h4>
+                    <Typography>Plan of Study</Typography>
+                    <Typography>Cumulative GPA: {student.gpa}</Typography>
+                    <Typography>Completed Semesters:</Typography>
                     <ul className="list-group">
                         {semesters &&
                             semesters.map((semester, index) => (
@@ -91,6 +92,7 @@ class PlanOfSudy extends Component {
                     </ul>
                 </div>
                 </Container>
+                </ThemeProvider>
             </div>
         );
     };

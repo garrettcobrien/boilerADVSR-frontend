@@ -2,6 +2,7 @@ import { Component } from "react";
 import Copyright from "./Copyright";
 import CourseService from "../services/CourseService";
 import StudentService from "../services/StudentService";
+import APIService from "../services/APIService";
 import theme from "../theme";
 import CssBaseline from "@mui/material/CssBaseline";
 import Table from "@mui/material/Table";
@@ -13,14 +14,21 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ChatIcon from "@mui/icons-material/Chat";
 import EmailIcon from "@mui/icons-material/Email";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import RedditIcon from "@mui/icons-material/Reddit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import StarIcon from "@mui/icons-material/Star";
+import StarBorderIcon from "@mui/icons-material/StarBorder";
+import BookmarksIcon from "@mui/icons-material/Bookmarks";
 import Drawer from "@mui/material/Drawer";
 import Divider from "@mui/material/Divider";
 import List from "@mui/material/List";
 import Stack from "@mui/material/Stack";
 import Avatar from "@mui/material/Avatar";
+import Rating from "@mui/material/Rating";
+import Tooltip from "@mui/material/Tooltip";
 import { mainListItems, secondaryListItems } from "./listItems";
+import axios from "axios";
 
 import {
   ThemeProvider,
@@ -38,21 +46,14 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import NotificationsIcon from "@mui/icons-material/Notifications";
+import { ConstructionOutlined } from "@mui/icons-material";
 
-class Dashboard extends Component {
+class CourseView extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      id: this.props.match.params.id,
-      student: {},
-
-      courses: [],
-      reviews: [],
-      currentCourse: null,
-      currentIndex: -1,
-      searchDepartment: "",
-      anchorElNav: null,
-      anchorElUser: null,
+      courseId: this.props.match.params.courseId,
+      course: null,
     };
 
     this.drawerWidth = 240;
@@ -64,11 +65,14 @@ class Dashboard extends Component {
   }
 
   componentDidMount() {
-    StudentService.getStudentById(this.state.id).then((res) => {
-      this.setState({ student: res.data });
-    });
-    StudentService.getSuggestedSemester(this.state.id).then((res) => {
-      this.setState({ courses: res.data });
+    console.log("***************")
+    console.log("***** DMT *****")
+    CourseService.getCourse(this.state.courseId).then((res) => {
+      console.log("***************")
+      console.log("***** RES *****")
+      console.log(res)
+      console.log("***************")
+      this.setState({ course: res.data });
     });
   }
 
@@ -115,6 +119,10 @@ class Dashboard extends Component {
     this.props.history.push(`/students/editprofile/${id}`);
   }
 
+  toLandingpage(id) {
+    this.props.history.push(`/students/landingpage/${id}`);
+  }
+
   setAnchorElNav(target) {
     this.setState({
       anchorElNav: target,
@@ -144,25 +152,10 @@ class Dashboard extends Component {
   }
 
   render() {
-    const courseList = this.state.courses.map((course) => {
-      return (
-        <tr key={course.courseID}>
-          <td style={{ whiteSpace: "nowrap" }}>{course.courseID}</td>
-
-          <td>
-            <ButtonGroup>
-              <Button
-                size="sm"
-                color="danger"
-                onClick={() => this.remove(course.courseID)}
-              >
-                Delete
-              </Button>
-            </ButtonGroup>
-          </td>
-        </tr>
-      );
-    });
+    console.log("888888888");
+    console.log(this.props.match.params.courseId)
+    let course = this.state.course
+    console.log(course);
 
     return (
       <ThemeProvider theme={theme}>
@@ -290,7 +283,7 @@ class Dashboard extends Component {
                     }}
                   >
                     <Typography color="secondary" variant="h3" fontWeight={700}>
-                      Welcome Back {this.state.student.firstName}
+                      "1"
                     </Typography>
                     <Typography variant="h6" fontWeight={500} color="text">
                       What would you like to do?
@@ -322,4 +315,4 @@ class Dashboard extends Component {
   }
 }
 
-export default Dashboard;
+export default CourseView;

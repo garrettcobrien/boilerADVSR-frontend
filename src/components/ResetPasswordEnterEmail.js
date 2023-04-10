@@ -18,8 +18,7 @@ import theme from "../theme.js";
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import PasswordIcon from '@mui/icons-material/Password';
 
-
-class Login extends Component {
+class ResetPasswordEnterEmail extends Component {
   emptyItem = {
     email: "",
     password: "",
@@ -66,30 +65,15 @@ class Login extends Component {
                 variant="h3"
                 fontWeight={700}
               >
-                Welcome to BOILERADVSR
+                Forgot your password?
               </Typography>
               <Typography
                 color="text"
                 variant="h6"
                 fontWeight={400}
-              >
-                Your virtual Purdue advisor.
-              </Typography>
-            </Container>
-            <Container
-              component="main"
-              maxwidth="xs"
-              alignItems="center"
-              justifyContent="center"
-              sx={{ padding: 0 }}
-            >
-              <Typography
-                color="secondary"
-                variant="h3"
-                fontWeight={700}
                 style={{paddingBottom: 35}}
               >
-                Sign In
+                We'll send you a link to reset it.
               </Typography>
               <Form>
                 <FormGroup>
@@ -102,33 +86,13 @@ class Login extends Component {
                     value={item.email}
                     onChange={this.handleInputChange}
                     autoComplete="email"
-                    color="secondary"
+                    color="text"
                     focused
+                    sx={{ width: '25ch' }}
                     InputProps={{
                         startAdornment: (
                           <InputAdornment position="start">
-                            <MailOutlineIcon fontSize="small" sx={{color: '#ffffff'}} />
-                          </InputAdornment>
-                        ),
-                      }}
-                  />
-                </FormGroup>
-                <FormGroup>
-                  <TextField
-                    label="Password"
-                    variant="filled"
-                    type="password"
-                    name="password"
-                    id="password"
-                    value={item.password}
-                    onChange={this.handleInputChange}
-                    autoComplete="password"
-                    color="secondary"
-                    focused
-                    InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <PasswordIcon fontSize="small" sx={{color: '#ffffff'}} />
+                            <MailOutlineIcon fontSize="small" color="secondary" />
                           </InputAdornment>
                         ),
                       }}
@@ -138,15 +102,13 @@ class Login extends Component {
                   <Button
                     variant="contained"
                     color="secondary"
-                    style={{ marginTop: 10 }}
+                    style={{ marginLeft: "10px", marginTop: 10 }}
                     onClick={() => this.loginStudent(item.email)}
                     className="btn btn-info"
                   >
-                    <Typography color="primary">Log In</Typography>
+                    <Typography color="primary">Reset</Typography>
                   </Button>
                 </FormGroup>
-                <Typography variant="h6" fontWeight={500}>New user? <Link underline="hover" color="secondary">Sign up here</Link></Typography>
-                <Typography variant="h6" fontWeight={500}>Forgot your password? <Link underline="hover" color="secondary">Reset here</Link></Typography>
               </Form>
             </Container>
           </ThemeProvider>
@@ -156,4 +118,4 @@ class Login extends Component {
   }
 }
 
-export default Login;
+export default ResetPasswordEnterEmail;
