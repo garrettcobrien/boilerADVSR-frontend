@@ -27,6 +27,7 @@ class SearchCourses extends Component {
         this.handleInput = this.handleInput.bind(this);
         this.addCourse = this.addCourse.bind(this);
         this.getSuggestedSemester = this.getSuggestedSemester.bind(this);
+        this.addQuestion = this.addQuestion.bind(this);
     }
 
     componentDidMount() {

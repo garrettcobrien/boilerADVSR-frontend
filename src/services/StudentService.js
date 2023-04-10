@@ -94,14 +94,25 @@ class StudentService {
     }
 
     //accept request
-    handleRequest(id, connectionID) {
-        return axios({
-            method: 'put',
-            url: STUDENT_API_BASE_URL + '/' + id + '/connection/handle/' + connectionID,
-            data: {
-                status: "accept"
-            }
-        });
+    handleRequest(id, connectionID, status) {
+        if (status === "") {
+            return axios({
+                method: 'put',
+                url: STUDENT_API_BASE_URL + '/' + id + '/connection/handle/' + connectionID,
+                data: {
+                    status: "decline"
+                }
+            });
+        }
+        else {
+            return axios({
+                method: 'put',
+                url: STUDENT_API_BASE_URL + '/' + id + '/connection/handle/' + connectionID,
+                data: {
+                    status: "accept"
+                }
+            });
+        }
     }
 }
 

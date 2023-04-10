@@ -16,7 +16,8 @@ class Dashbaord extends Component {
             courses: [],
             currentCourse: null,
             linkedin: "",
-            text: ""
+            text: "",
+            connectionID: ""
         };
         this.toLandingpage = this.toLandingpage.bind(this);
         this.toPlanofstudy = this.toPlanofstudy.bind(this);
@@ -26,6 +27,7 @@ class Dashbaord extends Component {
         this.handleInput = this.handleInput.bind(this);
         this.addRequest = this.addRequest.bind(this);
         this.handleRequest = this.handleRequest.bind(this);
+        this.toChat = this.toChat.bind(this);
     }
 
     componentDidMount() {
@@ -66,6 +68,9 @@ class Dashbaord extends Component {
         StudentService.deleteStudent(id);
         this.props.history.push('/');
     }
+    toChat(id, connectionID) {
+        this.props.history.push(`/students/chat/${id}/${connectionID}`)
+    }
 
     remove(id, courseID) {
             StudentService.removeBacklog(id, courseID).then( res => {
@@ -74,8 +79,8 @@ class Dashbaord extends Component {
         this.props.history.push(`/students/landingpage/${id}`);
     }
 
-    handleRequest(id, connectionID) {
-        StudentService.handleRequest(id, connectionID);
+    handleRequest(id, connectionID, status) {
+        StudentService.handleRequest(id, connectionID, status);
         this.props.history.push(`/students/landingpage/${id}`);
     }
     
@@ -108,7 +113,8 @@ class Dashbaord extends Component {
                 
                 <td>
                     <ButtonGroup>
-                        <Button size="sm" color="danger" onClick={() => this.handleRequest(id, request)}>Accept</Button>
+                        <Button size="sm" color="danger" onClick={() => this.handleRequest(id, request, "accept")}>Accept</Button>
+                        <Button size="sm" color="danger" onClick={() => this.handleRequest(id, request, "")}>Decline</Button>
                     </ButtonGroup>
                 </td>
             </tr>
@@ -168,6 +174,7 @@ class Dashbaord extends Component {
                             student.connectionsIds.map((request, index) => (
                                 <div key={index}>
                                     {request}
+                                <button type="submit" onClick={() => this.toChat(id, request)}>chat</button>
                                 </div>
                             ))}
                     <br></br>
