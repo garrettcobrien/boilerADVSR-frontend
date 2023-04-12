@@ -66,6 +66,10 @@ class Dashboard extends Component {
 
     this.toLandingpage = this.toLandingpage.bind(this);
     this.toChat = this.toChat.bind(this);
+    this.toSearchCourses = this.toSearchCourses.bind(this);
+    this.toPlanofstudy = this.toPlanofstudy.bind(this);
+    this.toEditProfile = this.toEditProfile.bind(this);
+    this.toCoursepage = this.toCoursepage.bind(this);
   }
 
   componentDidMount() {
@@ -91,6 +95,9 @@ class Dashboard extends Component {
   }
   toChat(id, connectionID) {
     this.props.history.push(`/students/chat/${id}/${connectionID}`)
+  }
+  toSearchCourses(id){
+    this.props.history.push(`/students/courses/${id}`);
   }
   //end nav functions
 
@@ -207,7 +214,7 @@ class Dashboard extends Component {
             >
               <Button
                 onClick={() => {
-                  this.toLandingpage(this.state.student.email);
+                  this.toLandingpage(student.email);
                 }}
               >
                 <Typography
@@ -227,7 +234,7 @@ class Dashboard extends Component {
                 color="secondary"
                 sx={{ marginRight: 50, p: 4 }}
               >
-                <Button
+                <Button onClick={() => {this.toSearchCourses(this.state.student.email);}}
                   sx={{
                     backgroundColor: "#ffffff",
                     fontWeight: 700,
@@ -247,7 +254,7 @@ class Dashboard extends Component {
                 >
                   Suggest a Semester
                 </Button>
-                <Button
+                <Button onClick={() => {this.toPlanofstudy(this.state.student.email);}}
                   sx={{
                     backgroundColor: "#ffffff",
                     fontWeight: 700,
@@ -437,7 +444,7 @@ class Dashboard extends Component {
                           marginBottom: 1,
                         }}
                       >
-                        <Button
+                        <Button onClick={() => {this.toEditProfile(this.state.student.email);}}
                           size="small"
                           color="secondary"
                           variant="contained"
@@ -448,7 +455,7 @@ class Dashboard extends Component {
                         >
                           Edit
                         </Button>
-                        <Button
+                        <Button onClick={() => {this.delete(this.state.student.email);}}
                           size="small"
                           color="secondary"
                           variant="contained"

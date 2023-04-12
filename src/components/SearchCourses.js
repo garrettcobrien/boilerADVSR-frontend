@@ -29,6 +29,7 @@ class SearchCourses extends Component {
         this.handleInput = this.handleInput.bind(this);
         this.addCourse = this.addCourse.bind(this);
         this.getSuggestedSemester = this.getSuggestedSemester.bind(this);
+        this.toCoursepage = this.toCoursepage.bind(this);
     }
 
     componentDidMount() {
@@ -72,6 +73,10 @@ class SearchCourses extends Component {
     toLandingpage(id) {
         this.props.history.push(`/students/landingpage/${id}`);
     }
+    toCoursepage(id, courseID) {
+        this.props.history.push(`/course/${id}/${courseID}`);
+    }
+    
 
     handleInput (event) {
         const value = event.target.value;
@@ -94,7 +99,7 @@ class SearchCourses extends Component {
     }
 
     render() {
-        const { searchDepartment, courses, coursesSuggested, currentCourse, currentIndex, id, text, rating} = this.state;
+        const { student, searchDepartment, courses, coursesSuggested, currentCourse, currentIndex, id, text, rating} = this.state;
         return (
             <div>
                 <ThemeProvider theme={theme}>
@@ -117,7 +122,7 @@ class SearchCourses extends Component {
                                             "list-group-item " + 
                                             (index === currentIndex ? "active" : "")
                                         }
-                                        onClick={ () => this.setActiveCourse(course, index)}
+                                        onClick={() => {this.toCoursepage(student.email, course.courseID)}}
                                         key={index}
                                     >
                                        <Typography color="primary"> {course.courseID} </Typography>
@@ -137,7 +142,6 @@ class SearchCourses extends Component {
                         Search
                     </Button>          
                 </div>
-                </Card>
                 <br></br>
                 <div className="col-md-8">
                     <Typography>Searched Courses List</Typography>
@@ -150,87 +154,16 @@ class SearchCourses extends Component {
                                         "list-group-item " + 
                                         (index === currentIndex ? "active" : "")
                                     }
-                                    onClick={ () => this.setActiveCourse(course, index)}
+                                    onClick={() => {this.toCoursepage(student.email, course.courseID)}}
                                     key={index}
                                 >
-                                    {course.courseID}
+                                    <Typography color="primary"> {course.courseID} </Typography>
                                 </li>
                             ))}
                     </ul>
                 </div>
                 <br></br>
-                <div className="col-md-6">
-                    {currentCourse ? (
-                        <div>
-                            <Typography>Course</Typography>
-                        <div>
-                            <br></br>
-                            <Button type="button" onClick={ () => this.addCourse(id, currentCourse)}>Add to course backlog</Button>
-                        </div>
-                        <div>
-                            <Typography>
-                                <strong>Title:</strong>
-                            </Typography>{" "}
-                            {currentCourse.courseID}
-                        </div>
-                        <div>
-                            <Typography>
-                                <strong>Description:</strong>
-                            </Typography>{" "}
-                            {currentCourse.courseTitle}
-                        </div>
-                        <div>
-                            <Typography>
-                                <strong>Average Rating:</strong>
-                            </Typography>{" "}
-                            {currentCourse.averageRating}
-                        </div>
-                        <div>
-                            <Typography>
-                                <strong>Average GPA:</strong>
-                            </Typography>{" "}
-                            {currentCourse.averageGPA}
-                        </div>
-
-                        <div>
-                            <Typography>
-                                <strong>Reviews:</strong>
-                            </Typography>{" "}
-                            
-
-                            <ul >
-                                {currentCourse.reviews &&
-                                    currentCourse.reviews.map((review, index) => (
-                                        <li
-                                            key={index}
-                                        >
-                                            <div>
-                                                <p>Name of reviewer: {review.studentReviewer}</p>
-                                            </div>
-                                            <div>
-                                                <p>Review: {review.reviewText}</p>
-                                            </div>
-                                            <div>
-                                                <p>Rating: {review.overallRating}</p>
-                                            </div>
-                                        </li>
-                                    ))}
-                            </ul>
-                            <form onSubmit={ () => this.addReview(currentCourse.courseID, id, text, rating)}>
-                                <input type="text" name="text" id="text" placeholder="Enter review" value={text} onChange={this.handleInput}/>
-                                <input type="text" name="rating" id="rating" placeholder="Enter rating" value={rating} onChange={this.handleInput}/>
-                                <button type="submit">Submit</button>
-                            </form>
-                        </div>
-                        <br></br>
-                        </div>
-                    ) : (
-                        <div>
-                        <br />
-                            <p>Please click on a Course...</p>
-                        </div>
-                    )}
-                </div>
+                </Card>
                 </Container>
                 </ThemeProvider>
             </div>

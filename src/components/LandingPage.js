@@ -35,6 +35,8 @@ class LandingPage extends Component {
     this.pages = ["Find a Course", "Suggest a Semester", "Review a Course"];
 
     this.toProfile = this.toProfile.bind(this);
+    this.toSearchCourses = this.toSearchCourses.bind(this);
+    this.toPlanofstudy = this.toPlanofstudy.bind(this);
   }
 
   componentDidMount() {
@@ -49,6 +51,12 @@ class LandingPage extends Component {
 
   toProfile(id) {
     this.props.history.push(`/students/dashboard/${id}`);
+  }
+  toPlanofstudy(id) {
+    this.props.history.push(`/students/planofstudy/${id}`);
+  }
+  toSearchCourses(id){
+    this.props.history.push(`/students/courses/${id}`);
   }
 
   toPlanofstudy(id) {
@@ -98,11 +106,7 @@ class LandingPage extends Component {
                 pr: "24px", // keep right padding when drawer closed
               }}
             >
-              <Button
-                onClick={() => {
-                  this.toLandingpage(this.state.student.email);
-                }}
-              >
+              <Button onClick={() => {this.toLandingpage(this.state.student.email);}}>
                 <Typography
                   component="h1"
                   variant="h5"
@@ -119,7 +123,7 @@ class LandingPage extends Component {
                 color="secondary"
                 sx={{ marginRight: 50, p: 4 }}
               >
-                <Button
+                <Button onClick={() => {this.toSearchCourses(this.state.student.email);}}
                   sx={{
                     backgroundColor: "#ffffff",
                     fontWeight: 700,
@@ -139,7 +143,7 @@ class LandingPage extends Component {
                 >
                   Suggest a Semester
                 </Button>
-                <Button
+                <Button onClick={() => {this.toPlanofstudy(this.state.student.email);}}
                   sx={{
                     backgroundColor: "#ffffff",
                     fontWeight: 700,
@@ -219,7 +223,7 @@ class LandingPage extends Component {
                       What would you like to do?
                     </Typography>
                     <Stack paddingTop={2} spacing={2}>
-                      <Button color="secondary" variant="contained">
+                      <Button color="secondary" variant="contained" onClick={() => {this.toSearchCourses(this.state.student.email);}}>
                         Find a Course
                       </Button>
                       <Button color="secondary" variant="contained">
