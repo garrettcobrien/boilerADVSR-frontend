@@ -4,6 +4,7 @@ const STUDENT_API_BASE_URL = "http://localhost:8081/students";
 
 class StudentService {
 
+
     //get all students
     getStudents(){
         return axios.get(STUDENT_API_BASE_URL);
@@ -15,8 +16,15 @@ class StudentService {
     }
 
     //login
-    loginStudent(student){
-        return axios.get(STUDENT_API_BASE_URL + '/login', student);
+    loginStudent(id, password){
+        return axios({
+            method: 'put',
+            url: STUDENT_API_BASE_URL + '/login',
+            data: {
+                email: id,
+                password: password
+            }
+        });
     }
 
     //get taken courses

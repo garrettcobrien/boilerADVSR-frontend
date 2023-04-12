@@ -17,6 +17,7 @@ import { ThemeProvider } from "@mui/system";
 import theme from "../theme.js";
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import PasswordIcon from '@mui/icons-material/Password';
+import StudentService from "../services/StudentService.js";
 
 
 class Login extends Component {
@@ -29,6 +30,7 @@ class Login extends Component {
     super(props);
     this.state = {
       item: this.emptyItem,
+      student: {}
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -36,6 +38,7 @@ class Login extends Component {
   }
 
   handleInputChange(event) {
+    console.log(event);
     const { target } = event;
     const value = target.type === "checkbox" ? target.checked : target.value;
     const { name } = target;
@@ -44,9 +47,14 @@ class Login extends Component {
     this.setState({ item });
   }
 
-  loginStudent(id) {
+  loginStudent(id, password) {
     //implement attemping to get the first to see if it exists before sending them to dashboard
-    this.props.history.push(`/students/landingpage/${id}`);
+    StudentService.loginStudent(id, password).then( res => {
+      this.props.history.push(`/students/landingpage/${id}`);
+    }).catch(function (error) {
+      alert("Incorrect email or password");
+      console.log(error.toJSON());
+    });
   }
 
   render() {
@@ -58,8 +66,8 @@ class Login extends Component {
             <CssBaseline />
             <Container
                           maxwidth="xs"
-                          alignItems="center"
-                          justifyContent="center"
+                          align-items="center"
+                          justify-content="center"
                           sx={{ padding: 10 }}>
             <Typography
                 color="secondary"
@@ -79,8 +87,8 @@ class Login extends Component {
             <Container
               component="main"
               maxwidth="xs"
-              alignItems="center"
-              justifyContent="center"
+              align-items="center"
+              justify-content="center"
               sx={{ padding: 0 }}
             >
               <Typography
@@ -139,7 +147,7 @@ class Login extends Component {
                     variant="contained"
                     color="secondary"
                     style={{ marginTop: 10 }}
-                    onClick={() => this.loginStudent(item.email)}
+                    onClick={() => this.loginStudent(item.email, item.password)}
                     className="btn btn-info"
                   >
                     <Typography color="primary">Log In</Typography>

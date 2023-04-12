@@ -1,26 +1,10 @@
 import { Component } from "react";
 import Copyright from "./Copyright";
-import CourseService from "../services/CourseService";
 import StudentService from "../services/StudentService";
 import theme from "../theme";
 import CssBaseline from "@mui/material/CssBaseline";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import ChatIcon from "@mui/icons-material/Chat";
-import EmailIcon from "@mui/icons-material/Email";
-import LinkedInIcon from "@mui/icons-material/LinkedIn";
-import DeleteIcon from "@mui/icons-material/Delete";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import Drawer from "@mui/material/Drawer";
-import Divider from "@mui/material/Divider";
-import List from "@mui/material/List";
 import Stack from "@mui/material/Stack";
 import Avatar from "@mui/material/Avatar";
-import { mainListItems, secondaryListItems } from "./listItems";
 
 import {
   ThemeProvider,
@@ -28,7 +12,6 @@ import {
   AppBar,
   Toolbar,
   Typography,
-  IconButton,
   Badge,
   Paper,
   Grid,
@@ -36,8 +19,6 @@ import {
   Button,
   ButtonGroup,
 } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
-import NotificationsIcon from "@mui/icons-material/Notifications";
 
 class Dashboard extends Component {
   constructor(props) {
@@ -46,11 +27,6 @@ class Dashboard extends Component {
       id: this.props.match.params.id,
       student: {},
 
-      courses: [],
-      reviews: [],
-      currentCourse: null,
-      currentIndex: -1,
-      searchDepartment: "",
       anchorElNav: null,
       anchorElUser: null,
     };
@@ -58,17 +34,12 @@ class Dashboard extends Component {
     this.drawerWidth = 240;
     this.pages = ["Find a Course", "Suggest a Semester", "Review a Course"];
 
-    this.onChangeSearchDepartment = this.onChangeSearchDepartment.bind(this);
-    this.setActiveCourse = this.setActiveCourse.bind(this);
-    this.searchDepartment = this.searchDepartment.bind(this);
+    this.toProfile = this.toProfile.bind(this);
   }
 
   componentDidMount() {
     StudentService.getStudentById(this.state.id).then((res) => {
       this.setState({ student: res.data });
-    });
-    StudentService.getSuggestedSemester(this.state.id).then((res) => {
-      this.setState({ courses: res.data });
     });
   }
 
@@ -76,35 +47,7 @@ class Dashboard extends Component {
     this.state.open = !this.state.open;
   }
 
-  onChangeSearchDepartment(e) {
-    const searchDepartment = e.target.value;
-
-    this.setState({
-      searchDepartment: searchDepartment,
-    });
-  }
-
-  setActiveCourse(course, index) {
-    this.setState({
-      currentCourse: course,
-      currentIndex: index,
-    });
-  }
-
-  searchDepartment() {
-    CourseService.getDepartment(this.state.searchDepartment)
-      .then((response) => {
-        this.setState({
-          courses: response.data,
-        });
-        console.log(response.data);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  }
-
-  toDashboard(id) {
+  toProfile(id) {
     this.props.history.push(`/students/dashboard/${id}`);
   }
 
@@ -144,26 +87,7 @@ class Dashboard extends Component {
   }
 
   render() {
-    const courseList = this.state.courses.map((course) => {
-      return (
-        <tr key={course.courseID}>
-          <td style={{ whiteSpace: "nowrap" }}>{course.courseID}</td>
-
-          <td>
-            <ButtonGroup>
-              <Button
-                size="sm"
-                color="danger"
-                onClick={() => this.remove(course.courseID)}
-              >
-                Delete
-              </Button>
-            </ButtonGroup>
-          </td>
-        </tr>
-      );
-    });
-
+    const { student } = this.state;
     return (
       <ThemeProvider theme={theme}>
         <CssBaseline />
@@ -191,7 +115,6 @@ class Dashboard extends Component {
                 </Typography>
               </Button>
               <ButtonGroup
-                disableElevation="true"
                 variant="contained"
                 color="secondary"
                 sx={{ marginRight: 50, p: 4 }}
@@ -241,7 +164,7 @@ class Dashboard extends Component {
               <Button
                 color="inherit"
                 onClick={() => {
-                  this.toDashboard(this.state.student.email);
+                  this.toProfile(this.state.student.email);
                 }}
               >
                 <Badge badgeContent={4} color="secondary">
@@ -305,7 +228,7 @@ class Dashboard extends Component {
                       <Button color="secondary" variant="contained">
                         Review a Course
                       </Button>
-                      <Button color="secondary" variant="contained">
+                      <Button color="secondary" variant="contained" onClick={ () => this.toDashboard(student.id)}>
                         View My Profile
                       </Button>
                     </Stack>
