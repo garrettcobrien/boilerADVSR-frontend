@@ -56,9 +56,7 @@ class Dashboard extends Component {
 
       courses: [],
       reviews: [],
-      currentCourse: null,
-      currentIndex: -1,
-      searchDepartment: "",
+
       anchorElNav: null,
       anchorElUser: null,
     };
@@ -66,68 +64,39 @@ class Dashboard extends Component {
     this.drawerWidth = 240;
     this.pages = ["Find a Course", "Suggest a Semester", "Review a Course"];
 
-    this.onChangeSearchDepartment = this.onChangeSearchDepartment.bind(this);
-    this.setActiveCourse = this.setActiveCourse.bind(this);
-    this.searchDepartment = this.searchDepartment.bind(this);
     this.toLandingpage = this.toLandingpage.bind(this);
+    this.toChat = this.toChat.bind(this);
   }
 
   componentDidMount() {
     StudentService.getStudentById(this.state.id).then((res) => {
       this.setState({ student: res.data });
+      this.setState({ courses: res.data.backLog });
     });
-    StudentService.getSuggestedSemester(this.state.id).then((res) => {
-      this.setState({ courses: res.data });
-    });
+    
   }
 
-  toggleDrawer() {
-    this.state.open = !this.state.open;
-  }
-
-  onChangeSearchDepartment(e) {
-    const searchDepartment = e.target.value;
-
-    this.setState({
-      searchDepartment: searchDepartment,
-    });
-  }
-
-  setActiveCourse(course, index) {
-    this.setState({
-      currentCourse: course,
-      currentIndex: index,
-    });
-  }
-
-  searchDepartment() {
-    CourseService.getDepartment(this.state.searchDepartment)
-      .then((response) => {
-        this.setState({
-          courses: response.data,
-        });
-        console.log(response.data);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  }
-
+  //Navigation functions
   toLandingpage(id) {
     this.props.history.push(`/students/landingpage/${id}`);
   }
-
   toCoursepage(idDept, idNum) {
     this.props.history.push(`/course/${idDept}/${idNum}/${this.state.id}`);
   }
-
   toPlanofstudy(id) {
     this.props.history.push(`/students/planofstudy/${id}`);
   }
   toEditProfile(id) {
     this.props.history.push(`/students/editprofile/${id}`);
   }
+  toChat(id, connectionID) {
+    this.props.history.push(`/students/chat/${id}/${connectionID}`)
+  }
+  //end nav functions
 
+  toggleDrawer() {
+    this.state.open = !this.state.open;
+  }
   setAnchorElNav(target) {
     this.setState({
       anchorElNav: target,
@@ -169,24 +138,12 @@ class Dashboard extends Component {
   }
 
   render() {
-    const courseList = this.state.courses.map((course) => {
+    //Objects
+    const { student, courses} = this.state;
+
+    //Course backlog
+    const courseList = courses.map((course) => {
       return (
-        // <tr key={course.courseID}>
-        //   <td style={{ whiteSpace: "nowrap" }}>{course.courseID}</td>
-
-        //   <td>
-        //     <ButtonGroup>
-        //       <Button
-        //         size="sm"
-        //         color="danger"
-        //         onClick={() => this.remove(course.courseID)}
-        //       >
-        //         Delete
-        //       </Button>
-        //     </ButtonGroup>
-        //   </td>
-        // </tr>
-
         <TableRow>
           <TableCell sx={{ color: "#EBD99F" }}>
             <b>{course.courseID}</b>
@@ -203,6 +160,31 @@ class Dashboard extends Component {
           <TableCell>
             <IconButton onClick={() => this.remove(course.courseID)}>
               <DeleteIcon sx={{ color: "#ffffff" }} />
+            </IconButton>
+          </TableCell>
+        </TableRow>
+      );
+    });
+
+    //Active Connections List
+    const connectionList = student.connectionsIds?.map((connection) => {
+      return (
+        <TableRow>
+          <TableCell>
+            <IconButton>
+              <AccountCircleIcon
+                sx={{ color: "#ffffff" }}
+                fontSize="small"
+              />
+            </IconButton>
+          </TableCell>
+          <TableCell>{connection}</TableCell>
+          <TableCell>
+            <IconButton type="submit" onClick={() => this.toChat(student.email, connection)}>
+              <ChatIcon
+                fontSize="small"
+                sx={{ color: "#EBD99F" }}
+              />
             </IconButton>
           </TableCell>
         </TableRow>
@@ -505,82 +487,7 @@ class Dashboard extends Component {
                     <Table size="small">
                       <TableHead></TableHead>
                       <TableBody>
-                        <TableRow>
-                          <TableCell>
-                            <IconButton>
-                              <AccountCircleIcon
-                                sx={{ color: "#ffffff" }}
-                                fontSize="small"
-                              />
-                            </IconButton>
-                          </TableCell>
-                          <TableCell>Freddie Clarke</TableCell>
-                          <TableCell>
-                            <IconButton>
-                              <ChatIcon
-                                fontSize="small"
-                                sx={{ color: "#EBD99F" }}
-                              />
-                            </IconButton>
-                          </TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell>
-                            <IconButton>
-                              <AccountCircleIcon
-                                sx={{ color: "#ffffff" }}
-                                fontSize="small"
-                              />
-                            </IconButton>
-                          </TableCell>
-                          <TableCell>Brandon Hart</TableCell>
-                          <TableCell>
-                            <IconButton>
-                              <ChatIcon
-                                fontSize="small"
-                                sx={{ color: "#EBD99F" }}
-                              />
-                            </IconButton>
-                          </TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell>
-                            <IconButton>
-                              <AccountCircleIcon
-                                sx={{ color: "#ffffff" }}
-                                fontSize="small"
-                              />
-                            </IconButton>
-                          </TableCell>
-                          <TableCell>Garrett O'Brien</TableCell>
-                          <TableCell>
-                            <IconButton>
-                              <ChatIcon
-                                fontSize="small"
-                                sx={{ color: "#EBD99F" }}
-                              />
-                            </IconButton>
-                          </TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell>
-                            <IconButton>
-                              <AccountCircleIcon
-                                sx={{ color: "#ffffff" }}
-                                fontSize="small"
-                              />
-                            </IconButton>
-                          </TableCell>
-                          <TableCell>Abdul Saleh</TableCell>
-                          <TableCell>
-                            <IconButton>
-                              <ChatIcon
-                                fontSize="small"
-                                sx={{ color: "#EBD99F" }}
-                              />
-                            </IconButton>
-                          </TableCell>
-                        </TableRow>
+                        {connectionList}
                       </TableBody>
                     </Table>
                     <Button color="secondary">View All</Button>

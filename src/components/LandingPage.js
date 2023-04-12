@@ -20,7 +20,7 @@ import {
   ButtonGroup,
 } from "@mui/material";
 
-class Dashboard extends Component {
+class LandingPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -228,7 +228,7 @@ class Dashboard extends Component {
                       <Button color="secondary" variant="contained">
                         Review a Course
                       </Button>
-                      <Button color="secondary" variant="contained" onClick={ () => this.toDashboard(student.id)}>
+                      <Button color="secondary" variant="contained" onClick={ () => this.toProfile(student.email)}>
                         View My Profile
                       </Button>
                     </Stack>
@@ -245,4 +245,4 @@ class Dashboard extends Component {
   }
 }
 
-export default Dashboard;
+export default LandingPage;

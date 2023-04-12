@@ -11,6 +11,7 @@ import ResetPasswordEnterEmail from "./components/ResetPasswordEnterEmail";
 import CourseView from "./components/CourseView";
 import Search from "./components/Search";
 import SugggestSemester from "./components/SuggestSemester"
+import Chat from "./components/Chat";
 
 class App extends Component {
 
@@ -29,6 +30,7 @@ class App extends Component {
             <Route  path='/students/planofstudy/:id' component={PlanOfSudy} />
             <Route  path='/students/suggest/:id' component={SugggestSemester} />
             <Route  path='/course/:courseId' component={CourseView} />
+            <Route path='/students/chat/:id/:connectionID' component={Chat} />
           </Switch>
         </Router>
         </div>

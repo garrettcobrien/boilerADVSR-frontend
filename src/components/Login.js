@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Redirect, withRouter } from "react-router-dom";
 import { Form, FormGroup, Input, Label, FormFeedback } from "reactstrap";
 import { useNavigate } from "react-router-dom";
 import {
@@ -38,7 +37,6 @@ class Login extends Component {
   }
 
   handleInputChange(event) {
-    console.log(event);
     const { target } = event;
     const value = target.type === "checkbox" ? target.checked : target.value;
     const { name } = target;
