@@ -4,7 +4,6 @@ const STUDENT_API_BASE_URL = "http://localhost:8081/students";
 
 class StudentService {
 
-
     //get all students
     getStudents(){
         return axios.get(STUDENT_API_BASE_URL);
@@ -16,15 +15,8 @@ class StudentService {
     }
 
     //login
-    loginStudent(id, password){
-        return axios({
-            method: 'put',
-            url: STUDENT_API_BASE_URL + '/login',
-            data: {
-                email: id,
-                password: password
-            }
-        });
+    loginStudent(student){
+        return axios.get(STUDENT_API_BASE_URL + '/login', student);
     }
 
     //get taken courses
@@ -75,6 +67,52 @@ class StudentService {
     //get students completed semesters
     getCompletedSemesters(studentId) {
         return axios.get(STUDENT_API_BASE_URL + '/' + studentId + '/plan/semesters');
+    }
+
+    //reset password link sent to email
+    resetPasswordLink(id) {
+        return axios.get(STUDENT_API_BASE_URL + '/change/pass/' + id);
+    }
+
+    //reset password
+    resetPassword(password, id) {
+        return axios.put(STUDENT_API_BASE_URL + '/change/pass/' + id + '/' + password)
+    }
+
+    removeBacklog(id, courseID) {
+        return axios.post(STUDENT_API_BASE_URL + '/' + id + '/plan/removebacklog/' + courseID);
+    }
+
+    //Get all connections
+    getConnections(id) {
+        return axios.get(STUDENT_API_BASE_URL + '/' + id + '/connections');
+    }
+
+    //request to connect to someone
+    requestConnection(id, connectionID) {
+        return axios.put(STUDENT_API_BASE_URL + '/' + id + '/connection/request/' + connectionID);
+    }
+
+    //accept request
+    handleRequest(id, connectionID, status) {
+        if (status === "") {
+            return axios({
+                method: 'put',
+                url: STUDENT_API_BASE_URL + '/' + id + '/connection/handle/' + connectionID,
+                data: {
+                    status: "decline"
+                }
+            });
+        }
+        else {
+            return axios({
+                method: 'put',
+                url: STUDENT_API_BASE_URL + '/' + id + '/connection/handle/' + connectionID,
+                data: {
+                    status: "accept"
+                }
+            });
+        }
     }
 }
 

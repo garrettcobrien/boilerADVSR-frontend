@@ -21,7 +21,7 @@ class App extends Component {
         <Router>
           <Switch>
             <Route exact path='/' component={Login} />
-            <Route exact path='/reset' component={ResetPasswordEnterEmail} />
+            <Route  path='/students/change/pass=:id' component={ResetPasswordEnterEmail} />
             <Route  path='/students/new' component={Register} />
             <Route  path='/students/landingpage/:id' component={LandingPage} />
             <Route  path='/students/dashboard/:id' component={Dashboard} />
