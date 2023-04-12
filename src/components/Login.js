@@ -34,8 +34,8 @@ class Login extends Component {
 
     this.handleInputChange = this.handleInputChange.bind(this);
     this.loginStudent = this.loginStudent.bind(this);
-    this.forgotPassword = this.forgotPassword.bind(this);
     this.toRegister = this.toRegister.bind(this);
+    this.toForgotPass = this.toForgotPass.bind(this);
   }
 
   handleInputChange(event) {
@@ -61,15 +61,11 @@ class Login extends Component {
     this.props.history.push('/students/new/')
   }
 
-  forgotPassword(id) {
-    StudentService.getStudentById(id).then( res => {
-        StudentService.resetPasswordLink(id);
-        //alert("Request to change password has been set!");
-    }).catch(function (error) {
-        alert("Account does not exist");
-        console.log(error.toJSON());
-    });
-}
+  toForgotPass() {
+    //implement attemping to get the first to see if it exists before sending them to dashboard
+    this.props.history.push(`/students/change`);
+  }
+
 
   render() {
     const { item } = this.state;
@@ -168,7 +164,7 @@ class Login extends Component {
                   </Button>
                 </FormGroup>
                 <Typography variant="h6" fontWeight={500}>New user? <Link onClick={ () => this.toRegister()} underline="hover" color="secondary">Sign up here</Link></Typography>
-                <Typography variant="h6" fontWeight={500}>Forgot your password? <Link underline="hover" color="secondary" onClick={ () => this.forgotPassword(item.email)}>Reset here</Link></Typography>
+                <Typography variant="h6" fontWeight={500}>Forgot your password? <Link underline="hover" color="secondary" onClick={ () => this.toForgotPass()}>Reset here</Link></Typography>
               </Form>
             </Container>
           </ThemeProvider>

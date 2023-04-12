@@ -12,6 +12,7 @@ import CourseView from "./components/CourseView";
 import Search from "./components/Search";
 import SugggestSemester from "./components/SuggestSemester"
 import Chat from "./components/Chat";
+import ResetPasswordNewPass from "./components/ResetPasswordNewPass";
 
 class App extends Component {
 
@@ -21,7 +22,8 @@ class App extends Component {
         <Router>
           <Switch>
             <Route exact path='/' component={Login} />
-            <Route  path='/students/change/pass=:id' component={ResetPasswordEnterEmail} />
+            <Route  path='/students/change' component={ResetPasswordEnterEmail} />
+            <Route  path='/students/change/pass=:id' component={ResetPasswordNewPass} />
             <Route  path='/students/new' component={Register} />
             <Route  path='/students/landingpage/:id' component={LandingPage} />
             <Route  path='/students/dashboard/:id' component={Dashboard} />
