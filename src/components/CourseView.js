@@ -47,65 +47,45 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { ConstructionOutlined } from "@mui/icons-material";
+import ChatService from "../services/ChatService";
 
 class CourseView extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      courseId: this.props.match.params.courseId,
-      course: null,
+      courseID: this.props.match.params.courseID,
+      id: this.props.match.params.id,
+      student: {},
+      course: {},
+      text: "",
+      rating: "",
+      chat: "",
     };
 
     this.drawerWidth = 240;
     this.pages = ["Find a Course", "Suggest a Semester", "Review a Course"];
 
-    this.onChangeSearchDepartment = this.onChangeSearchDepartment.bind(this);
-    this.setActiveCourse = this.setActiveCourse.bind(this);
-    this.searchDepartment = this.searchDepartment.bind(this);
+
+    this.toLandingpage = this.toLandingpage.bind(this);
+    this.addReview = this.addReview.bind(this);
+    this.handleInput = this.handleInput.bind(this);
+    this.addCourse = this.addCourse.bind(this);
+    this.addQuestion = this.addQuestion.bind(this);
+    this.courseRec = this.courseRec.bind(this);
+    this.getChatID = this.getChatID.bind(this);    
   }
 
   componentDidMount() {
-    console.log("***************")
-    console.log("***** DMT *****")
-    CourseService.getCourse(this.state.courseId).then((res) => {
-      console.log("***************")
-      console.log("***** RES *****")
-      console.log(res)
-      console.log("***************")
+    CourseService.getCourse(this.state.courseID).then((res) => {
       this.setState({ course: res.data });
+    });
+    StudentService.getStudentById(this.state.id).then((res) => {
+      this.setState({student: res.data});
     });
   }
 
   toggleDrawer() {
     this.state.open = !this.state.open;
-  }
-
-  onChangeSearchDepartment(e) {
-    const searchDepartment = e.target.value;
-
-    this.setState({
-      searchDepartment: searchDepartment,
-    });
-  }
-
-  setActiveCourse(course, index) {
-    this.setState({
-      currentCourse: course,
-      currentIndex: index,
-    });
-  }
-
-  searchDepartment() {
-    CourseService.getDepartment(this.state.searchDepartment)
-      .then((response) => {
-        this.setState({
-          courses: response.data,
-        });
-        console.log(response.data);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
   }
 
   toDashboard(id) {
@@ -151,12 +131,45 @@ class CourseView extends Component {
     this.setAnchorElUser(null);
   }
 
-  render() {
-    console.log("888888888");
-    console.log(this.props.match.params.courseId)
-    let course = this.state.course
-    console.log(course);
 
+  addReview(courseID, id, text, rating) {
+    CourseService.addReview(courseID, id, text, rating);
+  }
+
+  addQuestion(courseID, id, text, rating, desc) {
+    CourseService.addQuestion(courseID, id, text, rating, desc);
+  }
+
+  toLandingpage(id) {
+    this.props.history.push(`/students/landingpage/${id}`);
+  }
+
+handleInput (event) {
+    const value = event.target.value;
+    console.log(value);
+    this.setState({
+      ...this.state,
+      [event.target.name]: value,
+    });
+  }
+
+addCourse(id, currentCourse) {
+    StudentService.addToBacklog(id, currentCourse);
+}
+
+courseRec(id, courseID, chat) {
+    ChatService.sendCourse(id, courseID, chat.id);
+}
+
+getChatID(id, connectionID, chat) {
+    ChatService.getChat(id, connectionID).then( res => {
+        this.setState({chat: res.data});
+        console.log("Course sent to " + connectionID + " chat id: " + chat.id);
+    })
+}
+
+  render() {
+    const { course, student, id, text, rating, chat } = this.state;
     return (
       <ThemeProvider theme={theme}>
         <CssBaseline />
@@ -282,26 +295,122 @@ class CourseView extends Component {
                       verticalAlign: "middle",
                     }}
                   >
-                    <Typography color="secondary" variant="h3" fontWeight={700}>
-                      "1"
-                    </Typography>
-                    <Typography variant="h6" fontWeight={500} color="text">
-                      What would you like to do?
-                    </Typography>
-                    <Stack paddingTop={2} spacing={2}>
-                      <Button color="secondary" variant="contained">
-                        Find a Course
-                      </Button>
-                      <Button color="secondary" variant="contained">
-                        Suggest a Semester
-                      </Button>
-                      <Button color="secondary" variant="contained">
-                        Review a Course
-                      </Button>
-                      <Button color="secondary" variant="contained">
-                        View My Profile
-                      </Button>
-                    </Stack>
+                    <div className="col-md-6">
+                    
+                        <div>
+                            <h4>Course</h4>
+                        <div>
+                            <br></br>
+                            <button type="button" onClick={ () => this.addCourse(id, course)}>Add to course backlog</button>
+                        </div>
+                        <div>
+                            <label>
+                                <strong>Title:</strong>
+                            </label>{" "}
+                            {course.courseID}
+                        </div>
+                        <div>
+                            <label>
+                                <strong>Description:</strong>
+                            </label>{" "}
+                            {course.courseTitle}
+                        </div>
+                        <div>
+                            <label>
+                                <strong>Average Rating:</strong>
+                            </label>{" "}
+                            {course.averageRating}
+                        </div>
+                        <div>
+                            <label>
+                                <strong>Average GPA:</strong>
+                            </label>{" "}
+                            {course.averageGPA}
+                        </div>
+
+                        <div>
+                            <label>
+                                <strong>Reviews:</strong>
+                            </label>{" "}
+                            <ul >
+                                {course.reviews &&
+                                    course.reviews.map((review, index) => (
+                                        <li
+                                            key={index}
+                                        >
+                                            <div>
+                                                <p>Name of reviewer: {review.studentReviewer}</p>
+                                            </div>
+                                            <div>
+                                                <p>Review: {review.reviewText}</p>
+                                            </div>
+                                            <div>
+                                                <p>Rating: {review.overallRating}</p>
+                                            </div>
+                                        </li>
+                                    ))}
+                            </ul>
+                            <form onSubmit={ () => this.addReview(course.courseID, id, text, rating)}>
+                                <input type="text" name="text" id="text" placeholder="Enter review" value={text} onChange={this.handleInput}/>
+                                <input type="text" name="rating" id="rating" placeholder="Enter rating" value={rating} onChange={this.handleInput}/>
+                                <button type="submit">Submit</button>
+                            </form>
+                        </div>
+                        <br></br>
+                        <label>
+                            <strong>Discussions:</strong>
+                        </label>{" "}
+                        <div>
+                            
+                            {course.discussion &&
+                                course.discussion.map((question, index) => (
+                                    <ul key={index}>
+                                        <div>
+                                            <p>Question ID: {question.id}</p>
+                                        </div>
+                                        <div>
+                                            <p>Name of questioner: {question.userID}</p>
+                                        </div>
+                                        <div>
+                                            <p>Review: {question.text}</p>
+                                        </div>
+                                        <div>
+                                            {question.responses &&
+                                                question.responses.map((response) => (
+                                                    <ul><li>
+                                                        <div>
+                                                            <p>Name of response: {response.userID}</p>
+                                                        </div>
+                                                        <div>
+                                                            <p>Answer: {response.text}</p>
+                                                        </div>
+                                                    </li></ul>
+                                                ))
+                                            }
+                                        </div>
+                                        <>Post a Response</>
+                                        <form onSubmit={ () => this.addQuestion(course.courseID, id, text, question.id)}>
+                                            <input type="text" name="text" id="text" placeholder="Enter your response here" value={text} onChange={this.handleInput}/>
+                                            <button type="submit">Submit</button>
+                                        </form>
+                                    </ul>
+                                ))}
+                            <>Post a Question</>
+                            <form onSubmit={ () => this.addQuestion(course.courseID, id, text, "")}>
+                                <input type="text" name="text" id="text" placeholder="Enter question" value={text} onChange={this.handleInput}/>
+                                <button type="submit">Submit</button>
+                            </form>
+                            <br></br>
+                            <>Recommend to a Friend?</>
+                            
+                                <input type="text" name="text" id="text" placeholder="Enter connection to recommend" value={text} onChange={this.handleInput}/>
+                                <button type="button" onClick={ () => this.getChatID(id, text, chat)}>Get ID!</button>
+                                <button type="button" onClick={ () => this.courseRec(id, course.courseID, chat)}>Send!</button>
+                           
+                            <br></br>
+                        </div>
+                      </div>
+                </div>
                   </Paper>
                 </Grid>
                 <Grid item xs={0} md={2} lg={3}></Grid>

@@ -80,8 +80,8 @@ class Dashboard extends Component {
   toLandingpage(id) {
     this.props.history.push(`/students/landingpage/${id}`);
   }
-  toCoursepage(idDept, idNum) {
-    this.props.history.push(`/course/${idDept}/${idNum}/${this.state.id}`);
+  toCoursepage(idDept, idNum, id, courseID) {
+    this.props.history.push(`/course/${id}/${courseID}`);
   }
   toPlanofstudy(id) {
     this.props.history.push(`/students/planofstudy/${id}`);
@@ -153,7 +153,7 @@ class Dashboard extends Component {
             <b>{course.creditHours}</b>
           </TableCell>
           <TableCell>
-            <Button onClick={() => {this.toCoursepage(course.courseIdDepartment, course.courseIdNumber)}}>
+            <Button onClick={() => {this.toCoursepage(course.courseIdDepartment, course.courseIdNumber, student.email, course.courseID)}}>
               View
             </Button>
           </TableCell>

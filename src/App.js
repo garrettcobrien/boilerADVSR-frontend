@@ -29,7 +29,7 @@ class App extends Component {
             <Route  path='/students/editprofile/:id' component={EditProfile} />
             <Route  path='/students/planofstudy/:id' component={PlanOfSudy} />
             <Route  path='/students/suggest/:id' component={SugggestSemester} />
-            <Route  path='/course/:courseId' component={CourseView} />
+            <Route  path='/course/:id/:courseID' component={CourseView} />
             <Route path='/students/chat/:id/:connectionID' component={Chat} />
           </Switch>
         </Router>
