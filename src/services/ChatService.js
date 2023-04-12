@@ -29,6 +29,18 @@ class ChatService {
         });
     }
 
+    sendCourse(userID, courseID, messageId) {
+        return axios({
+            method: 'put',
+            url: CHAT_API_BASE_URL + "/addmessage/course",
+            data: {
+                sender: userID,
+                courseID: courseID,
+                id: messageId,
+            }
+        });
+    }
+
 }
 
 export default new ChatService();

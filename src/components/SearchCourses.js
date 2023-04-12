@@ -1,6 +1,7 @@
 import { Component } from "react";
 import CourseService from "../services/CourseService";
 import StudentService from "../services/StudentService";
+import ChatService from "../services/ChatService";
 
 class SearchCourses extends Component {
     constructor(props) {
@@ -16,7 +17,8 @@ class SearchCourses extends Component {
             currentIndex: -1,
             searchDepartment: "",
             text: "",
-            rating:""
+            rating:"",
+            chat: {},
         };
 
         this.onChangeSearchDepartment = this.onChangeSearchDepartment.bind(this);
@@ -28,6 +30,8 @@ class SearchCourses extends Component {
         this.addCourse = this.addCourse.bind(this);
         this.getSuggestedSemester = this.getSuggestedSemester.bind(this);
         this.addQuestion = this.addQuestion.bind(this);
+        this.courseRec = this.courseRec.bind(this);
+        this.getChatID = this.getChatID.bind(this);
     }
 
     componentDidMount() {
@@ -96,8 +100,20 @@ class SearchCourses extends Component {
         this.forceUpdate();
     }
 
+    courseRec(id, connectionID, courseID, chat) {
+        console.log("dfs");
+        ChatService.sendCourse(id, courseID, chat.id);
+    }
+
+    getChatID(id, connectionID, chat) {
+        ChatService.getChat(id, connectionID).then( res => {
+            this.setState({chat: res.data});
+            console.log("Course sent to " + connectionID + " chat id: " + chat.id);
+        })
+    }
+
     render() {
-        const { searchDepartment, courses, coursesSuggested, currentCourse, currentIndex, id, text, rating} = this.state;
+        const { searchDepartment, courses, coursesSuggested, currentCourse, currentIndex, id, text, rating, chat} = this.state;
         return (
             <div>
                 
@@ -271,6 +287,14 @@ class SearchCourses extends Component {
                                 <input type="text" name="text" id="text" placeholder="Enter question" value={text} onChange={this.handleInput}/>
                                 <button type="submit">Submit</button>
                             </form>
+                            <br></br>
+                            <>Recommend to a Friend?</>
+                            
+                                <input type="text" name="text" id="text" placeholder="Enter connection to recommend" value={text} onChange={this.handleInput}/>
+                                <button type="button" onClick={ () => this.getChatID(id, text, chat)}>Get ID!</button>
+                                <button type="button" onClick={ () => this.courseRec(id, text, currentCourse.courseID, chat)}>Send!</button>
+                           
+                            <br></br>
                         </div>
                         </div>
                     ) : (
