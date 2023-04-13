@@ -28,12 +28,19 @@ class ResetPasswordNewPass extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      id: this.props.match.params.id,
       item: this.emptyItem,
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
-    this.toLogin = this.toLogin.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
+
+  componentDidMount() {
+    StudentService.getStudentById(this.state.id).then( res => {
+        this.setState({item: res.data});
+    });   
+}
 
   handleInputChange(event) {
     const { target } = event;
@@ -80,14 +87,14 @@ class ResetPasswordNewPass extends Component {
               <Form>
                 <FormGroup>
                   <TextField
-                    label="Email"
+                    label="Password"
                     variant="filled"
-                    type="email"
-                    name="email"
-                    id="email"
+                    type="password"
+                    name="password"
+                    id="password"
                     value={item.password}
                     onChange={this.handleInputChange}
-                    autoComplete="email"
+                    autoComplete="password"
                     color="text"
                     focused
                     sx={{ width: '25ch' }}

@@ -63,7 +63,7 @@ class Login extends Component {
 
   toForgotPass() {
     //implement attemping to get the first to see if it exists before sending them to dashboard
-    this.props.history.push(`/students/change`);
+    this.props.history.push(`/students/enteremail`);
   }
 
 

@@ -17,6 +17,7 @@ import { ThemeProvider } from "@mui/system";
 import theme from "../theme.js";
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import PasswordIcon from '@mui/icons-material/Password';
+import StudentService from "../services/StudentService.js";
 
 class ResetPasswordEnterEmail extends Component {
   emptyItem = {
@@ -31,7 +32,8 @@ class ResetPasswordEnterEmail extends Component {
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
-    this.loginStudent = this.loginStudent.bind(this);
+    this.toLogin = this.toLogin.bind(this);
+    this.forgotPassword = this.forgotPassword.bind(this);
   }
 
   handleInputChange(event) {
@@ -43,10 +45,21 @@ class ResetPasswordEnterEmail extends Component {
     this.setState({ item });
   }
 
-  loginStudent(id) {
+  toLogin() {
     //implement attemping to get the first to see if it exists before sending them to dashboard
-    this.props.history.push(`/students/landingpage/${id}`);
+    this.props.history.push(`/`);
   }
+
+  forgotPassword(id) {
+    StudentService.getStudentById(id).then( res => {
+        StudentService.resetPasswordLink(id);
+        alert("Request to change password has been set!");
+        this.toLogin();
+    }).catch(function (error) {
+        alert("Account does not exist");
+        console.log(error.toJSON());
+    });
+}
 
   render() {
     const { item } = this.state;
@@ -103,7 +116,7 @@ class ResetPasswordEnterEmail extends Component {
                     variant="contained"
                     color="secondary"
                     style={{ marginLeft: "10px", marginTop: 10 }}
-                    onClick={() => this.loginStudent(item.email)}
+                    onClick={() => this.forgotPassword(item.email)}
                     className="btn btn-info"
                   >
                     <Typography color="primary">Reset</Typography>
