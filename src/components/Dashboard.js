@@ -77,7 +77,6 @@ class Dashboard extends Component {
       this.setState({ student: res.data });
       this.setState({ courses: res.data.backLog });
     });
-    
   }
 
   //Navigation functions
@@ -147,6 +146,7 @@ class Dashboard extends Component {
   render() {
     //Objects
     const { student, courses} = this.state;
+    const notifications = this.state.student.notifications;
 
     //Course backlog
     const courseList = courses.map((course) => {
@@ -194,6 +194,23 @@ class Dashboard extends Component {
               />
             </IconButton>
           </TableCell>
+        </TableRow>
+      );
+    });
+
+    //Notfications List
+    const notificationsList = student.notifications?.map((notif) => {
+      return (
+        <TableRow>
+          <TableCell>
+            <IconButton>
+              <AccountCircleIcon
+                sx={{ color: "#ffffff" }}
+                fontSize="small"
+              />
+            </IconButton>
+          </TableCell>
+          <TableCell>{notif}</TableCell>
         </TableRow>
       );
     });
@@ -277,7 +294,7 @@ class Dashboard extends Component {
               </ButtonGroup>
 
               <Button color="inherit">
-                <Badge badgeContent={4} color="secondary">
+                <Badge badgeContent={notifications && notifications.length} color="secondary">
                   <Avatar
                     variant="circle"
                     src="https://media.istockphoto.com/id/1171169127/photo/headshot-of-cheerful-handsome-man-with-trendy-haircut-and-eyeglasses-isolated-on-gray.jpg?s=612x612&w=0&k=20&c=yqAKmCqnpP_T8M8I5VTKxecri1xutkXH7zfybnwVWPQ="
@@ -495,6 +512,36 @@ class Dashboard extends Component {
                       <TableHead></TableHead>
                       <TableBody>
                         {connectionList}
+                      </TableBody>
+                    </Table>
+                    <Button color="secondary">View All</Button>
+                  </Paper>
+                </Grid>
+
+                <Grid
+                  item
+                  xs={12}
+                  md={5}
+                  lg={4}
+                  sx={{ verticalAlign: "middle" }}
+                >
+                  <Paper
+                    sx={{
+                      p: 1.5,
+                      height: "auto",
+                      display: "flex",
+                      flexDirection: "column",
+                      boxShadow: 3,
+                    }}
+                  >
+                    <Typography variant="h5" fontWeight={700} color="secondary">
+                      Notifications
+                    </Typography>
+
+                    <Table size="small">
+                      <TableHead></TableHead>
+                      <TableBody>
+                        {notificationsList}
                       </TableBody>
                     </Table>
                     <Button color="secondary">View All</Button>

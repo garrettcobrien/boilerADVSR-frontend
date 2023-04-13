@@ -27,6 +27,7 @@ class Register extends Component {
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.toLogin = this.toLogin.bind(this);
   }
 
   //create handle change for each input
@@ -58,6 +59,10 @@ class Register extends Component {
     StudentService.createStudent(item).then((res) => {
       this.setState({ student: res.data });
     });
+    this.props.history.push(`/`);
+  }
+
+  toLogin() {
     this.props.history.push(`/`);
   }
 
@@ -239,7 +244,7 @@ class Register extends Component {
                   <Typography color="primary">Submit</Typography>
                 </Button>{" "}
               </FormGroup>
-              <Typography variant="h6" fontWeight={500}>Already have an account? <Link underline="hover" color="secondary">Return to login</Link></Typography>
+              <Typography variant="h6" fontWeight={500}>Already have an account? <Link onClick={() => this.toLogin()} underline="hover" color="secondary">Return to login</Link></Typography>
             </Form>
           </Container>
         </ThemeProvider>

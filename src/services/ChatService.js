@@ -40,6 +40,9 @@ class ChatService {
             }
         });
     }
+    removeNotif(id, sender) {
+        return axios.post(`http://localhost:8081/students/` + id + `/removechatnotification/` + sender);
+    }
 
 }
 
