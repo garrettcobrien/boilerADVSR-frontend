@@ -15,11 +15,15 @@ import Chat from "./components/Chat";
 import ResetPasswordNewPass from "./components/ResetPasswordNewPass";
 import AddSemester from "./components/AddSemester";
 
+import UploadFiles from "./components/file.component";
+
+
 class App extends Component {
 
   render() {
     return (
       <div>
+        <UploadFiles />
         <Router>
           <Switch>
             <Route exact path='/' component={Login} />
