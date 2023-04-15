@@ -72,7 +72,6 @@ class CourseView extends Component {
     this.addCourse = this.addCourse.bind(this);
     this.addQuestion = this.addQuestion.bind(this);
     this.courseRec = this.courseRec.bind(this);
-    this.getChatID = this.getChatID.bind(this);    
   }
 
   componentDidMount() {
@@ -157,14 +156,11 @@ addCourse(id, currentCourse) {
     StudentService.addToBacklog(id, currentCourse);
 }
 
-courseRec(id, courseID, chat) {
-    ChatService.sendCourse(id, courseID, chat.id);
-}
-
-getChatID(id, connectionID, chat) {
+courseRec(id, connectionID, courseID) {
     ChatService.getChat(id, connectionID).then( res => {
-        this.setState({chat: res.data});
-        console.log("Course sent to " + connectionID + " chat id: " + chat.id);
+      const chat = res.data;
+      console.log("Course sent to " + connectionID + " chat id: " + chat.id);
+      ChatService.sendCourse(id, courseID, chat.id);
     })
 }
 
@@ -404,8 +400,7 @@ getChatID(id, connectionID, chat) {
                             <>Recommend to a Friend?</>
                             
                                 <input type="text" name="text" id="text" placeholder="Enter connection to recommend" value={text} onChange={this.handleInput}/>
-                                <button type="button" onClick={ () => this.getChatID(id, text, chat)}>Get ID!</button>
-                                <button type="button" onClick={ () => this.courseRec(id, course.courseID, chat)}>Send!</button>
+                                <button type="button" onClick={ () => this.courseRec(id, chat, course.courseID)}>Send!</button>
                            
                             <br></br>
                         </div>

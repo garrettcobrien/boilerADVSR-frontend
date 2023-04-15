@@ -45,8 +45,10 @@ import {
   CardMedia,
   Avatar,
   Link,
+  TextField,
 } from "@mui/material";
 import NotificationsIcon from "@mui/icons-material/Notifications";
+import { Form, Input } from "reactstrap";
 class Dashboard extends Component {
   constructor(props) {
     super(props);
@@ -56,7 +58,11 @@ class Dashboard extends Component {
 
       courses: [],
       reviews: [],
+      connectionsSuggested: [],
+      searchedConnectionsList: [],
 
+      searchDepartment: "",
+      degrees: [],
       anchorElNav: null,
       anchorElUser: null,
     };
@@ -70,6 +76,11 @@ class Dashboard extends Component {
     this.toPlanofstudy = this.toPlanofstudy.bind(this);
     this.toEditProfile = this.toEditProfile.bind(this);
     this.toCoursepage = this.toCoursepage.bind(this);
+    this.requestConnection = this.requestConnection.bind(this);
+    this.searchConnections = this.searchConnections.bind(this);
+    this.onChangeSearchDepartment = this.onChangeSearchDepartment.bind(this);
+    this.getSuggestedConnections = this.getSuggestedConnections.bind(this);
+    this.handleRequest = this.handleRequest.bind(this);
   }
 
   componentDidMount() {
@@ -77,6 +88,10 @@ class Dashboard extends Component {
       this.setState({ student: res.data });
       this.setState({ courses: res.data.backLog });
     });
+
+    StudentService.getPlanofStudy(this.state.id).then((res) => {
+      this.setState({degrees: res.data.degrees})
+    })
   }
 
   //Navigation functions
@@ -143,10 +158,53 @@ class Dashboard extends Component {
     this.setState({ courses: updatedStudents });
   }
 
+  handleRequest(id, connectionID, status) {
+    StudentService.handleRequest(id, connectionID, status);
+    //this.props.history.push(`/students/landingpage/${id}`);
+    //this.forceUpdate();
+  }
+
+  requestConnection(id, connectionID) {
+    console.log("requested connection");
+    StudentService.requestConnection(id, connectionID);
+  }
+
+  searchConnections() {
+    console.log("search toggled");
+    StudentService.getSearchConnections(this.state.id, this.state.searchDepartment).then((res) => {
+      this.setState({searchedConnectionsList: res.data});
+    })
+  }
+
+  getSuggestedConnections() {
+    this.state.degrees?.forEach(mydegree => {
+      console.log(mydegree);
+      if (mydegree.degreeType == "MAJOR") {
+        StudentService.getSearchConnections(this.state.id, mydegree.degreeTitle).then((res) => {
+          this.setState({connectionsSuggested: res.data});
+        });
+      }
+  });
+  }
+
+  onChangeSearchDepartment(e) {
+    const searchDepartment = e.target.value;
+    console.log(searchDepartment);
+    this.setState({
+        searchDepartment: searchDepartment
+    });
+  }
+
+
+  //profile pic
+
+
   render() {
     //Objects
-    const { student, courses} = this.state;
+    const { student, courses, searchedConnectionsList, connectionsSuggested, searchDepartment, degrees} = this.state;
     const notifications = this.state.student.notifications;
+    console.log(this.state.searchDepartment);
+    console.log(this.state.connectionsSuggested);
 
     //Course backlog
     const courseList = courses.map((course) => {
@@ -193,6 +251,37 @@ class Dashboard extends Component {
                 sx={{ color: "#EBD99F" }}
               />
             </IconButton>
+          </TableCell>
+        </TableRow>
+      );
+    });
+
+    //Connections waiting to be handled
+    const requestList = student.connectionRequests?.map((request) => {
+      return (
+        <TableRow>
+          <TableCell>{request}</TableCell>
+          <TableCell>
+              <Form onSubmit={() => this.handleRequest(student.email, request, "accept")}>
+                <Button sx={{
+                            backgroundColor: "#ffffff",
+                            fontWeight: 700,
+                            mr: 0,
+                            ml: 1,
+                        }} 
+                        size="small" type="submit" >Accept</Button>
+              </Form>
+          </TableCell>
+          <TableCell>
+              <Form onSubmit={() => this.handleRequest(student.email, request, "")}>
+                  <Button sx={{
+                            backgroundColor: "#ffffff",
+                            fontWeight: 700,
+                            mr: 1,
+                            ml: 0,
+                        }} 
+                        size="small" type="submit" >Decline</Button>
+              </Form>
           </TableCell>
         </TableRow>
       );
@@ -325,8 +414,8 @@ class Dashboard extends Component {
             <Toolbar />
             <Container maxWidth="md" sx={{ mt: 4, mb: 4 }}>
               <Grid container spacing={3}>
-                {/* Chart */}
-
+               {/* Chart */}
+ 
                 <Grid item xs={2} md={2} lg={2}></Grid>
                 <Grid item xs={8} md={8} lg={8}>
                   <Container></Container>
@@ -507,17 +596,73 @@ class Dashboard extends Component {
                     <Typography variant="h5" fontWeight={700} color="secondary">
                       Classmates
                     </Typography>
-
-                    <Table size="small">
+                    <Table size="medium">
                       <TableHead></TableHead>
                       <TableBody>
                         {connectionList}
                       </TableBody>
                     </Table>
-                    <Button color="secondary">View All</Button>
+                    <Typography paddingTop={3} variant="h5" fontWeight={700} color="secondary">
+                      Incomming Connection Requests
+                    </Typography>
+                    <Table size="medium">
+                      <TableBody>
+                        {this.state.student.connectionRequests && requestList}
+                      </TableBody>
+                    </Table>
                   </Paper>
                 </Grid>
-
+                <br></br>
+                    <Card alignItems="center" justifyContent="center" sx={{padding: 5}}>
+                        <br></br>
+                        <Typography variant="h5">Suggested Friends List</Typography>
+                        <Button onClick={this.getSuggestedConnections}>Generate Suggested Connections List</Button>
+                        <ul className="list-group">
+                            {connectionsSuggested &&
+                                connectionsSuggested.map((connection, index) => (
+                                    <li
+                                        className={
+                                            "list-group-item "
+                                        }
+                                        onClick={() => {this.requestConnection(student.email, connection)}}
+                                        key={index}
+                                    >
+                                       <Typography color="secondary"> {connection} </Typography>
+                                    </li>
+                                ))}
+                        </ul>
+                <br></br>
+                <TextField
+                    type="text"
+                    variant="outlined"
+                    placeholder="Search by department"
+                    value={searchDepartment}
+                    onChange={this.onChangeSearchDepartment}
+                />
+                <div className="input-group-append">
+                    <Button sx={{margin: 2}} type="button" variant="contained" onClick={this.searchConnections}>
+                        Search
+                    </Button>          
+                </div>
+                <br></br>
+                <div className="col-md-8">
+                    <Typography color="secondary" varient="h3">Searched Friends List</Typography>
+                    <ul className="list-group">
+                        {searchedConnectionsList &&
+                            searchedConnectionsList.map((connection, index) => (
+                                <li
+                                    className={
+                                        "list-group-item "
+                                    }
+                                    onClick={() => {this.requestConnection(student.email, connection)}}
+                                    key={index}
+                                >
+                                    <Typography color="primary"> {connection} </Typography>
+                                </li>
+                            ))}
+                    </ul>
+                </div>
+                </Card>
                 <Grid
                   item
                   xs={12}

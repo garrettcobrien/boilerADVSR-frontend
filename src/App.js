@@ -13,6 +13,7 @@ import Search from "./components/Search";
 import SugggestSemester from "./components/SuggestSemester"
 import Chat from "./components/Chat";
 import ResetPasswordNewPass from "./components/ResetPasswordNewPass";
+import AddSemester from "./components/AddSemester";
 
 class App extends Component {
 
@@ -30,6 +31,7 @@ class App extends Component {
             <Route  path='/students/courses/:id' component={SearchCourses} />
             <Route  path='/students/editprofile/:id' component={EditProfile} />
             <Route  path='/students/planofstudy/:id' component={PlanOfSudy} />
+            <Route  path='/students/addsemester/:id/:year/:season' component={AddSemester} />
             <Route  path='/students/suggest/:id' component={SugggestSemester} />
             <Route  path='/course/:id/:courseID' component={CourseView} />
             <Route path='/students/chat/:id/:connectionID' component={Chat} />

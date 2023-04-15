@@ -88,6 +88,8 @@ class SearchCourses extends Component {
         });
       }
     
+    //{TODO       !!!!!!!!!!!
+    //Uncomment add course to backlog function in student service
     addCourse(id, currentCourse) {
         StudentService.addToBacklog(id, currentCourse);
     }
@@ -197,7 +199,6 @@ class SearchCourses extends Component {
                     </Button>
                     </Toolbar>
                 </AppBar>
-
 
                 <Button onClick={ () => this.toLandingpage(id)}>Back to landing page</Button>
                 <br></br>

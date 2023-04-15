@@ -1,56 +1,90 @@
-import { TextField } from "@mui/material";
+import { InputAdornment, TextField } from "@mui/material";
 import { Component } from "react";
-import { FormGroup } from "reactstrap";
+import { FormGroup, Form, Label } from "reactstrap";
 import CourseService from "../services/CourseService";
+import theme from "../theme";
+import CssBaseline from "@mui/material/CssBaseline";
+import Stack from "@mui/material/Stack";
+import Avatar from "@mui/material/Avatar";
+import {
+  ThemeProvider,
+  Box,
+  AppBar,
+  Toolbar,
+  Typography,
+  Badge,
+  Paper,
+  Grid,
+  Container,
+  Button,
+  ButtonGroup,
+} from "@mui/material";
+import StudentService from "../services/StudentService";
+import { SentimentSatisfiedOutlined } from "@mui/icons-material";
 
 class AddSemester extends Component {
+    emptySem = {
+        year: '',
+        season: '',
+        courseId: '',
+        grade: '',
+        courses: [""],
+    }
+
     constructor(props) {
         super(props);
         this.state = {
             id: this.props.match.params.id,
             student: {},
-            semester: {
-                year:'',
-                season:'',
-                gpa:'',
-                qualityPoints:'',
-                creditHours:'',
-                courses: [],
-            },
+            semester: this.emptySem,
         }
+        this.handleChange = this.handleChange.bind(this);
+        this.handleChangeCourses = this.handleChangeCourses.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.addCourseSem = this.addCourseSem.bind(this);
     }
 
     componentDidMount() {
-        StudentService.getStudentById(this.state.id).then((res) => {
-          this.setState({ student: res.data });
-        });
+        if (this.props.match.params.year !== 'new') {
+            StudentService.getStudentById(this.state.id).then((res) => {
+                this.setState({ student: res.data });
+            });
+            StudentService.getSemester(this.props.match.params.id, this.props.match.params.season, this.props.match.params.year).then((res) => {
+                this.setState({semester: res.data}); 
+            });
+        }
+        
     }
 
     handleChangeCourses(e, index) {
-        const course = {};
-        CourseService.getCourse(e.target.value).then((res) => {
-            course = res.data;
-        });
-        this.state.courses[index] = course;
+        this.state.courses[index] = e.target.value;
         console.log(this.state.courses);
         this.setState({courses: this.state.courses});
     }
 
     handleChange(event) {
         const { target } = event;
-        const value = target.type === "checkbox" ? target.checked : target.value;
+        const value = target.type === 'checkbox' ? target.checked : target.value;
         const { name } = target;
-        let item = { ...this.state.item };
-        item[name] = value;
-        this.setState({ item });
+        let semester = {...this.state.semester};
+        semester[name] = value;
+        this.setState({semester});
     }
 
-    handleSubmit(semester) {
-        console.log(semester);
+    addCourseSem(id, semester) {
+        console.log(id + " " + semester.year + " " + semester.season + " " + semester.courseId + " " + semester.grade);
+        StudentService.addCourseSem(id, semester.year, semester.season, semester.courseId, semester.grade).then((res) => {
+            this.props.history.push(`/students/addsemester/${this.state.id}/${semester.year}/${semester.season}`,);
+        })
+    }
+
+    handleSubmit(id, semester, courses) {
+        this.props.history.push(`/students/planofstudy/${this.state.id}`);
     }
 
     render() {
-        const { student, semester } = this.state;
+        const { id, year, season, courseID, gpaGrade, semester, courses } = this.state;
+        console.log(semester);
         return (
           <div>
             <ThemeProvider theme={theme}>
@@ -72,7 +106,7 @@ class AddSemester extends Component {
                     variant="h6"
                     fontWeight={400}
                   >
-                    Let's set up another semester.
+                    {this.props.match.params.year !== "new" ? 'Update your semester below.' : 'Lets set up another semester.'}
                   </Typography>
                 </Container>
               <Container sx={{ padding: 0 }}>
@@ -82,114 +116,127 @@ class AddSemester extends Component {
                     fontWeight={700}
                     style={{paddingBottom: 35}}
                   >
-                    Add Semester
+                    {this.props.match.params.year !== "new" ? 'Edit Semester' : 'Add Semester'}
                   </Typography>
-                <Form>
+                <Form onSubmit={() => this.addCourseSem(id, semester)}>
                   <FormGroup>
                     <TextField
                       label="Year"
                       type="year"
                       name="year"
                       id="year"
-                      value={semester.year || ""}
-                      onChange={this.handleChange}
+                      value={semester.year}
+                      onChange={(e) => this.handleChange(e)}
                       autoComplete="year"
                       color="secondary"
                       focused
                       variant="filled"
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <BadgeOutlinedIcon fontSize="small" sx={{color: '#ffffff'}} />
-                          </InputAdornment>
-                        ),
-                      }}
                     />
                     <TextField
                       label="Season"
                       type="season"
                       name="season"
                       id="season"
-                      value={semester.season|| ""}
-                      onChange={this.handleChange}
-                      autoComplete="season"
-                      color="secondary"
-                      focused
-                      variant="filled"
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <BadgeOutlinedIcon fontSize="small" sx={{color: '#ffffff'}} />
-                          </InputAdornment>
-                        ),
-                      }}
-                    />
-                  </FormGroup>
-                  <FormGroup>
-                    <TextField
-                      label="Credit Hours"
-                      type="creditHours"
-                      name="creditHours"
-                      id="creditHours"
-                      value={semester.creditHours || ""}
-                      onChange={this.handleChange}
-                      autoComplete="creditHours"
-                      color="secondary"
-                      focused
-                      variant="filled"
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <PasswordIcon fontSize="small" sx={{color: '#ffffff'}} />
-                          </InputAdornment>
-                        ),
-                      }}
-                    />
-                    <TextField
-                      label="GPA"
-                      type="gpa"
-                      name="gpa"
-                      id="gpa"
-                      value={semester.gpa || ""}
-                      onChange={this.handleChange}
-                      autoComplete="gpa"
-                      color="secondary"
-                      focused
+                      value={semester.season}
+                      onChange={(e) => this.handleChange(e)}
+                      autoComplete="seasons"
                       sx={{ marginLeft: 5 }}
+                      color="secondary"
+                      focused
                       variant="filled"
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <PasswordIcon fontSize="small" sx={{color: '#ffffff'}} />
-                          </InputAdornment>
-                        ),
-                      }}
                     />
                   </FormGroup>
                   <FormGroup>
-                    {
+                    <TextField
+                        label="Course Id"
+                        type="courseId"
+                        name="courseId"
+                        id="courseId"
+                        value={semester.courseId}
+                        onChange={this.handleChange}
+                        autoComplete="courseId"
+                        color="secondary"
+                        focused
+                        variant="filled"
+                    />
+                    <TextField
+                        label="GPA"
+                        type="grade"
+                        name="grade"
+                        id="grade"
+                        value={semester.grade}
+                        onChange={this.handleChange}
+                        autoComplete="grade"
+                        color="secondary"
+                        focused
+                        sx={{ marginLeft: 5 }}
+                        variant="filled"
+                    />
+                    <Button
+                      style={{ marginTop: 10 }}
+                      variant="contained"
+                      color="secondary"
+                      type="submit"
+                    >
+                      <Typography color="primary">Add Course</Typography>
+                    </Button>{" "}
+                  </FormGroup>
+                </Form>
+                <Form>
+                  <FormGroup>
+                  <Typography
+                    color="secondary"
+                    variant="h5"
+                    fontWeight={700}
+                    style={{paddingTop: 35}}
+                  >
+                    {semester.year ? 'Added Courses' : 'No courses have been added'}
+                  </Typography>
+                    {semester.courses && semester.courses[0] !== "" &&
                         semester.courses.map((course, index) => {
                             return (
-                                <div key={index}>
-                                    <TextField 
-                                        onChange={(e) => this.handleChangeCourses(e, index)}
-                                        value={course}
-                                    
-                                    />
+                                <div>
+                                <TextField
+                                    label="Course Id"
+                                    type="courseId"
+                                    name="courseId"
+                                    id="courseId"
+                                    InputProps={{readOnly: true, }}
+                                    value={course.courseID}
+                                    onChange={this.handleChange}
+                                    autoComplete="courseId"
+                                    color="secondary"
+                                    focused
+                                    variant="filled"
+                                />
+                                <TextField
+                                    label="GPA"
+                                    type="grade"
+                                    name="grade"
+                                    id="grade"
+                                    InputProps={{readOnly: true, }}
+                                    value={course.grade}
+                                    onChange={this.handleChange}
+                                    autoComplete="grade"
+                                    color="secondary"
+                                    focused
+                                    sx={{ marginLeft: 5 }}
+                                    variant="filled"
+                                />
                                 </div>
-                            )
+                            );
                         })
                     }
-                  </FormGroup>
+                    </FormGroup>
                   <FormGroup>
                     <Button
                       style={{ marginTop: 10 }}
                       variant="contained"
                       color="secondary"
                       type="submit"
-                      onClick={() => this.handleSubmit(semester)}
+                      onClick={() => this.handleSubmit()}
                     >
-                      <Typography color="primary">Submit</Typography>
+                      <Typography color="primary">Save</Typography>
                     </Button>{" "}
                   </FormGroup>
                 </Form>

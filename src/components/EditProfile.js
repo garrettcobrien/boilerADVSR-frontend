@@ -1,6 +1,8 @@
 import { Component } from "react";
 import { Button, Container, Form, FormGroup, Input, Label, FormFeedback } from 'reactstrap';
+import { MenuItem, Select, TextField, } from '@mui/material'
 import StudentService from "../services/StudentService";
+import APIService from "../services/APIService";
 
 class EditProfile extends Component {
     emptyItem = {
@@ -21,16 +23,33 @@ class EditProfile extends Component {
         this.state = {
             id: this.props.match.params.id,
             student: this.emptyItem,
+            planOfStudy: {},
+            degree: '',
+            type: '',
+            dep: '',
+            departments: [""],
+            degrees: [],
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleChangeDep = this.handleChangeDep.bind(this);
+        this.handleChangeType = this.handleChangeType.bind(this);
+        this.search = this.search.bind(this);
     }
 
     componentDidMount() {
         console.log("edit");
         StudentService.getStudentById(this.state.id).then( res => {
             this.setState({student: res.data});
-        })
+        });
+        StudentService.getPlanofStudy(this.state.id).then(res => {
+            this.setState({planOfStudy: res.data})
+        });
+        APIService.getDepartments().then((res) => {
+            this.setState({departments: res.data});
+        });
+        this.forceUpdate();
+
     }
 
     handleChange(event) {
@@ -42,6 +61,13 @@ class EditProfile extends Component {
         console.log("render");
 
         this.setState({student});
+    }
+
+    handleChangeDep(e) {
+        this.setState({dep: e.target.value});
+    }
+    handleChangeType(e) {
+        this.setState({type: e.target.value});
     }
 
     validateEmail(e) {
@@ -65,8 +91,21 @@ class EditProfile extends Component {
         this.props.history.push(`/students/dashboard/${id}`);
     }
 
+    removeDegree(id, degree, text) {
+        StudentService.changeDegree(id, degree, text).then((res) => {
+            this.setState({departments: res.data});
+        })
+        this.forceUpdate();
+    }
+
+    search(dep, type) {
+        APIService.getDegreeList(dep, type).then((res) => {
+            this.setState({degrees: res.data});
+        })
+    }
+
     render() {
-        const { student, id, isLoading } = this.state;
+        const { student, id, isLoading, planOfStudy, type, degree, dep, departments, degrees } = this.state;
         if (isLoading) {
             return <p>Loading...</p>;
         }
@@ -118,7 +157,42 @@ class EditProfile extends Component {
                                onChange={this.handleChange} autoComplete="linkedin"/>
                     </FormGroup>
                     <FormGroup>
-                        
+                        {/* Getting degrees */}
+                       {planOfStudy.degrees?.map((degree) => (
+                        <div>
+                            <Label for="degree">
+                                {degree.degreeTitle}
+                            </Label> {degree.degreeType}
+                            <Button type="submit" onClick={ () => this.removeDegree(id, degree.degreeTitle, "false")}>Remove</Button>
+                        </div>
+                       ))} 
+                    </FormGroup>
+                </Form>
+
+                <Form onSubmit={() => this.removeDegree(id, degree.degreeTitle, "true")}>
+                    <FormGroup>
+                        {/* Adding more degrees */}
+                        <Select id="category" label="Please Select a Type of Department" value={dep} onChange={ (e) => this.handleChangeDep(e)}>
+                            {departments &&
+                                departments.map((department) => (
+                                    <MenuItem color="primary" key={department} value={department}> {department} </MenuItem>
+                                ))
+                            }
+                        </Select>
+                        <Select label="Please Select a Type of Degree" value={type} onChange={ (e) => this.handleChangeType(e)}>
+                            <MenuItem key="major" value="MAJOR">Major</MenuItem>
+                            <MenuItem key="minor" value="MINOR">Minor</MenuItem>
+                            <MenuItem key="concentration" value="CONCENTRATION">Concentration</MenuItem>
+                        </Select>
+                        <Button onClick={() => this.search(dep, type)}>Search</Button>
+                        {degrees &&
+                            degrees.map((degree) => (
+                                <label className="list-group-item">
+                                    {degree.degreeTitle}
+                                    <input type="submit"/>
+                                </label>
+                            ))
+                        }
                     </FormGroup>
                     <Button color="primary" type="submit" onClick={ () => this.handleSubmit(student, id)} >Update</Button>{' '}
                 </Form>

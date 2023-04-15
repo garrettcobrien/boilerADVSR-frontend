@@ -1,4 +1,7 @@
+import React from 'react';
 import axios from 'axios';
+import CourseService from './CourseService';
+import { VapingRooms } from '@mui/icons-material';
 
 const STUDENT_API_BASE_URL = "http://localhost:8081/students";
 
@@ -37,9 +40,9 @@ class StudentService {
     }
 
     //add course to transcrip
-    addCourse(id, course) {
-        return axios.post(STUDENT_API_BASE_URL + '/' + id + '/plan/addcourse', course);
-    }
+    // addCourse(id, course) {
+    //     return axios.post(STUDENT_API_BASE_URL + '/' + id + '/plan/addcourse', course);
+    // }
 
     //get student
     getStudentById(studentId){
@@ -121,6 +124,86 @@ class StudentService {
             });
         }
     }
+
+    //add semester
+    addCourseSem(id, year, season, courseID, gpaGrade) {
+        return axios({
+            method: 'post',
+            url: STUDENT_API_BASE_URL + '/' + id + '/plan/addcoursebyid',
+            data: {
+                year: year,
+                season: season,
+                courseId: courseID,
+                grade: gpaGrade
+            }
+        })
+    }
+
+
+    getProfilePic(email) {
+        return axios.get("/upload/" + email + "/profile-picture",
+        {
+            responseType: 'arraybuffer',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/pdf'
+            }
+        })
+        .then((response) => {
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'file.pdf'); //or any other extension
+            document.body.appendChild(link);
+            link.click();
+        })
+        .catch((error) => console.log(error));
+    }
+
+    changeDegree(id, degree, operation) {
+        if (operation === "true") {
+            return axios({
+                method: 'post',
+                url: STUDENT_API_BASE_URL + '/' + id + '/plan/adddegree',
+                data: {
+                    degree: degree,
+                    operation: "true"
+                }
+            })
+        }
+        else {
+            return axios({
+                method: 'post',
+                url: STUDENT_API_BASE_URL + '/' + id + '/plan/adddegree',
+                data: {
+                    degree: degree,
+                    operation: "false"
+                }
+            })
+        }
+    }
+
+    getSemester(id, season, year) {
+        return axios({
+            method: 'put',
+            url: STUDENT_API_BASE_URL + '/' + id + '/plan/getsemester',
+            data: {
+                season: season,
+                year: year
+            }
+        })
+    }
+
+    getSearchConnections(id, dep) {
+        console.log(dep);
+        if (dep === "") {
+            return axios.get(STUDENT_API_BASE_URL + '/' + id + '/search/all');
+        }
+        else {
+            return axios.get(STUDENT_API_BASE_URL + '/' + id + '/search/all?department=' + dep);
+        }
+    }
 }
+
 
 export default new StudentService()
