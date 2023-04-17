@@ -94,7 +94,7 @@ class EditProfile extends Component {
     removeDegree(id, degree, text) {
         StudentService.changeDegree(id, degree, text).then((res) => {
             this.setState({departments: res.data});
-        })
+        });
         this.forceUpdate();
     }
 
@@ -169,7 +169,7 @@ class EditProfile extends Component {
                     </FormGroup>
                 </Form>
 
-                <Form onSubmit={() => this.removeDegree(id, degree.degreeTitle, "true")}>
+                <Form >
                     <FormGroup>
                         {/* Adding more degrees */}
                         <Select id="category" label="Please Select a Type of Department" value={dep} onChange={ (e) => this.handleChangeDep(e)}>
@@ -189,13 +189,13 @@ class EditProfile extends Component {
                             degrees.map((degree) => (
                                 <label className="list-group-item">
                                     {degree.degreeTitle}
-                                    <input type="submit"/>
+                                    <input type="submit" onClick={() => this.removeDegree(id, degree.degreeTitle, "true")}/>
                                 </label>
                             ))
                         }
                     </FormGroup>
-                    <Button color="primary" type="submit" onClick={ () => this.handleSubmit(student, id)} >Update</Button>{' '}
                 </Form>
+                <Button color="primary" type="submit" onClick={ () => this.handleSubmit(student, id)} >Update</Button>{' '}
             </Container>
             </div>
         );

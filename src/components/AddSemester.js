@@ -41,7 +41,7 @@ class AddSemester extends Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleChangeCourses = this.handleChangeCourses.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.addCourseSem = this.addCourseSem.bind(this);
+        this.addCourse = this.addCourse.bind(this);
     }
 
     componentDidMount() {
@@ -71,11 +71,13 @@ class AddSemester extends Component {
         this.setState({semester});
     }
 
-    addCourseSem(id, semester) {
+    addCourse(id, semester) {
+        const year = this.state.semester.year;
+        const season = this.state.semester.season;
         console.log(id + " " + semester.year + " " + semester.season + " " + semester.courseId + " " + semester.grade);
         StudentService.addCourseSem(id, semester.year, semester.season, semester.courseId, semester.grade).then((res) => {
-            this.props.history.push(`/students/addsemester/${this.state.id}/${semester.year}/${semester.season}`,);
-        })
+        });
+        this.props.history.push(`/students/addsemester/${id}/${year}/${season}`);
     }
 
     handleSubmit(id, semester, courses) {
@@ -118,7 +120,7 @@ class AddSemester extends Component {
                   >
                     {this.props.match.params.year !== "new" ? 'Edit Semester' : 'Add Semester'}
                   </Typography>
-                <Form onSubmit={() => this.addCourseSem(id, semester)}>
+                <Form onSubmit={() => this.addCourse(id, semester)}>
                   <FormGroup>
                     <TextField
                       label="Year"
