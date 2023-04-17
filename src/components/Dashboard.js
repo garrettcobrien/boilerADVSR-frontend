@@ -76,6 +76,7 @@ class Dashboard extends Component {
     this.toPlanofstudy = this.toPlanofstudy.bind(this);
     this.toEditProfile = this.toEditProfile.bind(this);
     this.toCoursepage = this.toCoursepage.bind(this);
+    this.toCalendar = this.toCalendar.bind(this);
     this.requestConnection = this.requestConnection.bind(this);
     this.searchConnections = this.searchConnections.bind(this);
     this.onChangeSearchDepartment = this.onChangeSearchDepartment.bind(this);
@@ -112,6 +113,9 @@ class Dashboard extends Component {
   }
   toSearchCourses(id){
     this.props.history.push(`/students/courses/${id}`);
+  }
+  toCalendar(id) {
+    this.props.history.push(`/students/calendar/${id}`);
   }
   //end nav functions
 
@@ -379,6 +383,16 @@ class Dashboard extends Component {
                   }}
                 >
                   Transcript
+                </Button>
+                <Button onClick={() => {this.toCalendar(this.state.student.email);}}
+                  sx={{
+                    backgroundColor: "#ffffff",
+                    fontWeight: 700,
+                    mr: 1,
+                    ml: 1,
+                  }}
+                >
+                  Calendar
                 </Button>
               </ButtonGroup>
 
@@ -689,7 +703,6 @@ class Dashboard extends Component {
                         {notificationsList}
                       </TableBody>
                     </Table>
-                    <Button color="secondary">View All</Button>
                   </Paper>
                 </Grid>
 

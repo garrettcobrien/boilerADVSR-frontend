@@ -16,6 +16,7 @@ import ResetPasswordNewPass from "./components/ResetPasswordNewPass";
 import AddSemester from "./components/AddSemester";
 
 import UploadFiles from "./components/file.component";
+import Calendar from "./components/Calendar";
 
 
 class App extends Component {
@@ -23,7 +24,6 @@ class App extends Component {
   render() {
     return (
       <div>
-        <UploadFiles />
         <Router>
           <Switch>
             <Route exact path='/' component={Login} />
@@ -35,6 +35,7 @@ class App extends Component {
             <Route  path='/students/courses/:id' component={SearchCourses} />
             <Route  path='/students/editprofile/:id' component={EditProfile} />
             <Route  path='/students/planofstudy/:id' component={PlanOfSudy} />
+            <Route path='/students/calendar/:id' component={Calendar} />
             <Route  path='/students/addsemester/:id/:year/:season' component={AddSemester} />
             <Route  path='/students/suggest/:id' component={SugggestSemester} />
             <Route  path='/course/:id/:courseID' component={CourseView} />

@@ -14,7 +14,9 @@ class Register extends Component {
     firstName: "",
     lastName: "",
     email: "",
+    confirmEmail: "",
     password: "",
+    confirmPassword: "",
     validate: {
       emailState: "",
     },
@@ -54,16 +56,33 @@ class Register extends Component {
     this.setState({ validate });
   }
 
-  handleSubmit(item) {
-    /* Send them too create their profile page */
-    StudentService.createStudent(item).then((res) => {
-      this.setState({ student: res.data });
-    });
+  toLogin() {
+    //implement attemping to get the first to see if it exists before sending them to dashboard
     this.props.history.push(`/`);
   }
 
-  toLogin() {
-    this.props.history.push(`/`);
+  handleSubmit(item) {
+    /* Send them too create their profile page */
+    if (item.validate.emailState === "has-success" && item.email === item.confirmEmail && item.password === item.confirmPassword) {
+      const temp = {};
+      StudentService.getStudentById(item.email).then((res) => {
+          temp = res.data;
+      }).catch((reason) => {
+          if (reason.response.status !== 200) {
+          StudentService.createStudent(item).then((res) => {
+            this.setState({ student: res.data });
+          });
+          this.props.history.push(`/`);
+        }
+        else {
+          alert("Email already in use");
+        }
+      });
+    }
+    else {
+      console.log("ERROR");
+      alert("Invaild Credentials");
+    }
   }
 
   render() {
@@ -151,7 +170,7 @@ class Register extends Component {
                   id="email"
                   valid={item.validate.emailState === "has-success"}
                   invalid={item.validate.emailState === "has-danger"}
-                  value={item.email}
+                  value={item.email || ''}
                   onChange={(e) => {
                     this.validateEmail(e);
                     this.handleChange(e);
@@ -172,14 +191,11 @@ class Register extends Component {
                   type="email"
                   name="confirmEmail"
                   id="confirmEmail"
-                  valid={item.validate.emailState === "has-success"}
-                  invalid={item.validate.emailState === "has-danger"}
                   sx={{ marginLeft: 5 }}
-                  //   value={item.email}
-                  //   onChange={(e) => {
-                  //     this.validateEmail(e);
-                  //     this.handleChange(e);
-                  //   }}
+                    value={item.confirmEmail || ''}
+                  onChange={(e) => {
+                    this.handleChange(e);
+                  }}
                   color="secondary"
                   focused
                   variant="filled"
@@ -217,8 +233,8 @@ class Register extends Component {
                   type="password"
                   name="confirmPassword"
                   id="confirmPassword"
-                  //   value={item.password || ""}
-                  //   onChange={this.handleChange}
+                    value={item.confirmPassword || ""}
+                    onChange={this.handleChange}
                   autoComplete="password"
                   color="secondary"
                   focused
@@ -238,11 +254,12 @@ class Register extends Component {
                   style={{ marginTop: 10 }}
                   variant="contained"
                   color="secondary"
-                  type="submit"
-                  onClick={() => this.handleSubmit(item)}
+                  type="button"
+                  onClick={() => this.handleSubmit(item)}                  
                 >
                   <Typography color="primary">Submit</Typography>
                 </Button>{" "}
+                
               </FormGroup>
               <Typography variant="h6" fontWeight={500}>Already have an account? <Link onClick={() => this.toLogin()} underline="hover" color="secondary">Return to login</Link></Typography>
             </Form>
@@ -252,4 +269,4 @@ class Register extends Component {
     );
   }
 }
-export default Register;
+export default withRouter(Register);

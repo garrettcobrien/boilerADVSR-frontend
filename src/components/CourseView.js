@@ -275,7 +275,7 @@ courseRec(id, connectionID, courseID) {
             }}
           >
             <Toolbar />
-            <Container maxWidth="md" sx={{ mt: 10, mb: 4 }}>
+            <Container maxWidth="lg" sx={{ mt: 10, mb: 4 }}>
               <Grid container spacing={3}>
                 <Grid item xs={0} md={2} lg={3}></Grid>
                 <Grid item xs={12} md={8} lg={6}>
@@ -325,6 +325,7 @@ courseRec(id, connectionID, courseID) {
                         </div>
 
                         <div>
+                          <form onSubmit={ () => this.addReview(course.courseID, id, text, rating)}>  
                             <label>
                                 <strong>Reviews:</strong>
                             </label>{" "}
@@ -346,7 +347,7 @@ courseRec(id, connectionID, courseID) {
                                         </li>
                                     ))}
                             </ul>
-                            <form onSubmit={ () => this.addReview(course.courseID, id, text, rating)}>
+                            
                                 <input type="text" name="text" id="text" placeholder="Enter review" value={text} onChange={this.handleInput}/>
                                 <input type="text" name="rating" id="rating" placeholder="Enter rating" value={rating} onChange={this.handleInput}/>
                                 <button type="submit">Submit</button>

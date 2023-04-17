@@ -121,6 +121,15 @@ class ResetPasswordEnterEmail extends Component {
                   >
                     <Typography color="primary">Reset</Typography>
                   </Button>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    style={{ marginLeft: "10px", marginTop: 10 }}
+                    onClick={() => this.toLogin()}
+                    className="btn btn-info"
+                  >
+                    <Typography color="primary">Back to login</Typography>
+                  </Button>
                 </FormGroup>
               </Form>
             </Container>

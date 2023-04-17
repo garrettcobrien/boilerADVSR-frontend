@@ -18,6 +18,10 @@ class APIService {
     getDegreeList(dep, type) {
         return axios.get("http://localhost:8081/degrees?department=" + dep + "&degree-type=" + type);
     }
+
+    getAllEvents() {
+        return axios.get("http://localhost:8081/events/all");
+    }
 }
 
 export default new APIService()
