@@ -617,7 +617,7 @@ class Dashboard extends Component {
                       </TableBody>
                     </Table>
                     <Typography paddingTop={3} variant="h5" fontWeight={700} color="secondary">
-                      Incomming Connection Requests
+                      Incoming Connection Requests
                     </Typography>
                     <Table size="medium">
                       <TableBody>

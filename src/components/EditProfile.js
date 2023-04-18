@@ -29,12 +29,14 @@ class EditProfile extends Component {
             dep: '',
             departments: [""],
             degrees: [],
+            hasChanged: false
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChangeDep = this.handleChangeDep.bind(this);
         this.handleChangeType = this.handleChangeType.bind(this);
         this.search = this.search.bind(this);
+        this.saveInfo = this.saveInfo.bind(this);
     }
 
     componentDidMount() {
@@ -61,6 +63,7 @@ class EditProfile extends Component {
         console.log("render");
 
         this.setState({student});
+        this.setState({hasChanged: true});
     }
 
     handleChangeDep(e) {
@@ -91,11 +94,18 @@ class EditProfile extends Component {
         this.props.history.push(`/students/dashboard/${id}`);
     }
 
+    saveInfo() {
+        StudentService.updateStudent(this.state.student, this.state.id).then( res => {
+            this.setState({student: res.data});
+        });
+        this.setState({hasChanged: false});
+    }
+
     removeDegree(id, degree, text) {
         StudentService.changeDegree(id, degree, text).then((res) => {
             this.setState({departments: res.data});
         });
-        this.forceUpdate();
+        //this.forceUpdate();
     }
 
     search(dep, type) {
@@ -147,32 +157,23 @@ class EditProfile extends Component {
                                onChange={this.handleChange} autoComplete="password"/>
                     </FormGroup>
                     <FormGroup>
-                        <Label for="aboutme">About Me</Label>
-                        <Input type="aboutme" name="aboutme" id="aboutme" value={student.aboutMe || ''}
-                               onChange={this.handleChange} autoComplete="aboutme"/>
+                        <Label for="aboutMe">About Me</Label>
+                        <Input type="aboutmM" name="aboutMe" id="aboutMe" value={student.aboutMe || ''}
+                               onChange={this.handleChange} autoComplete="aboutMe"/>
                     </FormGroup>
                     <FormGroup>
-                        <Label for="linkedin">LinkedIn</Label>
-                        <Input type="linkedin" name="linkedin" id="linkedin" value={student.linkedIn || ''}
-                               onChange={this.handleChange} autoComplete="linkedin"/>
+                        <Label for="linkedIn">LinkedIn</Label>
+                        <Input type="linkedIn" name="linkedIn" id="linkedIn" value={student.linkedIn || ''}
+                               onChange={this.handleChange} autoComplete="linkedIn"/>
                     </FormGroup>
-                    <FormGroup>
-                        {/* Getting degrees */}
-                       {planOfStudy.degrees?.map((degree) => (
-                        <div>
-                            <Label for="degree">
-                                {degree.degreeTitle}
-                            </Label> {degree.degreeType}
-                            <Button type="submit" onClick={ () => this.removeDegree(id, degree.degreeTitle, "false")}>Remove</Button>
-                        </div>
-                       ))} 
-                    </FormGroup>
+                    <Button disabled={!(this.state.hasChanged)} onClick={() => this.saveInfo()}>Save Input Changes</Button>
                 </Form>
-
+                <br></br>
                 <Form >
+                    <Label>Search Degrees to add by Department and Type</Label>
                     <FormGroup>
                         {/* Adding more degrees */}
-                        <Select id="category" label="Please Select a Type of Department" value={dep} onChange={ (e) => this.handleChangeDep(e)}>
+                        <Select id="category" label="Please Select a Type of Department" value={dep} onChange={this.handleChangeDep}>
                             {departments &&
                                 departments.map((department) => (
                                     <MenuItem color="primary" key={department} value={department}> {department} </MenuItem>
@@ -189,10 +190,25 @@ class EditProfile extends Component {
                             degrees.map((degree) => (
                                 <label className="list-group-item">
                                     {degree.degreeTitle}
-                                    <input type="submit" onClick={() => this.removeDegree(id, degree.degreeTitle, "true")}/>
+                                    <button label="add"  onClick={() => this.removeDegree(id, degree.degreeTitle, "true")}>add</button>
                                 </label>
                             ))
                         }
+                    </FormGroup>
+                </Form>
+                <br></br>
+                <Form>
+                    <Label>Degrees added below</Label>
+                    <FormGroup>
+                        {/* Getting degrees */}
+                       {planOfStudy.degrees?.map((degree) => (
+                        <div>
+                            <Label for="degree">
+                                {degree.degreeTitle}
+                            </Label> {degree.degreeType}
+                            <Button type="submit" onClick={ () => this.removeDegree(id, degree.degreeTitle, "false")}>Remove</Button>
+                        </div>
+                       ))} 
                     </FormGroup>
                 </Form>
                 <Button color="primary" type="submit" onClick={ () => this.handleSubmit(student, id)} >Update</Button>{' '}
