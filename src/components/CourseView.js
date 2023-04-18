@@ -158,9 +158,9 @@ addCourse(id, currentCourse) {
 
 courseRec(id, connectionID, courseID) {
     ChatService.getChat(id, connectionID).then( res => {
-      const chat = res.data;
-      console.log("Course sent to " + connectionID + " chat id: " + chat.id);
-      ChatService.sendCourse(id, courseID, chat.id);
+      //const chat = res.data;
+      console.log("Course sent to " + connectionID + " chat id: " );
+      ChatService.sendCourse(id, courseID, res.data.id);
     })
 }
 
@@ -401,7 +401,7 @@ courseRec(id, connectionID, courseID) {
                             <>Recommend to a Friend?</>
                             
                                 <input type="text" name="text" id="text" placeholder="Enter connection to recommend" value={text} onChange={this.handleInput}/>
-                                <button type="button" onClick={ () => this.courseRec(id, chat, course.courseID)}>Send!</button>
+                                <button type="button" onClick={ () => this.courseRec(id, text, course.courseID)}>Send!</button>
                            
                             <br></br>
                         </div>

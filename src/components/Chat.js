@@ -16,7 +16,7 @@ class Chat extends Component {
     }
 
     componentDidMount() {
-        ChatService.getChat(this.state.id, this.state.connectionID).then( res => {
+        ChatService.getChat(this.props.match.params.id, this.props.match.params.connectionID).then( res => {
             this.setState({chat: res.data});
         });
         ChatService.removeNotif(this.state.id, this.state.connectionID);
