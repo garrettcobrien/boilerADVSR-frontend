@@ -73,7 +73,7 @@ class Register extends Component {
           if (reason.response.status !== 200) {
           StudentService.createStudent(item).then((res) => {
             this.setState({ student: res.data });
-            this.props.history.push(`/students/editprofile/${item.email}`);
+            this.props.history.push(`/students/addDegrees/${res.data.email}`);
           });
         }
         else {
@@ -170,8 +170,6 @@ class Register extends Component {
                   type="email"
                   name="email"
                   id="email"
-                  valid={item.validate.emailState === "has-success"}
-                  invalid={item.validate.emailState === "has-danger"}
                   value={item.email || ''}
                   onChange={(e) => {
                     this.validateEmail(e);

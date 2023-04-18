@@ -81,7 +81,7 @@ class AddSemester extends Component {
     }
 
     handleSubmit(id, semester, courses) {
-        this.props.history.push(`/students/planofstudy/${this.state.id}`);
+        this.props.history.push(`/students/landingpage/${this.state.id}`);
     }
 
     render() {
@@ -192,7 +192,7 @@ class AddSemester extends Component {
                     fontWeight={700}
                     style={{paddingTop: 35}}
                   >
-                    {semester.year ? 'Added Courses' : 'No courses have been added'}
+                    {this.props.match.params.year !== "new" ? 'Added Courses' : 'No courses have been added'}
                   </Typography>
                     {semester.courses && semester.courses[0] !== "" &&
                         semester.courses.map((course, index) => {
