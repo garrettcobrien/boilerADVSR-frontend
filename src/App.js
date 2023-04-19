@@ -9,13 +9,10 @@ import PlanOfSudy from "./components/PlanOfStudy";
 import EditProfile from "./components/EditProfile";
 import ResetPasswordEnterEmail from "./components/ResetPasswordEnterEmail";
 import CourseView from "./components/CourseView";
-import Search from "./components/Search";
 import SugggestSemester from "./components/SuggestSemester"
 import Chat from "./components/Chat";
 import ResetPasswordNewPass from "./components/ResetPasswordNewPass";
 import AddSemester from "./components/AddSemester";
-
-import UploadFiles from "./components/file.component";
 import Calendar from "./components/Calendar";
 
 

@@ -1,6 +1,4 @@
 import React, { Component } from 'react'  
-// import "@fullcalendar/core/main.css";  
-// import "@fullcalendar/daygrid/main.css";  
 import FullCalendar from "@fullcalendar/react";  
 import dayGridPlugin from "@fullcalendar/daygrid";  
 import StudentService from '../services/StudentService';
