@@ -1,6 +1,5 @@
 import React, {Component} from "react";
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import Register from "./components/Register";
 import Dashboard from "./components/Dashboard";
 import Login from "./components/Login";
 import SearchCourses from "./components/SearchCourses";
@@ -14,6 +13,8 @@ import Chat from "./components/Chat";
 import ResetPasswordNewPass from "./components/ResetPasswordNewPass";
 import AddSemester from "./components/AddSemester";
 import Calendar from "./components/Calendar";
+import Degrees from "./components/Degrees";
+import Register from "./components/Register";
 
 
 class App extends Component {
@@ -24,6 +25,7 @@ class App extends Component {
         <Router>
           <Switch>
             <Route exact path='/' component={Login} />
+            <Route path='/students/addDegrees/:id' component={Degrees} />
             <Route  path='/students/enteremail' component={ResetPasswordEnterEmail} />
             <Route  path='/students/change/pass=:id' component={ResetPasswordNewPass} />
             <Route  path='/students/new' component={Register} />

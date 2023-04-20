@@ -17,6 +17,8 @@ class Register extends Component {
     confirmEmail: "",
     password: "",
     confirmPassword: "",
+    aboutMe:"",
+    linkedIn:"",
     validate: {
       emailState: "",
     },
@@ -168,8 +170,6 @@ class Register extends Component {
                   type="email"
                   name="email"
                   id="email"
-                  valid={item.validate.emailState === "has-success"}
-                  invalid={item.validate.emailState === "has-danger"}
                   value={item.email || ''}
                   onChange={(e) => {
                     this.validateEmail(e);
