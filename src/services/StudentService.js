@@ -65,8 +65,19 @@ class StudentService {
     }
 
     //get suggested semester given parameters
-    getSuggestedSemester(studentId, sort) {
-        return axios.get(STUDENT_API_BASE_URL + '/' + studentId + '/plan/courses/suggestedSemester?sort=' + sort);
+    getSuggestedSemester(studentId, sort, level) {
+        if (sort === "" && level === "") {
+            return axios.get(STUDENT_API_BASE_URL + '/' + studentId + '/plan/courses/suggestedSemester');
+        }
+        else if (sort !== "" && level === "") {
+            return axios.get(STUDENT_API_BASE_URL + '/' + studentId + '/plan/courses/suggestedSemester?sort=' + sort);
+        }
+        else if (sort === "" && level !== "") {
+            return axios.get(STUDENT_API_BASE_URL + '/' + studentId + '/plan/courses/suggestedSemester?level=' + level);
+        }
+        else {
+            return axios.get(STUDENT_API_BASE_URL + '/' + studentId + '/plan/courses/suggestedSemester?sort=' + sort + '&level=' + level);
+        }
     }
 
     //get whole plan of study

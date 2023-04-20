@@ -66,8 +66,18 @@ import {
   ReplyOutlined,
 } from "@mui/icons-material";
 import ChatService from "../services/ChatService";
+import { withRouter } from "react-router-dom";
 
-export default class CourseCard extends Component {
+class CourseCard extends Component {
+  constructor(props) {
+    super(props);
+    this.toCoursepage = this.toCoursepage.bind(this);
+  }
+
+  toCoursepage(id, courseID) {
+    this.props.history.push(`/course/${id}/${courseID}`);
+  }
+
   render() {
     return (
       <div>
@@ -138,6 +148,9 @@ export default class CourseCard extends Component {
                   variant="contained"
                   color="secondary"
                   sx={{ padding: 1 }}
+                  onClick={() => {
+                    this.toCoursepage(this.props.id, this.props.courseID)
+                  }}
                 >
                   Course Page
                 </Button>
@@ -157,3 +170,5 @@ export default class CourseCard extends Component {
     );
   }
 }
+
+export default withRouter(CourseCard);

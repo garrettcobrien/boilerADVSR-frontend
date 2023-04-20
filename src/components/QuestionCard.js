@@ -91,7 +91,7 @@ export default class QuestionCard extends Component {
           elevation={5}
         >
           <List>
-            <ListItem sx={{p: 0}}>
+            <ListItem sx={{ p: 0 }}>
               <Grid container sx={{ marginBottom: 1 }}>
                 <Grid
                   item
@@ -135,7 +135,7 @@ export default class QuestionCard extends Component {
                 </Grid>
               </Grid>
             </ListItem>
-            <ListItem sx={{p: 0}}>
+            <ListItem sx={{ p: 0 }}>
               <Grid container sx={{ marginBottom: 0, marginTop: 0 }} spacing={1}>
                 <Grid
                   item
@@ -207,120 +207,120 @@ export default class QuestionCard extends Component {
                 <Grid item></Grid>
               </Grid>
             </ListItem>
+            <Divider color="#EBD99F" sx={{ marginTop: 2, marginBottom: 1 }} />
+            {this.props.responses &&
+              this.props.responses.map((response) => (
+                <ListItem sx={{p: 0}}>
+                  <Grid container sx={{ marginBottom: 1, marginTop: 1 }}>
+                    <Grid
+                      item
+                      xs={2}
+                      md={2}
+                      lg={2}
+                      sx={{
+                        display: "flex",
+                        justifyContent: "left",
+                        alignItems: "center",
+                        textAlign: "center",
+                        verticalAlign: "middle",
+                      }}
+                    >
+                      <Typography color="secondary" fontWeight={800} variant="h3">
+                        A
+                      </Typography>
+                    </Grid>
 
-            <Divider color="#EBD99F" sx={{marginTop: 2, marginBottom: 1}} />
-
-            <ListItem sx={{p: 0}}>
-              <Grid container sx={{ marginBottom: 1, marginTop: 1 }}>
-                <Grid
-                  item
-                  xs={2}
-                  md={2}
-                  lg={2}
-                  sx={{
-                    display: "flex",
-                    justifyContent: "left",
-                    alignItems: "center",
-                    textAlign: "center",
-                    verticalAlign: "middle",
-                  }}
-                >
-                  <Typography color="secondary" fontWeight={800} variant="h3">
-                    A
-                  </Typography>
-                </Grid>
-
-                <Grid
-                  item
-                  xs={10}
-                  md={10}
-                  lg={10}
-                  sx={{
-                    display: "flex",
-                    justifyContent: "left",
-                    alignItems: "center",
-                    textAlign: "left",
-                    verticalAlign: "middle",
-                  }}
-                >
-                  <Typography fontSize={18}>
-                    {this.props.aText}
-                  </Typography>
-                </Grid>
-              </Grid>
-            </ListItem>
-            <ListItem sx={{p: 0}}>
-              <Grid container sx={{ marginBottom: 0 }} spacing={1}>
-                <Grid
-                  item
-                  sx={{
-                    display: "flex",
-                    justifyContent: "left",
-                    alignItems: "center",
-                    textAlign: "left",
-                    verticalAlign: "middle",
-                  }}
-                >
-                  <Typography fontSize={11}>by </Typography>
-                </Grid>
-                <Grid
-                  item
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    textAlign: "center",
-                    verticalAlign: "middle",
-                    marginLeft: 0,
-                  }}
-                >
-                  <Avatar
-                    variant="circle"
-                    src="https://t4.ftcdn.net/jpg/03/64/21/11/360_F_364211147_1qgLVxv1Tcq0Ohz3FawUfrtONzz8nq3e.jpg"
-                    alt="profilepic"
-                    sx={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      textAlign: "center",
-                      verticalAlign: "middle",
-                      height: 25,
-                      width: 25,
-                    }}
-                  />
-                </Grid>
-
-                <Grid
-                  item
-                  sx={{
-                    display: "flex",
-                    justifyContent: "left",
-                    alignItems: "center",
-                    textAlign: "left",
-                    verticalAlign: "middle",
-                  }}
-                >
-                  <Typography variant="h8" fontSize={11} fontWeight={500}>
-                  {this.props.aName}
-                  </Typography>
-                </Grid>
-                <Grid
-                  item
-                  sx={{
-                    display: "flex",
-                    justifyContent: "left",
-                    alignItems: "center",
-                    textAlign: "left",
-                    verticalAlign: "middle",
-                  }}
-                >
-                  <Typography variant="h11" color="secondary" fontSize={11}>
-                  {this.props.aMajor}
-                  </Typography>
-                </Grid>
-                <Grid item></Grid>
-              </Grid>
-            </ListItem>
+                    <Grid
+                      item
+                      xs={10}
+                      md={10}
+                      lg={10}
+                      sx={{
+                        display: "flex",
+                        justifyContent: "left",
+                        alignItems: "center",
+                        textAlign: "left",
+                        verticalAlign: "middle",
+                      }}
+                    >
+                      <Typography fontSize={18}>
+                        {response.text}
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                
+                  <Grid container sx={{ marginBottom: 0 }} spacing={1}>
+                    <Grid
+                      item
+                      sx={{
+                        display: "flex",
+                        justifyContent: "left",
+                        alignItems: "center",
+                        textAlign: "left",
+                        verticalAlign: "middle",
+                      }}
+                    >
+                      <Typography fontSize={11}>by </Typography>
+                    </Grid>
+                    <Grid
+                      item
+                      sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        textAlign: "center",
+                        verticalAlign: "middle",
+                        marginLeft: 0,
+                      }}
+                    >
+                      <Avatar
+                        variant="circle"
+                        src="https://t4.ftcdn.net/jpg/03/64/21/11/360_F_364211147_1qgLVxv1Tcq0Ohz3FawUfrtONzz8nq3e.jpg"
+                        alt="profilepic"
+                        sx={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          textAlign: "center",
+                          verticalAlign: "middle",
+                          height: 25,
+                          width: 25,
+                        }}
+                      />
+                    </Grid>
+                    <Grid
+                      item
+                      sx={{
+                        display: "flex",
+                        justifyContent: "left",
+                        alignItems: "center",
+                        textAlign: "left",
+                        verticalAlign: "middle",
+                      }}
+                    >
+                      <Typography variant="h8" fontSize={11} fontWeight={500}>
+                      {response.userID}
+                      </Typography>
+                    </Grid>
+                    <Grid
+                      item
+                      sx={{
+                        display: "flex",
+                        justifyContent: "left",
+                        alignItems: "center",
+                        textAlign: "left",
+                        verticalAlign: "middle",
+                      }}
+                    >
+                      <Typography variant="h11" color="secondary" fontSize={11}>
+                      {/*{this.props.aMajor}*/}
+                      </Typography>
+                    </Grid>
+                    <Grid item></Grid>
+                  </Grid>
+                </ListItem>
+              ))
+            }
           </List>
         </Paper>
       </div>

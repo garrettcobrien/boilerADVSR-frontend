@@ -17,7 +17,6 @@ export class Calendar extends Component {
         }
 
         this.toProfile = this.toProfile.bind(this);
-        this.setEvents = this.setEvents.bind(this);
     }
 
     componentDidMount() {
@@ -25,7 +24,8 @@ export class Calendar extends Component {
             this.setState({student: res.data});
         })
         APIService.getAllEvents().then((res) => {
-            this.setState({eventFormattedList: this.setEvents(res.data)});
+            this.setState({eventFormattedList: res.data});
+
         })
     }
 
@@ -33,23 +33,10 @@ export class Calendar extends Component {
         this.props.history.push(`/students/dashboard/${this.state.id}`);
       }
 
-    setEvents(events) {
-        const eventFormattedList = [{title: String, date: String}];
-        for (let index = 0; index < eventFormattedList.length; index++) {
-            //console.log(events[index].year + '-' + events[index].month + '-' + events[index].day)
-            let title2 = events[index].title;
-            let date2 = events[index].year + '-' + events[index].month + '-' + events[index].day;
-            eventFormattedList[index] = {title : title2, date : date2};
-            eventsList.push({title : title2, date : date2});
-            };
-        console.log(eventFormattedList);
-        return eventFormattedList;
-    }
-
     render() {
-        const { id, student, eventFormattedList, events } = this.state;
-        eventsList.push({title: 'Today', date: '2023-04-13'}); 
-        console.log(eventsList);
+        const { id, eventFormattedList, student, events } = this.state;
+        //eventsList.push({title: 'Today', date: '2023-04-13'}); 
+        console.log(eventFormattedList);
         return (  
             <div className="container">
                 <Button onClick={this.toProfile}>Back to profile</Button>  
@@ -61,7 +48,7 @@ export class Calendar extends Component {
                 <FullCalendar  
                     defaultView="dayGridMonth"  
                     plugins={[dayGridPlugin]}
-                    events={eventsList}
+                    events={eventFormattedList}
                 />
             </div>  
         ) 

@@ -71,8 +71,8 @@ class Register extends Component {
           if (reason.response.status !== 200) {
           StudentService.createStudent(item).then((res) => {
             this.setState({ student: res.data });
+            this.props.history.push(`/students/addDegrees/${res.data.email}`);
           });
-          this.props.history.push(`/`);
         }
         else {
           alert("Email already in use");
@@ -244,6 +244,50 @@ class Register extends Component {
                     startAdornment: (
                       <InputAdornment position="start">
                         <PasswordIcon fontSize="small" sx={{color: '#ffffff'}} />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </FormGroup>
+              <FormGroup>
+                <TextField
+                  label="About Me"
+                  type="aboutMe"
+                  name="aboutMe"
+                  id="aboutMe"
+                  value={item.aboutMe || ""}
+                  onChange={this.handleChange}
+                  autoComplete="aboutMe"
+                  color="secondary"
+                  focused
+                  sx={{ marginLeft: 5 }}
+                  variant="filled"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <BadgeOutlinedIcon fontSize="small" sx={{color: '#ffffff'}} />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </FormGroup>
+              <FormGroup>
+                <TextField
+                  label="LinkedIn"
+                  type="linkedIn"
+                  name="linkedIn"
+                  id="linkedIn"
+                  value={item.linkedIn || ""}
+                  onChange={this.handleChange}
+                  autoComplete="linkedIn"
+                  color="secondary"
+                  focused
+                  sx={{ marginLeft: 5 }}
+                  variant="filled"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <BadgeOutlinedIcon fontSize="small" sx={{color: '#ffffff'}} />
                       </InputAdornment>
                     ),
                   }}

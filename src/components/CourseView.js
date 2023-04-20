@@ -78,9 +78,13 @@ class CourseView extends Component {
       id: this.props.match.params.id,
       student: {},
       course: {},
-      text: "",
+      textReview: "",
+      textQuestion: "",
+      textResponse: "",
+      textResponseFinal: "",
       rating: "",
       chat: "",
+
       reviewNumber: 1,
     };
 
@@ -88,16 +92,23 @@ class CourseView extends Component {
     this.pages = ["Find a Course", "Suggest a Semester", "Review a Course"];
 
     this.toLandingpage = this.toLandingpage.bind(this);
+    this.toCalendar = this.toCalendar.bind(this);
+    this.toDashboard = this.toDashboard.bind(this);
+    this.toPlanofstudy = this.toPlanofstudy.bind(this);
+    this.toSearchCourses = this.toSearchCourses.bind(this);
     this.addReview = this.addReview.bind(this);
     this.handleInput = this.handleInput.bind(this);
     this.addCourse = this.addCourse.bind(this);
     this.addQuestion = this.addQuestion.bind(this);
     this.courseRec = this.courseRec.bind(this);
+    this.handleRatingChange = this.handleRatingChange.bind(this);
+    this.handleReviewText = this.handleReviewText.bind(this);
   }
 
   componentDidMount() {
     CourseService.getCourse(this.state.courseID).then((res) => {
       this.setState({ course: res.data });
+      this.setState({})
     });
     StudentService.getStudentById(this.state.id).then((res) => {
       this.setState({ student: res.data });
@@ -108,19 +119,24 @@ class CourseView extends Component {
     this.state.open = !this.state.open;
   }
 
+  //Navigation Links
   toDashboard(id) {
     this.props.history.push(`/students/dashboard/${id}`);
   }
-
   toPlanofstudy(id) {
     this.props.history.push(`/students/planofstudy/${id}`);
   }
   toEditProfile(id) {
     this.props.history.push(`/students/editprofile/${id}`);
   }
-
   toLandingpage(id) {
     this.props.history.push(`/students/landingpage/${id}`);
+  }
+  toSearchCourses(id){
+    this.props.history.push(`/students/courses/${id}`);
+  }
+  toCalendar(id) {
+    this.props.history.push(`/students/calendar/${id}`);
   }
 
   setAnchorElNav(target) {
@@ -173,10 +189,6 @@ class CourseView extends Component {
     CourseService.addQuestion(courseID, id, text, rating, desc);
   }
 
-  toLandingpage(id) {
-    this.props.history.push(`/students/landingpage/${id}`);
-  }
-
   handleInput(event) {
     const value = event.target.value;
     console.log(value);
@@ -198,8 +210,20 @@ class CourseView extends Component {
     });
   }
 
+  handleRatingChange(e) {
+    this.setState({rating: e.target.value});
+  }
+  handleReviewText(e) {
+    const textReview = e.target.value;
+    this.setState({
+      textReview: textReview,
+    });
+  }
+
   render() {
-    const { course, student, id, text, rating, chat } = this.state;
+    const { course, textReview, textQuestion, textResponse, rating, chat } = this.state;
+    const notifications = this.state.student.notifications;
+
     return (
       <ThemeProvider theme={theme}>
         <CssBaseline />
@@ -239,6 +263,7 @@ class CourseView extends Component {
                     mr: 1,
                     ml: 1,
                   }}
+                  onClick={() => {this.toSearchCourses(this.state.student.email);}}
                 >
                   Find a Course
                 </Button>
@@ -259,19 +284,20 @@ class CourseView extends Component {
                     mr: 1,
                     ml: 1,
                   }}
+                  onClick={() => this.toPlanofstudy(this.state.student.email)}
                 >
                   Plan of Study
                 </Button>
-                <Button
-                  sx={{
-                    backgroundColor: "#ffffff",
-                    fontWeight: 700,
-                    mr: 1,
-                    ml: 1,
-                  }}
-                >
-                  Transcript
-                </Button>
+                <Button onClick={() => { this.toCalendar(this.state.student.email); }}
+                    sx={{
+                      backgroundColor: "#ffffff",
+                      fontWeight: 700,
+                      mr: 1,
+                      ml: 1,
+                    }}
+                  >
+                    Calendar
+                  </Button>
               </ButtonGroup>
 
               <Button
@@ -280,7 +306,7 @@ class CourseView extends Component {
                   this.toDashboard(this.state.student.email);
                 }}
               >
-                <Badge badgeContent={4} color="secondary">
+                <Badge badgeContent={notifications && notifications.length} color="secondary">
                   <Avatar
                     variant="circle"
                     src="https://media.istockphoto.com/id/1171169127/photo/headshot-of-cheerful-handsome-man-with-trendy-haircut-and-eyeglasses-isolated-on-gray.jpg?s=612x612&w=0&k=20&c=yqAKmCqnpP_T8M8I5VTKxecri1xutkXH7zfybnwVWPQ="
@@ -372,7 +398,7 @@ class CourseView extends Component {
                           verticalAlign: "middle",
                         }}
                       >
-                        <Typography fontSize={12}>Average Rating: 4.5</Typography>
+                        <Typography fontSize={12}>Average Rating: {course.averageRating}</Typography>
                       </Grid>
                       <Grid
                         item
@@ -387,7 +413,7 @@ class CourseView extends Component {
                           verticalAlign: "middle",
                         }}
                       >
-                        <Typography fontSize={12}>Average GPA: 3.4</Typography>
+                        <Typography fontSize={12}>Average GPA: {course.averageGPA}</Typography>
                       </Grid>
 
                       <Grid
@@ -441,7 +467,7 @@ class CourseView extends Component {
                       >
                         <Rating
                           readOnly
-                          value={4.5}
+                          value={course.averageRating || 0}
                           precision={0.25}
                           icon={<StarIcon/>}
                           emptyIcon={<StarBorderIcon  style={{color: '#EBD99F'}}/>}
@@ -465,9 +491,9 @@ class CourseView extends Component {
                         <Tooltip title="3.2">
                         <Rating
                           readOnly
-                          value={3.4}
+                          value={course.averageGPA || 0}
                           precision={0.1}
-                          max={4}
+                          
                           icon={<CircleIcon/>}
                           emptyIcon={<CircleOutlinedIcon  style={{color: '#EBD99F'}} />}
                           size="small"
@@ -587,15 +613,13 @@ class CourseView extends Component {
                             maxHeight: 450,
                           }}
                         >
-                          <ListItem disablePadding>
-                            <ReviewCard name="Freddie Clarke" rating={5} major="Computer Science"/>
-                          </ListItem>
-                          <ListItem disablePadding>
-                            <ReviewCard name="John Smith" rating={4} major="General Management"/>
-                          </ListItem>
-                          <ListItem disablePadding>
-                            <ReviewCard name="Bill Williams" rating={3} major="Biology"/>
-                          </ListItem>
+                          {course.reviews &&
+                            course.reviews.map((review) => (
+                              <ListItem disablePadding>
+                                <ReviewCard name={review.studentReviewer} rating={review.overallRating} text={review.reviewText} major={review.degrees} />
+                              </ListItem>
+                            ))
+                          }
                         </List>
                       </Grid>
                       <Grid item xs={0} md={0} lg={0}></Grid>
@@ -618,7 +642,7 @@ class CourseView extends Component {
                           verticalAlign: "middle",
                         }}
                       >
-                        <Rating></Rating>
+                        <Rating value={rating} onChange={(e) => this.handleRatingChange(e)} />
                       </Grid>
                       <Grid item xs={1} md={1} lg={1}></Grid>
                     </Grid>
@@ -640,7 +664,9 @@ class CourseView extends Component {
                           verticalAlign: "middle",
                         }}
                       >
-                        <TextField fullWidth multiline maxRows={5} variant="filled" label="Your Review"></TextField>
+                        <TextField fullWidth multiline maxRows={5} variant="filled" label="Your Review" 
+                          value={textReview} onChange={(e) => this.handleReviewText(e)}
+                        />
                       </Grid>
                       <Grid item xs={1} md={1} lg={1}></Grid>
                     </Grid>
@@ -649,7 +675,9 @@ class CourseView extends Component {
 
                     <Grid container sx={{ marginBottom: 2, marginTop: 2 }}>
                       <Grid item xs={2} md={2} lg={2}></Grid>
-
+                      <form onSubmit={() =>
+                            this.addReview(course.courseID, this.state.student.email, textReview, rating)
+                          }>
                       <Grid
                         item
                         xs={8}
@@ -668,11 +696,13 @@ class CourseView extends Component {
                           color="secondary"
                           startIcon={<QuestionAnswer />}
                           elevation={8}
+                          type="submit"
                         >
                           Write a Review
                         </Button>
                       </Grid>
                       <Grid item xs={2} md={2} lg={2}></Grid>
+                      </form>
                     </Grid>
                   </Paper>
                 </Grid>
@@ -730,15 +760,13 @@ class CourseView extends Component {
                             maxHeight: 450,
                           }}
                         >
-                          <ListItem disablePadding>
-                            <QuestionCard qName="Freddie Clarke" qMajor="Computer Science" qText="Who is the best professor for this course?" aName="John Jones" aMajor="Statistics" aText="Dr. Chen is the best lecturer." />
-                          </ListItem>
-                          <ListItem disablePadding>
-                          <QuestionCard qName="James Cook" qMajor="Physics" qText="How many lectures are there per week" aName="Adam Smith" aMajor="Actuarial Science" aText="There are 3 lectures per week." />
-                          </ListItem>
-                          <ListItem disablePadding>
-                          <QuestionCard qName="Bill Watson" qMajor="Chemical Engineering" qText="How many exams are there for this course?" aName="Peter Evans" aMajor="Integrated Business & Engineering" aText="There are two midterms and one final exam for this course." />
-                          </ListItem>
+                        {course.discussion &&
+                          course.discussion.map((question) => (
+                            <ListItem disablePadding>
+                              <QuestionCard responses={question.responses} qName={question.userID} qMajor="Computer Science" qText={question.text} aName="John Jones" aMajor="Statistics" aText="Dr. Chen is the best lecturer." />
+                            </ListItem>
+                          ))
+                        }
                         </List>
                       </Grid>
                       <Grid item xs={0} md={0} lg={0}></Grid>
@@ -765,215 +793,16 @@ class CourseView extends Component {
                           color="secondary"
                           startIcon={<QuestionAnswer />}
                           elevation={8}
+                          type="submit"
+                          onSubmit={() =>
+                            this.addQuestion(course.courseID, this.state.student.email, textQuestion, "")
+                          }
                         >
                           Ask a Question
                         </Button>
                       </Grid>
                       <Grid item xs={2} md={2} lg={2}></Grid>
                     </Grid>
-                  </Paper>
-                </Grid>
-                <Grid item xs={0} md={2} lg={3}></Grid>
-              </Grid>
-            </Container>
-
-            <Container maxWidth="lg" sx={{ mt: 10, mb: 4 }}>
-              <Grid container spacing={3}>
-                <Grid item xs={0} md={2} lg={3}></Grid>
-                <Grid item xs={12} md={8} lg={6}>
-                  <Paper
-                    sx={{
-                      p: 2,
-                      flexDirection: "column",
-                      height: "auto",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      textAlign: "center",
-                      verticalAlign: "middle",
-                    }}
-                  >
-                    <div className="col-md-6">
-                      <div>
-                        <h4>Course</h4>
-                        <div>
-                          <br></br>
-                          <button
-                            type="button"
-                            onClick={() => this.addCourse(id, course)}
-                          >
-                            Add to course backlog
-                          </button>
-                        </div>
-                        <div>
-                          <label>
-                            <strong>Title:</strong>
-                          </label>{" "}
-                          {course.courseID}
-                        </div>
-                        <div>
-                          <label>
-                            <strong>Description:</strong>
-                          </label>{" "}
-                          {course.courseTitle}
-                        </div>
-                        <div>
-                          <label>
-                            <strong>Average Rating:</strong>
-                          </label>{" "}
-                          {course.averageRating}
-                        </div>
-                        <div>
-                          <label>
-                            <strong>Average GPA:</strong>
-                          </label>{" "}
-                          {course.averageGPA}
-                        </div>
-                        <div>
-                          <form
-                            onSubmit={() =>
-                              this.addReview(course.courseID, id, text, rating)
-                            }
-                          >
-                            <label>
-                              <strong>Reviews:</strong>
-                            </label>{" "}
-                            <ul>
-                              {course.reviews &&
-                                course.reviews.map((review, index) => (
-                                  <li key={index}>
-                                    <div>
-                                      <p>
-                                        Name of reviewer:{" "}
-                                        {review.studentReviewer}
-                                      </p>
-                                    </div>
-                                    <div>
-                                      <p>Review: {review.reviewText}</p>
-                                    </div>
-                                    <div>
-                                      <p>Rating: {review.overallRating}</p>
-                                    </div>
-                                  </li>
-                                ))}
-                            </ul>
-                            <input
-                              type="text"
-                              name="text"
-                              id="text"
-                              placeholder="Enter review"
-                              value={text}
-                              onChange={this.handleInput}
-                            />
-                            <input
-                              type="text"
-                              name="rating"
-                              id="rating"
-                              placeholder="Enter rating"
-                              value={rating}
-                              onChange={this.handleInput}
-                            />
-                            <button type="submit">Submit</button>
-                          </form>
-                        </div>
-                        <br></br>
-                        <label>
-                          <strong>Discussions:</strong>
-                        </label>{" "}
-                        <div>
-                          {course.discussion &&
-                            course.discussion.map((question, index) => (
-                              <ul key={index}>
-                                <div>
-                                  <p>Question ID: {question.id}</p>
-                                </div>
-                                <div>
-                                  <p>Name of questioner: {question.userID}</p>
-                                </div>
-                                <div>
-                                  <p>Review: {question.text}</p>
-                                </div>
-                                <div>
-                                  {question.responses &&
-                                    question.responses.map((response) => (
-                                      <ul>
-                                        <li>
-                                          <div>
-                                            <p>
-                                              Name of response:{" "}
-                                              {response.userID}
-                                            </p>
-                                          </div>
-                                          <div>
-                                            <p>Answer: {response.text}</p>
-                                          </div>
-                                        </li>
-                                      </ul>
-                                    ))}
-                                </div>
-                                <>Post a Response</>
-                                <form
-                                  onSubmit={() =>
-                                    this.addQuestion(
-                                      course.courseID,
-                                      id,
-                                      text,
-                                      question.id
-                                    )
-                                  }
-                                >
-                                  <input
-                                    type="text"
-                                    name="text"
-                                    id="text"
-                                    placeholder="Enter your response here"
-                                    value={text}
-                                    onChange={this.handleInput}
-                                  />
-                                  <button type="submit">Submit</button>
-                                </form>
-                              </ul>
-                            ))}
-                          <>Post a Question</>
-                          <form
-                            onSubmit={() =>
-                              this.addQuestion(course.courseID, id, text, "")
-                            }
-                          >
-                            <input
-                              type="text"
-                              name="text"
-                              id="text"
-                              placeholder="Enter question"
-                              value={text}
-                              onChange={this.handleInput}
-                            />
-                            <button type="submit">Submit</button>
-                          </form>
-                          <br></br>
-                          <>Recommend to a Friend?</>
-
-                          <input
-                            type="text"
-                            name="text"
-                            id="text"
-                            placeholder="Enter connection to recommend"
-                            value={text}
-                            onChange={this.handleInput}
-                          />
-                          <button
-                            type="button"
-                            onClick={() =>
-                              this.courseRec(id, chat, course.courseID)
-                            }
-                          >
-                            Send!
-                          </button>
-
-                          <br></br>
-                        </div>
-                      </div>
-                    </div>
                   </Paper>
                 </Grid>
                 <Grid item xs={0} md={2} lg={3}></Grid>
