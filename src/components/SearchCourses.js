@@ -89,18 +89,23 @@ class SearchCourses extends Component {
       currentIndex: -1,
       searchDepartment: "",
       text: "",
-      rating: "",
+      sort: "",
+      level: ""
     };
 
-    this.onChangeSearchDepartment = this.onChangeSearchDepartment.bind(this);
-    this.setActiveCourse = this.setActiveCourse.bind(this);
-    this.searchDepartment = this.searchDepartment.bind(this);
     this.toLandingpage = this.toLandingpage.bind(this);
-    this.addReview = this.addReview.bind(this);
+    this.toCoursepage = this.toCoursepage.bind(this);
+    this.toCalendar = this.toCalendar.bind(this);
+    this.toProfile = this.toProfile.bind(this);
+    this.toPlanofstudy = this.toPlanofstudy.bind(this);
+    this.onChangeSearchDepartment = this.onChangeSearchDepartment.bind(this);
+    this.searchDepartment = this.searchDepartment.bind(this);
     this.handleInput = this.handleInput.bind(this);
     this.addCourse = this.addCourse.bind(this);
     this.getSuggestedSemester = this.getSuggestedSemester.bind(this);
-    this.toCoursepage = this.toCoursepage.bind(this);
+    this.handleInput = this.handleInput.bind(this);
+    this.handleChangeSort = this.handleChangeSort.bind(this);
+    this.handleChangeLevel = this.handleChangeLevel.bind(this);
   }
 
   componentDidMount() {
@@ -111,16 +116,8 @@ class SearchCourses extends Component {
 
   onChangeSearchDepartment(e) {
     const searchDepartment = e.target.value;
-
     this.setState({
       searchDepartment: searchDepartment,
-    });
-  }
-
-  setActiveCourse(course, index) {
-    this.setState({
-      currentCourse: course,
-      currentIndex: index,
     });
   }
 
@@ -137,15 +134,21 @@ class SearchCourses extends Component {
       });
   }
 
-  addReview(courseID, id, text, rating) {
-    CourseService.addReview(courseID, id, text, rating);
-  }
-
+  //Navagation links
   toLandingpage(id) {
     this.props.history.push(`/students/landingpage/${id}`);
   }
   toCoursepage(id, courseID) {
     this.props.history.push(`/course/${id}/${courseID}`);
+  }
+  toProfile(id) {
+    this.props.history.push(`/students/dashboard/${id}`);
+  }
+  toPlanofstudy(id) {
+    this.props.history.push(`/students/planofstudy/${id}`);
+  }
+  toCalendar(id) {
+    this.props.history.push(`/students/calendar/${id}`);
   }
 
   handleInput(event) {
@@ -157,17 +160,32 @@ class SearchCourses extends Component {
     });
   }
 
-  //{TODO       !!!!!!!!!!!
-  //Uncomment add course to backlog function in student service
+  handleChangeSort(e) {
+    this.setState({ sort: e.target.value });
+  }
+  handleChangeLevel(e) {
+    this.setState({ level: e.target.value });
+  }
+
+
   addCourse(id, currentCourse) {
     StudentService.addToBacklog(id, currentCourse);
   }
 
-  getSuggestedSemester(id, sort) {
-    StudentService.getSuggestedSemester(id, sort).then((res) => {
+  getSuggestedSemester(id, sort, level) {
+    console.log(id + " " + sort + " " + level);
+    StudentService.getSuggestedSemester(id, sort, level).then((res) => {
       this.setState({ coursesSuggested: res.data });
     });
-    this.forceUpdate();
+  }
+
+  handleInput(event) {
+    const value = event.target.value;
+    console.log(value);
+    this.setState({
+      ...this.state,
+      [event.target.name]: value,
+    });
   }
 
   render() {
@@ -180,10 +198,13 @@ class SearchCourses extends Component {
       currentIndex,
       id,
       text,
-      rating,
+      sort,
+      level
     } = this.state;
     const notifications = this.state.student.notifications;
 
+    
+    console.log(coursesSuggested);
     return (
       <div>
         <ThemeProvider theme={theme}>
@@ -244,10 +265,11 @@ class SearchCourses extends Component {
                       mr: 1,
                       ml: 1,
                     }}
+                    onClick={() => this.toPlanofstudy(id)}
                   >
                     Plan of Study
                   </Button>
-                  <Button
+                  <Button onClick={() => { this.toCalendar(this.state.student.email); }}
                     sx={{
                       backgroundColor: "#ffffff",
                       fontWeight: 700,
@@ -255,17 +277,17 @@ class SearchCourses extends Component {
                       ml: 1,
                     }}
                   >
-                    Transcript
+                    Calendar
                   </Button>
                 </ButtonGroup>
 
                 <Button
                   color="inherit"
                   onClick={() => {
-                    this.toDashboard(this.state.student.email);
+                    this.toProfile(this.state.student.email);
                   }}
                 >
-                  <Badge badgeContent={4} color="secondary">
+                  <Badge badgeContent={notifications && notifications.length} color="secondary">
                     <Avatar
                       variant="circle"
                       src="https://media.istockphoto.com/id/1171169127/photo/headshot-of-cheerful-handsome-man-with-trendy-haircut-and-eyeglasses-isolated-on-gray.jpg?s=612x612&w=0&k=20&c=yqAKmCqnpP_T8M8I5VTKxecri1xutkXH7zfybnwVWPQ="
@@ -334,7 +356,19 @@ class SearchCourses extends Component {
                             variant="filled"
                             fullWidth
                             label="Department"
-                          ></TextField>
+                            value={searchDepartment}
+                            onChange={this.onChangeSearchDepartment}
+                          >
+                          </TextField>
+                          <Button
+                            sx={{ margin: 2 }}
+                            type="button"
+                            variant="contained"
+                            color="secondary"
+                            onClick={this.searchDepartment}
+                          >
+                            Search
+                          </Button>
                         </Grid>
                         <Grid item xs={2} md={2} lg={2}></Grid>
                       </Grid>
@@ -353,11 +387,13 @@ class SearchCourses extends Component {
                             overflow: "auto",
                             maxHeight: 300,
                           }}>
-                            <ListItem><CourseCard courseId="CS 180" rating={5} title="Object Oriented Programming"/></ListItem>
-                            <ListItem><CourseCard courseId="CS 250" rating={4} title="Computer Architecture"/></ListItem>
-                            <ListItem><CourseCard courseId="CS 251" rating={2} title="Data Structures and Algorithms"/></ListItem>
-                            <ListItem><CourseCard courseId="CS 252" rating={4} title="Systems Programming"/></ListItem>
-                            <ListItem><CourseCard courseId="CS 307" rating={5} title="Software Engineering"/></ListItem>
+                            {courses &&
+                              courses.map((course) => (
+                                <ListItem>
+                                  <CourseCard courseId={course.courseID} rating={course.averageRating} title={course.courseTitle} id={student.email} course={course}/>
+                                </ListItem>
+                              ))
+                            }
                           </List>
                         </Grid>
                         <Grid item xs={3} md={3} lg={3}></Grid>
@@ -407,8 +443,12 @@ class SearchCourses extends Component {
                               fullWidth
                               labelId="sort-label"
                               label="Sort By"
+                              value={sort}
+                              onChange={(e) =>
+                                this.handleChangeSort(e)
+                              }
                             >
-                              <MenuItem value="gpa">Average GPA</MenuItem>
+                              <MenuItem value="avgGPA">Average GPA</MenuItem>
                               <MenuItem value="rating">Average Rating</MenuItem>
                             </Select>
                           </FormControl>
@@ -416,12 +456,17 @@ class SearchCourses extends Component {
                         <Grid item xs={3} md={3} lg={3}>
                           <FormControl fullWidth variant="filled">
                             <InputLabel>Course Level</InputLabel>
-                            <Select fullWidth label="Course Level">
-                              <MenuItem value="gpa">100-199</MenuItem>
-                              <MenuItem value="rating">200-299</MenuItem>
-                              <MenuItem value="rating">300-399</MenuItem>
-                              <MenuItem value="rating">400-499</MenuItem>
-                              <MenuItem value="rating">500+</MenuItem>
+                            <Select fullWidth label="Course Level"
+                              value={level}
+                              onChange={(e) =>
+                                this.handleChangeLevel(e)
+                              }
+                            >
+                              <MenuItem value="1">100-199</MenuItem>
+                              <MenuItem value="2">200-299</MenuItem>
+                              <MenuItem value="3">300-399</MenuItem>
+                              <MenuItem value="4">400-499</MenuItem>
+                              <MenuItem value="5">500+</MenuItem>
                             </Select>
                           </FormControl>
                         </Grid>
@@ -431,7 +476,7 @@ class SearchCourses extends Component {
                       <Grid container spacing={1} sx={{ marginBottom: 2 }}>
                         <Grid item xs={5} md={5} lg={5}></Grid>
                         <Grid item xs={2} md={2} lg={2}>
-                          <Button fullWidth variant="contained" color="secondary">Search</Button>
+                          <Button fullWidth variant="contained" color="secondary" type="button" onClick={() => this.getSuggestedSemester(id, sort, level)}>Search</Button>
                         </Grid>
                         <Grid item xs={5} md={5} lg={5}></Grid>
                       </Grid>
@@ -450,17 +495,19 @@ class SearchCourses extends Component {
                             overflow: "auto",
                             maxHeight: 300,
                           }}>
-                            <ListItem><CourseCard courseId="CS 180" rating={5} title="Object Oriented Programming"/></ListItem>
-                            <ListItem><CourseCard courseId="CS 250" rating={4} title="Computer Architecture"/></ListItem>
-                            <ListItem><CourseCard courseId="CS 251" rating={2} title="Data Structures and Algorithms"/></ListItem>
-                            <ListItem><CourseCard courseId="CS 252" rating={4} title="Systems Programming"/></ListItem>
-                            <ListItem><CourseCard courseId="CS 307" rating={5} title="Software Engineering"/></ListItem>
+                            {coursesSuggested &&
+                              coursesSuggested.map((course) => (
+                                <ListItem>
+                                  <CourseCard courseId={course.courseID} rating={course.averageRating} title={course.courseTitle} id={student.email} course={course}/>
+                                </ListItem>
+                              ))
+                            }
                           </List>
                         </Grid>
                         <Grid item xs={3} md={3} lg={3}></Grid>
                       </Grid>
 
-                    
+
                     </Paper>
                   </Grid>
                   <Grid item xs={0} md={1} lg={1}></Grid>

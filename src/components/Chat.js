@@ -85,19 +85,30 @@ class Chat extends Component {
     this.state = {
       id: this.props.match.params.id,
       connectionID: this.props.match.params.connectionID,
+      connectionStudent: {},
       chat: {},
+      student: {},
       text: "",
     };
     this.handleInput = this.handleInput.bind(this);
     this.addMessage = this.addMessage.bind(this);
     this.toProfile = this.toProfile.bind(this);
+    this.toChat = this.toChat.bind(this);
+    this.handleInput = this.handleInput.bind(this);
+    this.addMessage = this.addMessage.bind(this);
   }
 
   componentDidMount() {
-    ChatService.getChat(this.state.id, this.state.connectionID).then((res) => {
+    ChatService.getChat(this.props.match.params.id, this.props.match.params.connectionID).then(res => {
       this.setState({ chat: res.data });
     });
     ChatService.removeNotif(this.state.id, this.state.connectionID);
+    StudentService.getStudentById(this.props.match.params.id).then(res => {
+      this.setState({ student: res.data });
+    });
+    StudentService.getStudentById(this.props.match.params.connectionID).then(res => {
+      this.setState({ connectionStudent: res.data });
+    });
   }
 
   toProfile(id) {
@@ -105,16 +116,26 @@ class Chat extends Component {
   }
 
   handleInput(event) {
-    const value = event.target.value;
-    console.log(value);
-    this.setState({
-      ...this.state,
-      [event.target.name]: value,
-    });
+    // const value = event.target.value;
+    // console.log(value);
+    // this.setState({
+    //   ...this.state,
+    //   [event.target.name]: value,
+    // });
+    const text = event.target.value;
+    this.setState({ text: text });
   }
 
   addMessage(id, text, messageId) {
     ChatService.addMessage(id, text, messageId);
+    window.location.reload(false);
+    this.forceUpdate();
+  }
+
+  toChat(id, connectionID) {
+    console.log("changed chat");
+    this.props.history.push(`/students/chat/${id}/${connectionID}`);
+    window.location.reload(false);
   }
 
   render() {
@@ -198,7 +219,7 @@ class Chat extends Component {
                 <Button
                   color="inherit"
                   onClick={() => {
-                    this.toDashboard(this.state.student.email);
+                    this.toProfile(this.state.student.email);
                   }}
                 >
                   <Badge badgeContent={4} color="secondary">
@@ -285,268 +306,145 @@ class Chat extends Component {
                       }}
                       elevation={8}
                     >
+                      {/* Connections List */}
                       <Typography variant="h4">Classmates</Typography>
                       <List>
-                        <ListItem>
-                          <Typography>John Smith</Typography>
-                        </ListItem>
-                        <ListItem>
-                          <Typography>Bill Jones</Typography>
-                        </ListItem>
-                        <ListItem>
-                          <Typography>Adam Evans</Typography>
-                        </ListItem>
+                        {this.state.student.connectionsIds?.map((connection) => (
+                          <ListItem >
+                            <Typography>{connection}</Typography>
+                            <IconButton type="submit" onClick={() => this.toChat(this.state.student.email, connection)}>
+                              <ChatIcon
+                                fontSize="small"
+                                sx={{ color: "#EBD99F" }}
+                              />
+                            </IconButton>
+                          </ListItem>
+                        ))}
                       </List>
                     </Paper>
                   </Grid>
 
-                  
+
                   {/* Bottom Right Container and Paper - Chat View */}
                   <Grid item xs={11} md={5} lg={5}>
-                      <Grid component={Paper} container spacing={0} sx={{backgroundColor: "primary", marginBottom: 0, paddingBottom: 2, paddingTop: 2, marginTop: 0 }}>
-                            <Grid
-                              item
-                              xs={2}
-                              md={2}
-                              lg={2}
-                              sx={{
-                                display: "flex",
-                                justifyContent: "center",
-                                alignItems: "center",
-                                textAlign: "center",
-                                verticalAlign: "middle",
-                              }}
-                            >
-                              <Avatar
-                                src="https://media.istockphoto.com/id/1171169127/photo/headshot-of-cheerful-handsome-man-with-trendy-haircut-and-eyeglasses-isolated-on-gray.jpg?s=612x612&w=0&k=20&c=yqAKmCqnpP_T8M8I5VTKxecri1xutkXH7zfybnwVWPQ="
-                                alt="profilepic"
-                                sx={{
-                                  display: "flex",
-                                  justifyContent: "center",
-                                  alignItems: "center",
-                                  textAlign: "center",
-                                  verticalAlign: "middle",
-                                  height: 45,
-                                  width: 45,
-                                }}
-                              />
-                            </Grid>
+                    <Grid component={Paper} container spacing={0} sx={{ backgroundColor: "primary", marginBottom: 0, paddingBottom: 2, paddingTop: 2, marginTop: 0 }}>
+                      <Grid
+                        item
+                        xs={2}
+                        md={2}
+                        lg={2}
+                        sx={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          textAlign: "center",
+                          verticalAlign: "middle",
+                        }}
+                      >
+                        <Avatar
+                          src="https://media.istockphoto.com/id/1171169127/photo/headshot-of-cheerful-handsome-man-with-trendy-haircut-and-eyeglasses-isolated-on-gray.jpg?s=612x612&w=0&k=20&c=yqAKmCqnpP_T8M8I5VTKxecri1xutkXH7zfybnwVWPQ="
+                          alt="profilepic"
+                          sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            textAlign: "center",
+                            verticalAlign: "middle",
+                            height: 45,
+                            width: 45,
+                          }}
+                        />
+                      </Grid>
 
-                            <Grid
-                              item
-                              xs={5}
-                              md={5}
-                              lg={5}
-                              sx={{
-                                display: "flex",
-                                justifyContent: "left",
-                                alignItems: "center",
-                                textAlign: "left",
-                                verticalAlign: "middle",
-                              }}
-                            >
-                              <Typography color="secondary" fontWeight={600} variant="h5">John Smith</Typography>
-                            </Grid>
+                      <Grid
+                        item
+                        xs={5}
+                        md={5}
+                        lg={5}
+                        sx={{
+                          display: "flex",
+                          justifyContent: "left",
+                          alignItems: "center",
+                          textAlign: "left",
+                          verticalAlign: "middle",
+                        }}
+                      >
+                        <Typography color="secondary" fontWeight={600} variant="h5">{this.state.connectionStudent.firstName + " " + this.state.connectionStudent.lastName}</Typography>
+                      </Grid>
 
-                            <Grid
-                              item
-                              xs={5}
-                              md={5}
-                              lg={5}
-                              sx={{
-                                display: "flex",
-                                justifyContent: "center",
-                                alignItems: "center",
-                                textAlign: "center",
-                                verticalAlign: "middle",
-                              }}
-                            ></Grid>
-                          </Grid>
-                      <List sx={{padding: -2, width: 466, backgroundColor: '#1b1b1b', overflow:"auto", maxHeight: 300, marginTop: 1}}>
-                        {/* Top Chat ID Bar */}
-                        {/* <Grid container spacing={1} sx={{ marginBottom: 0, backgroundColor: '#1b1b1b', paddingBottom: 1 }}>
-                            <Grid
-                              item
-                              xs={2}
-                              md={2}
-                              lg={2}
-                              sx={{
-                                display: "flex",
-                                justifyContent: "center",
-                                alignItems: "center",
-                                textAlign: "center",
-                                verticalAlign: "middle",
-                              }}
-                            >
-                              <Avatar
-                                src="https://media.istockphoto.com/id/1171169127/photo/headshot-of-cheerful-handsome-man-with-trendy-haircut-and-eyeglasses-isolated-on-gray.jpg?s=612x612&w=0&k=20&c=yqAKmCqnpP_T8M8I5VTKxecri1xutkXH7zfybnwVWPQ="
-                                alt="profilepic"
-                                sx={{
-                                  display: "flex",
-                                  justifyContent: "center",
-                                  alignItems: "center",
-                                  textAlign: "center",
-                                  verticalAlign: "middle",
-                                  height: 45,
-                                  width: 45,
-                                }}
-                              />
-                            </Grid>
+                      <Grid
+                        item
+                        xs={5}
+                        md={5}
+                        lg={5}
+                        sx={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          textAlign: "center",
+                          verticalAlign: "middle",
+                        }}
+                      ></Grid>
+                    </Grid>
+                    <List sx={{ padding: -2, width: 466, backgroundColor: '#1b1b1b', overflow: "auto", maxHeight: 300, marginTop: 1 }}>
+                      <Grid container>
+                        <Grid item xs={6} md={6} lg={6}></Grid>
+                        {chat.messages &&
+                          chat.messages.map((message) => {
 
-                            <Grid
-                              item
-                              xs={5}
-                              md={5}
-                              lg={5}
-                              sx={{
-                                display: "flex",
-                                justifyContent: "left",
-                                alignItems: "center",
-                                textAlign: "left",
-                                verticalAlign: "middle",
-                              }}
-                            >
-                              <Typography fontWeight={600} variant="h5">John Smith</Typography>
-                            </Grid>
-
-                            <Grid
-                              item
-                              xs={5}
-                              md={5}
-                              lg={5}
-                              sx={{
-                                display: "flex",
-                                justifyContent: "center",
-                                alignItems: "center",
-                                textAlign: "center",
-                                verticalAlign: "middle",
-                              }}
-                            ></Grid>
-                          </Grid> */}
-
-                        <ListItem>
-                          <Grid container>
-                            <Grid item xs={6} md={6} lg={6}></Grid>
-                            <Grid item xs={6} md={6} lg={6}>
-                              <SentMessage message="Hello, world!" />
-                            </Grid>
-                          </Grid>
-                        </ListItem>
-
-                        <ListItem>
-                          <Grid container>
-                            <Grid item xs={6} md={6} lg={6}>
-                              <ReceivedMessage message="Hello, world!" />
-                            </Grid>
-                            <Grid item xs={6} md={6} lg={6}></Grid>
-                          </Grid>
-                        </ListItem>
-
-                        <ListItem>
-                          <Grid container>
-                            <Grid item xs={6} md={6} lg={6}></Grid>
-                            <Grid item xs={6} md={6} lg={6}>
-                              <SentMessage message="Hello, world!" />
-                            </Grid>
-                          </Grid>
-                        </ListItem>
-
-                        <ListItem>
-                          <Grid container>
-                            <Grid item xs={6} md={6} lg={6}>
-                              <ReceivedMessage message="Hello, world!" />
-                            </Grid>
-                            <Grid item xs={6} md={6} lg={6}></Grid>
-                          </Grid>
-                        </ListItem>
-                        <ListItem>
-                          <Grid container>
-                            <Grid item xs={6} md={6} lg={6}></Grid>
-                            <Grid item xs={6} md={6} lg={6}>
-                              <SentMessage message="Hello, world!" />
-                            </Grid>
-                          </Grid>
-                        </ListItem>
-
-                        <ListItem>
-                          <Grid container>
-                            <Grid item xs={6} md={6} lg={6}>
-                              <ReceivedMessage message="Hello, world!" />
-                            </Grid>
-                            <Grid item xs={6} md={6} lg={6}></Grid>
-                          </Grid>
-                        </ListItem>
-                        <ListItem>
-                          <Grid container>
-                            <Grid item xs={6} md={6} lg={6}></Grid>
-                            <Grid item xs={6} md={6} lg={6}>
-                              <SentMessage message="Hello, world!" />
-                            </Grid>
-                          </Grid>
-                        </ListItem>
-
-                        <ListItem>
-                          <Grid container>
-                            <Grid item xs={6} md={6} lg={6}>
-                              <ReceivedMessage message="Hello, world!" />
-                            </Grid>
-                            <Grid item xs={6} md={6} lg={6}></Grid>
-                          </Grid>
-                        </ListItem>
-                        <ListItem>
-                          <Grid container>
-                            <Grid item xs={6} md={6} lg={6}></Grid>
-                            <Grid item xs={6} md={6} lg={6}>
-                              <SentMessage message="Hello, world!" />
-                            </Grid>
-                          </Grid>
-                        </ListItem>
-
-                        <ListItem>
-                          <Grid container>
-                            <Grid item xs={6} md={6} lg={6}>
-                              <ReceivedMessage message="Hello, world!" />
-                            </Grid>
-                            <Grid item xs={6} md={6} lg={6}></Grid>
-                          </Grid>
-                        </ListItem>
-
-                        {/* Text input + send button */}
-                        
-                      </List>
-                          <Grid component={Paper} container spacing={0} sx={{backgroundColor: "primary", marginBottom: 0, marginTop: 1, paddingBottom: 2, paddingTop: 2 }}>
-                            <Grid
-                              item
-                              xs={10}
-                              md={10}
-                              lg={10}
-                              sx={{
-                                display: "flex",
-                                justifyContent: "left",
-                                alignItems: "center",
-                                textAlign: "left",
-                                verticalAlign: "middle",
-                              }}
-                            >
-                              <TextField fullWidth color="secondary" variant="filled" focused sx={{marginLeft: 2, marginRight: 2, backgroundColor: "#1b1b1bF"}}></TextField>
-                            </Grid>
-                            <Grid
-                              item
-                              xs={2}
-                              md={2}
-                              lg={2}
-                              sx={{
-                                display: "flex",
-                                justifyContent: "left",
-                                alignItems: "center",
-                                textAlign: "left",
-                                verticalAlign: "middle",
-                                paddingLeft: 1
-                              }}
-                            >
-                              <IconButton style={{backgroundColor: "#EBD99F", color: "#1b1b1b"}}><SendIcon/></IconButton>
-                            </Grid>
-                          </Grid>
+                            if (message.senderId === this.state.student.email)
+                              return <ListItem>
+                                <Grid container>
+                                  <Grid item xs={6} md={6} lg={6}></Grid>
+                                  <Grid item xs={6} md={6} lg={6}>
+                                    <SentMessage message={message.text} receiver={message.senderId} student={this.state.student} />
+                                  </Grid>
+                                </Grid>
+                              </ListItem>
+                            return (<ListItem>
+                              <Grid container>
+                                <Grid item xs={6} md={6} lg={6}>
+                                  <ReceivedMessage message={message.text} receiver={message.senderId} student={this.state.student} />
+                                </Grid>
+                                <Grid item xs={6} md={6} lg={6}></Grid>
+                              </Grid>
+                            </ListItem>)
+                          })}
+                      </Grid>
+                    </List>
+                    <Grid component={Paper} container spacing={0} sx={{ backgroundColor: "primary", marginBottom: 0, marginTop: 1, paddingBottom: 2, paddingTop: 2 }}>
+                      <Grid
+                        item
+                        xs={10}
+                        md={10}
+                        lg={10}
+                        sx={{
+                          display: "flex",
+                          justifyContent: "left",
+                          alignItems: "center",
+                          textAlign: "left",
+                          verticalAlign: "middle",
+                        }}
+                      >
+                        <TextField fullWidth color="secondary" variant="filled" focused sx={{ marginLeft: 2, marginRight: 2, backgroundColor: "#1b1b1bF" }} value={text} onChange={this.handleInput} />
+                      </Grid>
+                      <Grid
+                        item
+                        xs={2}
+                        md={2}
+                        lg={2}
+                        sx={{
+                          display: "flex",
+                          justifyContent: "left",
+                          alignItems: "center",
+                          textAlign: "left",
+                          verticalAlign: "middle",
+                          paddingLeft: 1
+                        }}
+                      >
+                        <IconButton style={{ backgroundColor: "#EBD99F", color: "#1b1b1b" }} type="submit" onClick={() => this.addMessage(this.state.id, text, this.state.chat.id)}><SendIcon /></IconButton>
+                      </Grid>
+                    </Grid>
                   </Grid>
                   <Grid item xs={2} md={2} lg={2}></Grid>
                 </Grid>

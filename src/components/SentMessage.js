@@ -102,7 +102,9 @@ export default class SentMessage extends Component {
                 verticalAlign: "middle",
               }}
             >
-              <Typography color="primary" fontSize={14} fontWeight={550}>{this.props.message}</Typography>
+              <Typography color="primary" fontSize={14} fontWeight={550}>
+                {this.props.message}
+              </Typography>
             </Grid>
           </Grid>
         </Paper>

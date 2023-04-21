@@ -66,8 +66,23 @@ import {
   ReplyOutlined,
 } from "@mui/icons-material";
 import ChatService from "../services/ChatService";
+import { withRouter } from "react-router-dom";
 
-export default class CourseCard extends Component {
+class CourseCard extends Component {
+  constructor(props) {
+    super(props);
+    this.toCoursepage = this.toCoursepage.bind(this);
+    this.addCourse = this.addCourse.bind(this);
+  }
+
+  toCoursepage(id, courseID) {
+    this.props.history.push(`/course/${id}/${courseID}`);
+  }
+
+  addCourse(id, course) {
+    StudentService.addToBacklog(id, course);
+  }
+
   render() {
     return (
       <div>
@@ -138,6 +153,9 @@ export default class CourseCard extends Component {
                   variant="contained"
                   color="secondary"
                   sx={{ padding: 1 }}
+                  onClick={() => {
+                    this.toCoursepage(this.props.id, this.props.courseId)
+                  }}
                 >
                   Course Page
                 </Button>
@@ -146,6 +164,9 @@ export default class CourseCard extends Component {
                   variant="contained"
                   color="secondary"
                   sx={{ padding: 1 }}
+                  onClick={() => {
+                    this.addCourse(this.props.id, this.props.course)
+                  }}
                 >
                   Add Course
                 </Button>
@@ -157,3 +178,5 @@ export default class CourseCard extends Component {
     );
   }
 }
+
+export default withRouter(CourseCard);
