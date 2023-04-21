@@ -117,7 +117,7 @@ class CourseCard extends Component {
               }}
             >
               <Stack fullWidth spacing={1}>
-                <Typography variant="h3" fontWeight={600} color="secondary">
+                <Typography variant="h5" fontWeight={600} color="secondary">
                   {this.props.courseId}
                 </Typography>
                 <Typography variant="h5" fontWeight={400}>

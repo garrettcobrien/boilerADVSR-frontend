@@ -12,6 +12,7 @@ class EditProfile extends Component {
         password: '',
         linkedIn: '',
         aboutMe: '',
+        profilePicture: '',
         validate: {
             emailState: '',
         },
@@ -165,6 +166,11 @@ class EditProfile extends Component {
                         <Label for="linkedIn">LinkedIn</Label>
                         <Input type="linkedIn" name="linkedIn" id="linkedIn" value={student.linkedIn || ''}
                                onChange={this.handleChange} autoComplete="linkedIn"/>
+                    </FormGroup>
+                    <FormGroup>
+                        <Label for="profilePicture">Profile Pic Link</Label>
+                        <Input type="profilePicture" name="profilePicture" id="profilePicture" value={student.profilePicture || ''}
+                               onChange={this.handleChange} autoComplete="profilePicture"/>
                     </FormGroup>
                     <Button disabled={!(this.state.hasChanged)} onClick={() => this.saveInfo()}>Save Input Changes</Button>
                 </Form>

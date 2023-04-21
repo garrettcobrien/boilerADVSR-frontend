@@ -185,6 +185,7 @@ class Dashboard extends Component {
       this.state.searchDepartment
     ).then((res) => {
       this.setState({ searchedConnectionsList: res.data });
+      console.log("Searched connections " + this.state.connectionsSuggested);
     });
   }
 
@@ -197,6 +198,7 @@ class Dashboard extends Component {
           mydegree.degreeTitle
         ).then((res) => {
           this.setState({ connectionsSuggested: res.data });
+          console.log("Suggested connections " + this.state.connectionsSuggested);
         });
       }
     });
@@ -298,7 +300,7 @@ class Dashboard extends Component {
                   backgroundColor: "#ffffff",
                   fontWeight: 700,
                   mr: 0,
-                  ml: 1,
+                  ml: 0,
                 }}
                 size="small"
                 type="submit"
@@ -315,7 +317,7 @@ class Dashboard extends Component {
                 sx={{
                   backgroundColor: "#ffffff",
                   fontWeight: 700,
-                  mr: 1,
+                  mr: 0,
                   ml: 0,
                 }}
                 size="small"
@@ -483,6 +485,7 @@ class Dashboard extends Component {
                               {linkedInUsername}
                             </Button>
                           </Tooltip>
+                          <Typography>About Me: {student.aboutMe}</Typography>
                         </Stack>
                       </Container>
 
@@ -581,7 +584,7 @@ class Dashboard extends Component {
 
                   <Paper
                     sx={{
-                      p: 2,
+                      p: 1,
                       height: "auto",
                       display: "flex",
                       flexDirection: "column",
@@ -595,11 +598,11 @@ class Dashboard extends Component {
                         fontWeight={700}
                         color="secondary"
                       >
-                        Incomming Connection Requests
+                        Incoming Connection Requests
                       </Typography>
                       <Table>
                         <TableHead></TableHead>
-                        <TableBody>{connectionList}</TableBody>
+                        <TableBody>{requestList}</TableBody>
                       </Table>
                     </Stack>
                   </Paper>
@@ -624,7 +627,7 @@ class Dashboard extends Component {
                       </Typography>
                       <Table>
                         <TableHead></TableHead>
-                        <TableBody>{connectionList}</TableBody>
+                        <TableBody>{notificationsList}</TableBody>
                       </Table>
                     </Stack>
                   </Paper>
@@ -685,7 +688,6 @@ class Dashboard extends Component {
                       value={searchDepartment}
                       onChange={this.onChangeSearchDepartment}
                     />
-                    <div className="input-group-append">
                       <Button
                         sx={{ margin: 2 }}
                         type="button"
@@ -694,17 +696,14 @@ class Dashboard extends Component {
                       >
                         Search
                       </Button>
-                    </div>
-                    <br></br>
-                    <div className="col-md-8">
-                      <Typography color="secondary" varient="h3">
+                      <Typography color="secondary" varient="h5">
                         Searched Friends List
                       </Typography>
                       <ul className="list-group">
                         {searchedConnectionsList &&
                           searchedConnectionsList.map((connection, index) => (
                             <li
-                              className={"list-group-item "}
+                              className={"list-group-item"}
                               onClick={() => {
                                 this.requestConnection(
                                   student.email,
@@ -713,14 +712,13 @@ class Dashboard extends Component {
                               }}
                               key={index}
                             >
-                              <Typography color="primary">
+                              <Typography color="secondary">
                                 {" "}
                                 {connection}{" "}
                               </Typography>
                             </li>
                           ))}
                       </ul>
-                    </div>
                   </Paper>
                 </Grid>
               </Grid>

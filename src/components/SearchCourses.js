@@ -448,6 +448,7 @@ class SearchCourses extends Component {
                                 this.handleChangeSort(e)
                               }
                             >
+                              <MenuItem value="">N/A</MenuItem>
                               <MenuItem value="avgGPA">Average GPA</MenuItem>
                               <MenuItem value="rating">Average Rating</MenuItem>
                             </Select>
@@ -462,6 +463,7 @@ class SearchCourses extends Component {
                                 this.handleChangeLevel(e)
                               }
                             >
+                              <MenuItem value="-1">N/A</MenuItem>
                               <MenuItem value="1">100-199</MenuItem>
                               <MenuItem value="2">200-299</MenuItem>
                               <MenuItem value="3">300-399</MenuItem>
@@ -483,7 +485,7 @@ class SearchCourses extends Component {
 
                       <Grid container spacing={1} sx={{ marginBottom: 2 }}>
                         <Grid item xs={3} md={3} lg={3}></Grid>
-                        <Grid item xs={6} md={6} lg={6} sx={{
+                        <Grid item xs={8} md={8} lg={8} sx={{
                           display: "flex",
                           justifyContent: "center",
                           alignItems: "center",
@@ -504,7 +506,7 @@ class SearchCourses extends Component {
                             }
                           </List>
                         </Grid>
-                        <Grid item xs={3} md={3} lg={3}></Grid>
+                        <Grid item xs={1} md={1} lg={1}></Grid>
                       </Grid>
 
 

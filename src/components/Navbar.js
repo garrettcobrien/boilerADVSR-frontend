@@ -212,6 +212,8 @@ class Navbar extends Component {
   }
 
   render() {
+    const notifications = this.state.student.notifications;
+
     return (
       <AppBar sx={{ padding: 2 }}>
         <Toolbar
@@ -410,7 +412,7 @@ class Navbar extends Component {
                     component={RouterLink}
                     to={`/students/dashboard/${this.state.id}`}
                   >
-                    <Badge badgeContent={0} color="secondary">
+                    <Badge badgeContent={notifications && notifications.length} color="secondary">
                       <Avatar
                         variant="circle"
                         src={this.state.student.profilePicture}
