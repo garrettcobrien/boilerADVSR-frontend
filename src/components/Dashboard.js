@@ -61,7 +61,7 @@ class Dashboard extends Component {
       id: this.props.match.params.id,
       student: {},
 
-      courses: [],
+      courses: [{}],
       reviews: [],
       connectionsSuggested: [],
       searchedConnectionsList: [],
@@ -87,6 +87,7 @@ class Dashboard extends Component {
     this.onChangeSearchDepartment = this.onChangeSearchDepartment.bind(this);
     this.getSuggestedConnections = this.getSuggestedConnections.bind(this);
     this.handleRequest = this.handleRequest.bind(this);
+    this.remove = this.remove.bind(this);
   }
 
   componentDidMount() {
@@ -98,6 +99,7 @@ class Dashboard extends Component {
     StudentService.getPlanofStudy(this.state.id).then((res) => {
       this.setState({ degrees: res.data.degrees });
     });
+    this.forceUpdate();
   }
 
   //Navigation functions
@@ -160,11 +162,10 @@ class Dashboard extends Component {
     this.props.history.push("/");
   }
 
-  remove(courseID) {
-    let updatedStudents = [...this.state.courses].filter(
-      (i) => i.courseID !== courseID
-    );
-    this.setState({ courses: updatedStudents });
+  remove(id, courseID) {
+    StudentService.removeBacklog(id, courseID).then((res) => {
+      this.setState({courses: res.data})
+    });
   }
 
   handleRequest(id, connectionID, status) {
@@ -229,18 +230,18 @@ class Dashboard extends Component {
     console.log(this.state.connectionsSuggested);
 
     //Course backlog
-    const courseList = courses.map((course) => {
+    const courseList = courses?.map((course) => {
       return (
         <TableRow>
           <TableCell sx={{ color: "#EBD99F" }}>
-            <b>{course.courseID}</b>
+            <b>{course.courseID || ""}</b>
           </TableCell>
           <TableCell>{course.courseTitle}</TableCell>
           <TableCell sx={{ color: "#EBD99F" }}>
-            <b>{course.creditHours}</b>
+            <b>{course.creditHours || ""}</b>
           </TableCell>
           <TableCell>
-            <Button
+            <Button type="submit"
               onClick={() => {
                 this.toCoursepage(
                   course.courseIdDepartment,
@@ -254,7 +255,7 @@ class Dashboard extends Component {
             </Button>
           </TableCell>
           <TableCell>
-            <IconButton onClick={() => this.remove(course.courseID)}>
+            <IconButton type="submit" onClick={() => this.remove(this.state.student.email, course.courseID)}>
               <DeleteIcon sx={{ color: "#ffffff" }} />
             </IconButton>
           </TableCell>
@@ -753,7 +754,7 @@ class Dashboard extends Component {
                           <TableCell></TableCell>
                         </TableRow>
                       </TableHead>
-                      <TableBody>{courseList}</TableBody>
+                      <TableBody>{courseList || ""}</TableBody>
                     </Table>
                   </Paper>
                 </Grid>

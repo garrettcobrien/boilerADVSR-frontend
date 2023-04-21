@@ -16,7 +16,12 @@ class CourseService {
 
     //search by department
     getDepartment(department) {
-        return axios.get(COURSE_API_BASE_URL + '?department=' + department);
+        if (department === "") {
+            return axios.get(COURSE_API_BASE_URL);
+        }
+        else {
+            return axios.get(COURSE_API_BASE_URL + '?department=' + department);
+        }
     }
 
     //add review
@@ -35,6 +40,7 @@ class CourseService {
     }
 
     addQuestion(courseID, id, text, discID) {
+        console.log("courseID:" + courseID + " id:" + " text:" + text + " discID:" + discID)
         if (discID === "") {
             return axios({
                 method: 'put',

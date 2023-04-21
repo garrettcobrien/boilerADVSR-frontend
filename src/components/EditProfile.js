@@ -95,12 +95,6 @@ class EditProfile extends Component {
         },
         
     };
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleChangeDep = this.handleChangeDep.bind(this);
-    this.handleChangeType = this.handleChangeType.bind(this);
-    this.search = this.search.bind(this);
-  }
 
     constructor(props) {
         super(props);
@@ -122,6 +116,7 @@ class EditProfile extends Component {
         this.search = this.search.bind(this);
         this.saveInfo = this.saveInfo.bind(this);
     }
+
   componentDidMount() {
     console.log("edit");
     StudentService.getStudentById(this.state.id).then((res) => {
@@ -196,7 +191,6 @@ class EditProfile extends Component {
     this.forceUpdate();
   }
 
-  }
   
   search(dep, type) {
     APIService.getDegreeList(dep, type).then((res) => {

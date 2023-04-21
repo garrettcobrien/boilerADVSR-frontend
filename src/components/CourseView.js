@@ -55,6 +55,8 @@ import {
   ButtonBase,
   ListItem,
   TextField,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import NotificationsIcon from "@mui/icons-material/Notifications";
@@ -85,6 +87,7 @@ class CourseView extends Component {
       textResponseFinal: "",
       rating: "",
       chat: "",
+      connectionID: "",
 
       reviewNumber: 1,
     };
@@ -104,12 +107,12 @@ class CourseView extends Component {
     this.courseRec = this.courseRec.bind(this);
     this.handleRatingChange = this.handleRatingChange.bind(this);
     this.handleReviewText = this.handleReviewText.bind(this);
+    this.handleQuestionText = this.handleQuestionText.bind(this);
   }
 
   componentDidMount() {
     CourseService.getCourse(this.state.courseID).then((res) => {
       this.setState({ course: res.data });
-      this.setState({})
     });
     StudentService.getStudentById(this.state.id).then((res) => {
       this.setState({ student: res.data });
@@ -133,7 +136,7 @@ class CourseView extends Component {
   toLandingpage(id) {
     this.props.history.push(`/students/landingpage/${id}`);
   }
-  toSearchCourses(id){
+  toSearchCourses(id) {
     this.props.history.push(`/students/courses/${id}`);
   }
   toCalendar(id) {
@@ -212,7 +215,7 @@ class CourseView extends Component {
   }
 
   handleRatingChange(e) {
-    this.setState({rating: e.target.value});
+    this.setState({ rating: e.target.value });
   }
   handleReviewText(e) {
     const textReview = e.target.value;
@@ -220,9 +223,15 @@ class CourseView extends Component {
       textReview: textReview,
     });
   }
+  handleQuestionText(e) {
+    const textQuestion = e.target.value;
+    this.setState({
+      textQuestion: textQuestion,
+    });
+  }
 
   render() {
-    const { course, textReview, textQuestion, textResponse, rating, chat } = this.state;
+    const { course, textReview, textQuestion, textResponse, rating, chat, connectionID } = this.state;
     const notifications = this.state.student.notifications;
 
     return (
@@ -396,16 +405,16 @@ class CourseView extends Component {
                         }}
                       >
                         <Tooltip title="3.2">
-                        <Rating
-                          readOnly
-                          value={course.averageGPA || 0}
-                          precision={0.1}
-                          
-                          icon={<CircleIcon/>}
-                          emptyIcon={<CircleOutlinedIcon  style={{color: '#EBD99F'}} />}
-                          size="small"
-                          style={{color: '#EBD99F'}}
-                        ></Rating>
+                          <Rating
+                            readOnly
+                            value={course.averageGPA || 0}
+                            precision={0.1}
+
+                            icon={<CircleIcon />}
+                            emptyIcon={<CircleOutlinedIcon style={{ color: '#EBD99F' }} />}
+                            size="small"
+                            style={{ color: '#EBD99F' }}
+                          ></Rating>
                         </Tooltip>
                       </Grid>
 
@@ -427,6 +436,8 @@ class CourseView extends Component {
                             variant="contained"
                             color="secondary"
                             size="small"
+                            type="button"
+                            onClick={() => this.addCourse(this.state.id, this.state.course)}
                           >
                             <AddIcon />
                           </IconButton>
@@ -446,15 +457,25 @@ class CourseView extends Component {
                           verticalAlign: "middle",
                         }}
                       >
-                        <Tooltip title="Share with Classmate">
+                        
                           <IconButton
                             variant="contained"
                             color="secondary"
                             size="small"
                           >
-                            <SendIcon />
+                            <Select id="category" label="Who do you want to send to" value={connectionID} onChange={this.handleChangeDep}>
+                              {
+                                this.state.student.connectionsIds?.map((connection) => (
+                                  <MenuItem color="primary" key={connection} value={connection} type="submit"
+                                  onClick={() => this.courseRec(this.state.id, connection, this.state.courseID)}
+                                  > 
+                                  {connection} <SendIcon fontSize="small" sx={{ color: "#EBD99F" }} />
+                                  </MenuItem>
+                                ))
+                              }
+                            </Select>
                           </IconButton>
-                        </Tooltip>
+                        
                       </Grid>
 
                       <Grid item xs={3} md={3} lg={3}></Grid>
@@ -569,7 +590,7 @@ class CourseView extends Component {
                           verticalAlign: "middle",
                         }}
                       >
-                        <TextField fullWidth multiline maxRows={5} variant="filled" label="Your Review" 
+                        <TextField fullWidth multiline maxRows={5} variant="filled" label="Your Review"
                           value={textReview} onChange={(e) => this.handleReviewText(e)}
                         />
                       </Grid>
@@ -579,32 +600,32 @@ class CourseView extends Component {
                     <Grid container sx={{ marginBottom: 2, marginTop: 2 }}>
                       <Grid item xs={2} md={2} lg={2}></Grid>
                       <form onSubmit={() =>
-                            this.addReview(course.courseID, this.state.student.email, textReview, rating)
-                          }>
-                      <Grid
-                        item
-                        xs={8}
-                        md={8}
-                        lg={8}
-                        sx={{
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                          textAlign: "center",
-                          verticalAlign: "middle",
-                        }}
-                      >
-                        <Button
-                          variant="contained"
-                          color="secondary"
-                          startIcon={<QuestionAnswer />}
-                          elevation={8}
-                          type="submit"
+                        this.addReview(course.courseID, this.state.student.email, textReview, rating)
+                      }>
+                        <Grid
+                          item
+                          xs={8}
+                          md={8}
+                          lg={8}
+                          sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            textAlign: "center",
+                            verticalAlign: "middle",
+                          }}
                         >
-                          Write a Review
-                        </Button>
-                      </Grid>
-                      <Grid item xs={2} md={2} lg={2}></Grid>
+                          <Button
+                            variant="contained"
+                            color="secondary"
+                            startIcon={<QuestionAnswer />}
+                            elevation={8}
+                            type="submit"
+                          >
+                            Write a Review
+                          </Button>
+                        </Grid>
+                        <Grid item xs={2} md={2} lg={2}></Grid>
                       </form>
                     </Grid>
                   </Paper>
@@ -663,13 +684,13 @@ class CourseView extends Component {
                             maxHeight: 450,
                           }}
                         >
-                        {course.discussion &&
-                          course.discussion.map((question) => (
-                            <ListItem disablePadding>
-                              <QuestionCard responses={question.responses} qName={question.userID} qMajor="Computer Science" qText={question.text} aName="John Jones" aMajor="Statistics" aText="Dr. Chen is the best lecturer." />
-                            </ListItem>
-                          ))
-                        }
+                          {course.discussion &&
+                            course.discussion.map((question) => (
+                              <ListItem disablePadding>
+                                <QuestionCard courseID={this.state.course.courseID} responses={question.responses} qName={question.userID} qText={question.text} questionId={question.id} id={this.state.student.email} />
+                              </ListItem>
+                            ))
+                          }
                         </List>
                       </Grid>
                       <Grid item xs={0} md={0} lg={0}></Grid>
@@ -691,12 +712,15 @@ class CourseView extends Component {
                           verticalAlign: "middle",
                         }}
                       >
+
                         <TextField
                           fullWidth
                           multiline
                           maxRows={5}
                           variant="filled"
                           label="Your Question"
+                          value={textQuestion}
+                          onChange={this.handleQuestionText}
                         ></TextField>
                       </Grid>
                       <Grid item xs={2} md={2} lg={2}></Grid>
@@ -717,18 +741,20 @@ class CourseView extends Component {
                           verticalAlign: "middle",
                         }}
                       >
-                        <Button
-                          variant="contained"
-                          color="secondary"
-                          startIcon={<QuestionAnswer />}
-                          elevation={8}
-                          type="submit"
-                          onSubmit={() =>
-                            this.addQuestion(course.courseID, this.state.student.email, textQuestion, "")
-                          }
-                        >
-                          Ask a Question
-                        </Button>
+                        <form onSubmit={() =>
+                          this.addQuestion(course.courseID, this.state.student.email, textQuestion, "")
+                        }>
+                          <Button
+                            variant="contained"
+                            color="secondary"
+                            startIcon={<QuestionAnswer />}
+                            elevation={8}
+                            type="submit"
+
+                          >
+                            Ask a Question
+                          </Button>
+                        </form>
                       </Grid>
                       <Grid item xs={2} md={2} lg={2}></Grid>
                     </Grid>

@@ -79,13 +79,13 @@ class SemesterTile extends Component {
         semester.grade
     );
     StudentService.addCourseSem(
-      id,
-      semester.year,
-      semester.season,
-      semester.courseId,
-      semester.grade
+      this.props.id,
+      this.props.semester.year,
+      this.props.semester.season,
+      this.props.semester.courseId,
+      this.props.semester.grade
     ).then((res) => {});
-    this.props.history.push(`/students/addsemester/${id}/${year}/${season}`);
+    this.props.history.push(`/students/addsemester/${this.props.id}/${this.props.year}/${this.props.season}`);
   }
 
   render() {
