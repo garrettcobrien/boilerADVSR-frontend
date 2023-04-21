@@ -96,7 +96,7 @@ export default class ReceivedMessage extends Component {
               sx={{
                 display: "flex",
                 justifyContent: "center",
-                alignItems: "right",
+                alignItems: "left",
                 textAlign: "left",
                 verticalAlign: "middle",
               }}

@@ -167,17 +167,16 @@ class SearchCourses extends Component {
     this.setState({ level: e.target.value });
   }
 
-  //{TODO       !!!!!!!!!!!
-  //Uncomment add course to backlog function in student service
+
   addCourse(id, currentCourse) {
     StudentService.addToBacklog(id, currentCourse);
   }
 
   getSuggestedSemester(id, sort, level) {
+    console.log(id + " " + sort + " " + level);
     StudentService.getSuggestedSemester(id, sort, level).then((res) => {
       this.setState({ coursesSuggested: res.data });
     });
-    this.forceUpdate();
   }
 
   handleInput(event) {
@@ -266,7 +265,7 @@ class SearchCourses extends Component {
                       mr: 1,
                       ml: 1,
                     }}
-                    onClick={() => this.toPlanofstudy()}
+                    onClick={() => this.toPlanofstudy(id)}
                   >
                     Plan of Study
                   </Button>
@@ -391,7 +390,7 @@ class SearchCourses extends Component {
                             {courses &&
                               courses.map((course) => (
                                 <ListItem>
-                                  <CourseCard courseId={course.courseID} rating={course.averageRating} title={course.courseTitle} id={student.email} courseID={course.courseID}/>
+                                  <CourseCard courseId={course.courseID} rating={course.averageRating} title={course.courseTitle} id={student.email} course={course}/>
                                 </ListItem>
                               ))
                             }
@@ -477,7 +476,7 @@ class SearchCourses extends Component {
                       <Grid container spacing={1} sx={{ marginBottom: 2 }}>
                         <Grid item xs={5} md={5} lg={5}></Grid>
                         <Grid item xs={2} md={2} lg={2}>
-                          <Button fullWidth variant="contained" color="secondary" onClick={() => this.getSuggestedSemester(id, sort, level)}>Search</Button>
+                          <Button fullWidth variant="contained" color="secondary" type="button" onClick={() => this.getSuggestedSemester(id, sort, level)}>Search</Button>
                         </Grid>
                         <Grid item xs={5} md={5} lg={5}></Grid>
                       </Grid>
@@ -499,7 +498,7 @@ class SearchCourses extends Component {
                             {coursesSuggested &&
                               coursesSuggested.map((course) => (
                                 <ListItem>
-                                  <CourseCard courseId={course.courseID} rating={course.averageRating} title={course.courseTitle} id={student.email} courseID={course.courseID}/>
+                                  <CourseCard courseId={course.courseID} rating={course.averageRating} title={course.courseTitle} id={student.email} course={course}/>
                                 </ListItem>
                               ))
                             }

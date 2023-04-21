@@ -72,10 +72,15 @@ class CourseCard extends Component {
   constructor(props) {
     super(props);
     this.toCoursepage = this.toCoursepage.bind(this);
+    this.addCourse = this.addCourse.bind(this);
   }
 
   toCoursepage(id, courseID) {
     this.props.history.push(`/course/${id}/${courseID}`);
+  }
+
+  addCourse(id, course) {
+    StudentService.addToBacklog(id, course);
   }
 
   render() {
@@ -149,7 +154,7 @@ class CourseCard extends Component {
                   color="secondary"
                   sx={{ padding: 1 }}
                   onClick={() => {
-                    this.toCoursepage(this.props.id, this.props.courseID)
+                    this.toCoursepage(this.props.id, this.props.courseId)
                   }}
                 >
                   Course Page
@@ -159,6 +164,9 @@ class CourseCard extends Component {
                   variant="contained"
                   color="secondary"
                   sx={{ padding: 1 }}
+                  onClick={() => {
+                    this.addCourse(this.props.id, this.props.course)
+                  }}
                 >
                   Add Course
                 </Button>
