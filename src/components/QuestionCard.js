@@ -32,7 +32,7 @@ import Stack from "@mui/material/Stack";
 import Avatar from "@mui/material/Avatar";
 import Rating from "@mui/material/Rating";
 import Tooltip from "@mui/material/Tooltip";
-import { mainListItems, secondaryListItems } from "./listItems";
+
 import axios from "axios";
 import AddIcon from "@mui/icons-material/Add";
 import SendIcon from "@mui/icons-material/Send";
@@ -54,6 +54,7 @@ import {
   Card,
   ButtonBase,
   ListItem,
+  TextField,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import NotificationsIcon from "@mui/icons-material/Notifications";
@@ -91,7 +92,7 @@ export default class QuestionCard extends Component {
           elevation={5}
         >
           <List>
-            <ListItem sx={{p: 0}}>
+            <ListItem sx={{ p: 0 }}>
               <Grid container sx={{ marginBottom: 1 }}>
                 <Grid
                   item
@@ -135,8 +136,12 @@ export default class QuestionCard extends Component {
                 </Grid>
               </Grid>
             </ListItem>
-            <ListItem sx={{p: 0}}>
-              <Grid container sx={{ marginBottom: 0, marginTop: 0 }} spacing={1}>
+            <ListItem sx={{ p: 0 }}>
+              <Grid
+                container
+                sx={{ marginBottom: 0, marginTop: 0 }}
+                spacing={1}
+              >
                 <Grid
                   item
                   sx={{
@@ -208,9 +213,9 @@ export default class QuestionCard extends Component {
               </Grid>
             </ListItem>
 
-            <Divider color="#EBD99F" sx={{marginTop: 2, marginBottom: 1}} />
+            <Divider color="#EBD99F" sx={{ marginTop: 2, marginBottom: 1 }} />
 
-            <ListItem sx={{p: 0}}>
+            <ListItem sx={{ p: 0 }}>
               <Grid container sx={{ marginBottom: 1, marginTop: 1 }}>
                 <Grid
                   item
@@ -243,13 +248,11 @@ export default class QuestionCard extends Component {
                     verticalAlign: "middle",
                   }}
                 >
-                  <Typography fontSize={18}>
-                    {this.props.aText}
-                  </Typography>
+                  <Typography fontSize={18}>{this.props.aText}</Typography>
                 </Grid>
               </Grid>
             </ListItem>
-            <ListItem sx={{p: 0}}>
+            <ListItem sx={{ p: 0 }}>
               <Grid container sx={{ marginBottom: 0 }} spacing={1}>
                 <Grid
                   item
@@ -301,7 +304,7 @@ export default class QuestionCard extends Component {
                   }}
                 >
                   <Typography variant="h8" fontSize={11} fontWeight={500}>
-                  {this.props.aName}
+                    {this.props.aName}
                   </Typography>
                 </Grid>
                 <Grid
@@ -315,10 +318,56 @@ export default class QuestionCard extends Component {
                   }}
                 >
                   <Typography variant="h11" color="secondary" fontSize={11}>
-                  {this.props.aMajor}
+                    {this.props.aMajor}
                   </Typography>
                 </Grid>
                 <Grid item></Grid>
+              </Grid>
+            </ListItem>
+            <Divider color="#EBD99F" sx={{ marginTop: 2, marginBottom: 1 }} />
+            <ListItem sx={{ p: 0 }}>
+              <Grid container sx={{ marginBottom: 0 }} spacing={1}>
+                <Grid
+                  item
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    textAlign: "center",
+                    verticalAlign: "middle",
+                    marginLeft: 0,
+                  }}
+                >
+                  <TextField
+                    fullWidth
+                    multiline
+                    maxRows={5}
+                    variant="filled"
+                    label="Your Answer"
+                  ></TextField>
+                </Grid>
+              </Grid>
+              <Grid container sx={{ marginBottom: 0 }} spacing={1}>
+                <Grid
+                  item
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    textAlign: "center",
+                    verticalAlign: "middle",
+                  }}
+                >
+                  <Button
+                    fullWidth
+                    variant="contained"
+                    color="secondary"
+                    startIcon={<QuestionAnswer />}
+                    elevation={8}
+                  >
+                    Post Answer
+                  </Button>
+                </Grid>
               </Grid>
             </ListItem>
           </List>

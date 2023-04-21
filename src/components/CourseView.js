@@ -32,7 +32,7 @@ import Stack from "@mui/material/Stack";
 import Avatar from "@mui/material/Avatar";
 import Rating from "@mui/material/Rating";
 import Tooltip from "@mui/material/Tooltip";
-import { mainListItems, secondaryListItems } from "./listItems";
+
 import axios from "axios";
 import AddIcon from "@mui/icons-material/Add";
 import SendIcon from "@mui/icons-material/Send";
@@ -54,7 +54,7 @@ import {
   Card,
   ButtonBase,
   ListItem,
-  TextField
+  TextField,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import NotificationsIcon from "@mui/icons-material/Notifications";
@@ -69,6 +69,7 @@ import {
 import ChatService from "../services/ChatService";
 import ReviewCard from "./ReviewCard";
 import QuestionCard from "./QuestionCard";
+import Navbar from "./Navbar";
 
 class CourseView extends Component {
   constructor(props) {
@@ -204,101 +205,7 @@ class CourseView extends Component {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Box sx={{ display: "flex" }}>
-          <AppBar>
-            <Toolbar
-              sx={{
-                pr: "24px", // keep right padding when drawer closed
-              }}
-            >
-              <Button
-                onClick={() => {
-                  this.toLandingpage(this.state.student.email);
-                }}
-              >
-                <Typography
-                  component="h1"
-                  variant="h5"
-                  noWrap
-                  color="secondary"
-                  sx={{ flexGrow: 1 }}
-                  fontWeight={800}
-                >
-                  BOILERADVSR
-                </Typography>
-              </Button>
-              <ButtonGroup
-                disableElevation="true"
-                variant="contained"
-                color="secondary"
-                sx={{ marginRight: 50, p: 4 }}
-              >
-                <Button
-                  sx={{
-                    backgroundColor: "#ffffff",
-                    fontWeight: 700,
-                    mr: 1,
-                    ml: 1,
-                  }}
-                >
-                  Find a Course
-                </Button>
-                <Button
-                  sx={{
-                    backgroundColor: "#ffffff",
-                    fontWeight: 700,
-                    mr: 1,
-                    ml: 1,
-                  }}
-                >
-                  Suggest a Semester
-                </Button>
-                <Button
-                  sx={{
-                    backgroundColor: "#ffffff",
-                    fontWeight: 700,
-                    mr: 1,
-                    ml: 1,
-                  }}
-                >
-                  Plan of Study
-                </Button>
-                <Button
-                  sx={{
-                    backgroundColor: "#ffffff",
-                    fontWeight: 700,
-                    mr: 1,
-                    ml: 1,
-                  }}
-                >
-                  Transcript
-                </Button>
-              </ButtonGroup>
-
-              <Button
-                color="inherit"
-                onClick={() => {
-                  this.toDashboard(this.state.student.email);
-                }}
-              >
-                <Badge badgeContent={4} color="secondary">
-                  <Avatar
-                    variant="circle"
-                    src="https://media.istockphoto.com/id/1171169127/photo/headshot-of-cheerful-handsome-man-with-trendy-haircut-and-eyeglasses-isolated-on-gray.jpg?s=612x612&w=0&k=20&c=yqAKmCqnpP_T8M8I5VTKxecri1xutkXH7zfybnwVWPQ="
-                    alt="profilepic"
-                    sx={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      textAlign: "center",
-                      verticalAlign: "middle",
-                      height: 40,
-                      width: 40,
-                    }}
-                  />
-                </Badge>
-              </Button>
-            </Toolbar>
-          </AppBar>
+          <Navbar id={this.state.id} />
 
           <Box
             component="main"
@@ -372,7 +279,9 @@ class CourseView extends Component {
                           verticalAlign: "middle",
                         }}
                       >
-                        <Typography fontSize={12}>Average Rating: 4.5</Typography>
+                        <Typography fontSize={12}>
+                          Average Rating: 4.5
+                        </Typography>
                       </Grid>
                       <Grid
                         item
@@ -443,10 +352,12 @@ class CourseView extends Component {
                           readOnly
                           value={4.5}
                           precision={0.25}
-                          icon={<StarIcon/>}
-                          emptyIcon={<StarBorderIcon  style={{color: '#EBD99F'}}/>}
+                          icon={<StarIcon />}
+                          emptyIcon={
+                            <StarBorderIcon style={{ color: "#EBD99F" }} />
+                          }
                           size="small"
-                          style={{color: '#EBD99F'}}
+                          style={{ color: "#EBD99F" }}
                         ></Rating>
                       </Grid>
                       <Grid
@@ -463,16 +374,20 @@ class CourseView extends Component {
                         }}
                       >
                         <Tooltip title="3.2">
-                        <Rating
-                          readOnly
-                          value={3.4}
-                          precision={0.1}
-                          max={4}
-                          icon={<CircleIcon/>}
-                          emptyIcon={<CircleOutlinedIcon  style={{color: '#EBD99F'}} />}
-                          size="small"
-                          style={{color: '#EBD99F'}}
-                        ></Rating>
+                          <Rating
+                            readOnly
+                            value={3.4}
+                            precision={0.1}
+                            max={4}
+                            icon={<CircleIcon />}
+                            emptyIcon={
+                              <CircleOutlinedIcon
+                                style={{ color: "#EBD99F" }}
+                              />
+                            }
+                            size="small"
+                            style={{ color: "#EBD99F" }}
+                          ></Rating>
                         </Tooltip>
                       </Grid>
 
@@ -588,19 +503,30 @@ class CourseView extends Component {
                           }}
                         >
                           <ListItem disablePadding>
-                            <ReviewCard name="Freddie Clarke" rating={5} major="Computer Science"/>
+                            <ReviewCard
+                              name="Freddie Clarke"
+                              rating={5}
+                              major="Computer Science"
+                            />
                           </ListItem>
                           <ListItem disablePadding>
-                            <ReviewCard name="John Smith" rating={4} major="General Management"/>
+                            <ReviewCard
+                              name="John Smith"
+                              rating={4}
+                              major="General Management"
+                            />
                           </ListItem>
                           <ListItem disablePadding>
-                            <ReviewCard name="Bill Williams" rating={3} major="Biology"/>
+                            <ReviewCard
+                              name="Bill Williams"
+                              rating={3}
+                              major="Biology"
+                            />
                           </ListItem>
                         </List>
                       </Grid>
                       <Grid item xs={0} md={0} lg={0}></Grid>
                     </Grid>
-
 
                     <Grid container sx={{ marginBottom: 2, marginTop: 2 }}>
                       <Grid item xs={1} md={1} lg={1}></Grid>
@@ -623,7 +549,6 @@ class CourseView extends Component {
                       <Grid item xs={1} md={1} lg={1}></Grid>
                     </Grid>
 
-
                     <Grid container sx={{ marginBottom: 2, marginTop: 2 }}>
                       <Grid item xs={1} md={1} lg={1}></Grid>
 
@@ -640,12 +565,16 @@ class CourseView extends Component {
                           verticalAlign: "middle",
                         }}
                       >
-                        <TextField fullWidth multiline maxRows={5} variant="filled" label="Your Review"></TextField>
+                        <TextField
+                          fullWidth
+                          multiline
+                          maxRows={5}
+                          variant="filled"
+                          label="Your Review"
+                        ></TextField>
                       </Grid>
                       <Grid item xs={1} md={1} lg={1}></Grid>
                     </Grid>
-
-
 
                     <Grid container sx={{ marginBottom: 2, marginTop: 2 }}>
                       <Grid item xs={2} md={2} lg={2}></Grid>
@@ -731,19 +660,66 @@ class CourseView extends Component {
                           }}
                         >
                           <ListItem disablePadding>
-                            <QuestionCard qName="Freddie Clarke" qMajor="Computer Science" qText="Who is the best professor for this course?" aName="John Jones" aMajor="Statistics" aText="Dr. Chen is the best lecturer." />
+                            <QuestionCard
+                              qName="Freddie Clarke"
+                              qMajor="Computer Science"
+                              qText="Who is the best professor for this course?"
+                              aName="John Jones"
+                              aMajor="Statistics"
+                              aText="Dr. Chen is the best lecturer."
+                            />
                           </ListItem>
                           <ListItem disablePadding>
-                          <QuestionCard qName="James Cook" qMajor="Physics" qText="How many lectures are there per week" aName="Adam Smith" aMajor="Actuarial Science" aText="There are 3 lectures per week." />
+                            <QuestionCard
+                              qName="James Cook"
+                              qMajor="Physics"
+                              qText="How many lectures are there per week"
+                              aName="Adam Smith"
+                              aMajor="Actuarial Science"
+                              aText="There are 3 lectures per week."
+                            />
                           </ListItem>
                           <ListItem disablePadding>
-                          <QuestionCard qName="Bill Watson" qMajor="Chemical Engineering" qText="How many exams are there for this course?" aName="Peter Evans" aMajor="Integrated Business & Engineering" aText="There are two midterms and one final exam for this course." />
+                            <QuestionCard
+                              qName="Bill Watson"
+                              qMajor="Chemical Engineering"
+                              qText="How many exams are there for this course?"
+                              aName="Peter Evans"
+                              aMajor="Integrated Business & Engineering"
+                              aText="There are two midterms and one final exam for this course."
+                            />
                           </ListItem>
                         </List>
                       </Grid>
                       <Grid item xs={0} md={0} lg={0}></Grid>
                     </Grid>
 
+                    <Grid container sx={{ marginBottom: 2, marginTop: 2 }}>
+                      <Grid item xs={2} md={2} lg={2}></Grid>
+
+                      <Grid
+                        item
+                        xs={8}
+                        md={8}
+                        lg={8}
+                        sx={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          textAlign: "center",
+                          verticalAlign: "middle",
+                        }}
+                      >
+                        <TextField
+                          fullWidth
+                          multiline
+                          maxRows={5}
+                          variant="filled"
+                          label="Your Question"
+                        ></TextField>
+                      </Grid>
+                      <Grid item xs={2} md={2} lg={2}></Grid>
+                    </Grid>
                     <Grid container sx={{ marginBottom: 2, marginTop: 2 }}>
                       <Grid item xs={2} md={2} lg={2}></Grid>
 

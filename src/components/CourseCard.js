@@ -32,7 +32,7 @@ import Stack from "@mui/material/Stack";
 import Avatar from "@mui/material/Avatar";
 import Rating from "@mui/material/Rating";
 import Tooltip from "@mui/material/Tooltip";
-import { mainListItems, secondaryListItems } from "./listItems";
+
 import axios from "axios";
 import AddIcon from "@mui/icons-material/Add";
 import SendIcon from "@mui/icons-material/Send";
