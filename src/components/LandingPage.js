@@ -38,6 +38,7 @@ class LandingPage extends Component {
     this.toProfile = this.toProfile.bind(this);
     this.toSearchCourses = this.toSearchCourses.bind(this);
     this.toPlanofstudy = this.toPlanofstudy.bind(this);
+    this.toSuggest = this.toSuggest.bind(this);
   }
 
   componentDidMount() {
@@ -58,6 +59,9 @@ class LandingPage extends Component {
   }
   toSearchCourses(id){
     this.props.history.push(`/students/courses/${id}`);
+  }
+  toSuggest(id){
+    this.props.history.push(`/students/suggest/${id}`);
   }
 
   toPlanofstudy(id) {
@@ -140,11 +144,11 @@ class LandingPage extends Component {
                       <Button color="secondary" variant="contained" onClick={() => {this.toSearchCourses(this.state.student.email);}}>
                         Find a Course
                       </Button>
-                      <Button color="secondary" variant="contained">
+                      <Button color="secondary" variant="contained" onClick={() => {this.toSuggest(this.state.student.email);}}>
                         Suggest a Semester
                       </Button>
-                      <Button color="secondary" variant="contained">
-                        Review a Course
+                      <Button color="secondary" variant="contained" onClick={() => this.toPlanofstudy(this.state.student.email)}>
+                        Plan of Study
                       </Button>
                       <Button color="secondary" variant="contained" onClick={ () => this.toProfile(student.email)}>
                         View My Profile

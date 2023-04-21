@@ -194,7 +194,7 @@ export default class QuestionCard extends Component {
                 >
                   <Avatar
                     variant="circle"
-                    src="https://media.istockphoto.com/id/1171169127/photo/headshot-of-cheerful-handsome-man-with-trendy-haircut-and-eyeglasses-isolated-on-gray.jpg?s=612x612&w=0&k=20&c=yqAKmCqnpP_T8M8I5VTKxecri1xutkXH7zfybnwVWPQ="
+                    src={this.props.qPic}
                     alt="profilepic"
                     sx={{
                       display: "flex",

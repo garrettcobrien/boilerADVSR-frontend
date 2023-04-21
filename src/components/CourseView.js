@@ -687,7 +687,7 @@ class CourseView extends Component {
                           {course.discussion &&
                             course.discussion.map((question) => (
                               <ListItem disablePadding>
-                                <QuestionCard courseID={this.state.course.courseID} responses={question.responses} qName={question.userID} qText={question.text} questionId={question.id} id={this.state.student.email} />
+                                <QuestionCard courseID={this.state.course.courseID} responses={question.responses} qName={question.userID} qText={question.text} questionId={question.id} qPic={this.state.student.profilePicture} id={this.state.student.email} />
                               </ListItem>
                             ))
                           }

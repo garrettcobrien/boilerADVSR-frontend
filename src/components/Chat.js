@@ -78,6 +78,7 @@ import QuestionCard from "./QuestionCard";
 import CourseCard from "./CourseCard";
 import SentMessage from "./SentMessage";
 import ReceivedMessage from "./RecievedMessage";
+import Navbar from "./Navbar";
 
 class Chat extends Component {
   constructor(props) {
@@ -146,101 +147,7 @@ class Chat extends Component {
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <Box sx={{ display: "flex" }}>
-            <AppBar>
-              <Toolbar
-                sx={{
-                  pr: "24px", // keep right padding when drawer closed
-                }}
-              >
-                <Button
-                  onClick={() => {
-                    this.toLandingpage(this.state.student.email);
-                  }}
-                >
-                  <Typography
-                    component="h1"
-                    variant="h5"
-                    noWrap
-                    color="secondary"
-                    sx={{ flexGrow: 1 }}
-                    fontWeight={800}
-                  >
-                    BOILERADVSR
-                  </Typography>
-                </Button>
-                <ButtonGroup
-                  disableElevation="true"
-                  variant="contained"
-                  color="secondary"
-                  sx={{ marginRight: 50, p: 4 }}
-                >
-                  <Button
-                    sx={{
-                      backgroundColor: "#ffffff",
-                      fontWeight: 700,
-                      mr: 1,
-                      ml: 1,
-                    }}
-                  >
-                    Find a Course
-                  </Button>
-                  <Button
-                    sx={{
-                      backgroundColor: "#ffffff",
-                      fontWeight: 700,
-                      mr: 1,
-                      ml: 1,
-                    }}
-                  >
-                    Suggest a Semester
-                  </Button>
-                  <Button
-                    sx={{
-                      backgroundColor: "#ffffff",
-                      fontWeight: 700,
-                      mr: 1,
-                      ml: 1,
-                    }}
-                  >
-                    Plan of Study
-                  </Button>
-                  <Button
-                    sx={{
-                      backgroundColor: "#ffffff",
-                      fontWeight: 700,
-                      mr: 1,
-                      ml: 1,
-                    }}
-                  >
-                    Transcript
-                  </Button>
-                </ButtonGroup>
-
-                <Button
-                  color="inherit"
-                  onClick={() => {
-                    this.toProfile(this.state.student.email);
-                  }}
-                >
-                  <Badge badgeContent={4} color="secondary">
-                    <Avatar
-                      variant="circle"
-                      src="https://media.istockphoto.com/id/1171169127/photo/headshot-of-cheerful-handsome-man-with-trendy-haircut-and-eyeglasses-isolated-on-gray.jpg?s=612x612&w=0&k=20&c=yqAKmCqnpP_T8M8I5VTKxecri1xutkXH7zfybnwVWPQ="
-                      alt="profilepic"
-                      sx={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        textAlign: "center",
-                        verticalAlign: "middle",
-                        height: 40,
-                        width: 40,
-                      }}
-                    />
-                  </Badge>
-                </Button>
-              </Toolbar>
-            </AppBar>
+            <Navbar id={this.state.id}/>
 
             <Box
               component="main"
@@ -342,7 +249,7 @@ class Chat extends Component {
                         }}
                       >
                         <Avatar
-                          src="https://media.istockphoto.com/id/1171169127/photo/headshot-of-cheerful-handsome-man-with-trendy-haircut-and-eyeglasses-isolated-on-gray.jpg?s=612x612&w=0&k=20&c=yqAKmCqnpP_T8M8I5VTKxecri1xutkXH7zfybnwVWPQ="
+                          src={this.state.connectionStudent.profilePicture}
                           alt="profilepic"
                           sx={{
                             display: "flex",

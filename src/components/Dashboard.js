@@ -486,7 +486,7 @@ class Dashboard extends Component {
                               {linkedInUsername}
                             </Button>
                           </Tooltip>
-                          <Typography>About Me: {student.aboutMe}</Typography>
+                          <Typography><b>About Me:</b> {student.aboutMe}</Typography>
                         </Stack>
                       </Container>
 
@@ -666,6 +666,9 @@ class Dashboard extends Component {
                               {" "}
                               {connection}{" "}
                             </Typography>
+                            <Button onClick={StudentService.requestConnection(this.state.id, connection.id)}>
+                              Add
+                            </Button>
                           </li>
                         ))}
                     </ul>
@@ -717,6 +720,9 @@ class Dashboard extends Component {
                                 {" "}
                                 {connection}{" "}
                               </Typography>
+                              <Button onClick={StudentService.requestConnection(this.state.id, connection.id)}>
+                              Add
+                            </Button>
                             </li>
                           ))}
                       </ul>

@@ -74,6 +74,7 @@ import ChatService from "../services/ChatService";
 import ReviewCard from "./ReviewCard";
 import QuestionCard from "./QuestionCard";
 import CourseCard from "./CourseCard";
+import Navbar from  "./Navbar"
 
 class SearchCourses extends Component {
   constructor(props) {
@@ -210,102 +211,8 @@ class SearchCourses extends Component {
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <Box sx={{ display: "flex" }}>
-            <AppBar>
-              <Toolbar
-                sx={{
-                  pr: "24px", // keep right padding when drawer closed
-                }}
-              >
-                <Button
-                  onClick={() => {
-                    this.toLandingpage(this.state.student.email);
-                  }}
-                >
-                  <Typography
-                    component="h1"
-                    variant="h5"
-                    noWrap
-                    color="secondary"
-                    sx={{ flexGrow: 1 }}
-                    fontWeight={800}
-                  >
-                    BOILERADVSR
-                  </Typography>
-                </Button>
-                <ButtonGroup
-                  disableElevation="true"
-                  variant="contained"
-                  color="secondary"
-                  sx={{ marginRight: 50, p: 4 }}
-                >
-                  <Button
-                    sx={{
-                      backgroundColor: "#ffffff",
-                      fontWeight: 700,
-                      mr: 1,
-                      ml: 1,
-                    }}
-                  >
-                    Find a Course
-                  </Button>
-                  <Button
-                    sx={{
-                      backgroundColor: "#ffffff",
-                      fontWeight: 700,
-                      mr: 1,
-                      ml: 1,
-                    }}
-                  >
-                    Suggest a Semester
-                  </Button>
-                  <Button
-                    sx={{
-                      backgroundColor: "#ffffff",
-                      fontWeight: 700,
-                      mr: 1,
-                      ml: 1,
-                    }}
-                    onClick={() => this.toPlanofstudy(id)}
-                  >
-                    Plan of Study
-                  </Button>
-                  <Button onClick={() => { this.toCalendar(this.state.student.email); }}
-                    sx={{
-                      backgroundColor: "#ffffff",
-                      fontWeight: 700,
-                      mr: 1,
-                      ml: 1,
-                    }}
-                  >
-                    Calendar
-                  </Button>
-                </ButtonGroup>
 
-                <Button
-                  color="inherit"
-                  onClick={() => {
-                    this.toProfile(this.state.student.email);
-                  }}
-                >
-                  <Badge badgeContent={notifications && notifications.length} color="secondary">
-                    <Avatar
-                      variant="circle"
-                      src="https://media.istockphoto.com/id/1171169127/photo/headshot-of-cheerful-handsome-man-with-trendy-haircut-and-eyeglasses-isolated-on-gray.jpg?s=612x612&w=0&k=20&c=yqAKmCqnpP_T8M8I5VTKxecri1xutkXH7zfybnwVWPQ="
-                      alt="profilepic"
-                      sx={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        textAlign: "center",
-                        verticalAlign: "middle",
-                        height: 40,
-                        width: 40,
-                      }}
-                    />
-                  </Badge>
-                </Button>
-              </Toolbar>
-            </AppBar>
+            <Navbar id={this.state.id}/>        
 
             <Box
               component="main"

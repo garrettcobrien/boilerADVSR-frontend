@@ -5,6 +5,7 @@ import Login from "./components/Login";
 import SearchCourses from "./components/SearchCourses";
 import LandingPage from "./components/LandingPage";
 import PlanOfSudy from "./components/PlanOfStudy";
+import PlanOfSudy2 from "./components/PlanOfStudy2";
 import EditProfile from "./components/EditProfile";
 import ResetPasswordEnterEmail from "./components/ResetPasswordEnterEmail";
 import CourseView from "./components/CourseView";
@@ -33,7 +34,7 @@ class App extends Component {
             <Route  path='/students/dashboard/:id' component={Dashboard} />
             <Route  path='/students/courses/:id' component={SearchCourses} />
             <Route  path='/students/editprofile/:id' component={EditProfile} />
-            <Route  path='/students/planofstudy/:id' component={PlanOfSudy} />
+            <Route  path='/students/planofstudy/:id' component={PlanOfSudy2} />
             <Route path='/students/calendar/:id' component={Calendar} />
             <Route  path='/students/addsemester/:id/:year/:season' component={AddSemester} />
             <Route  path='/students/suggest/:id' component={SugggestSemester} />
