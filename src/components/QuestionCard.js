@@ -192,9 +192,9 @@ export default class QuestionCard extends Component {
                     marginLeft: 0,
                   }}
                 >
-                  <Avatar
+                  {/* <Avatar
                     variant="circle"
-                    src={this.props.qPic}
+                    
                     alt="profilepic"
                     sx={{
                       display: "flex",
@@ -205,7 +205,7 @@ export default class QuestionCard extends Component {
                       height: 25,
                       width: 25,
                     }}
-                  />
+                  /> */}
                 </Grid>
 
                 <Grid
