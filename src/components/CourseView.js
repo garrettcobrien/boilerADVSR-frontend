@@ -32,7 +32,7 @@ import Stack from "@mui/material/Stack";
 import Avatar from "@mui/material/Avatar";
 import Rating from "@mui/material/Rating";
 import Tooltip from "@mui/material/Tooltip";
-import { mainListItems, secondaryListItems } from "./listItems";
+
 import axios from "axios";
 import AddIcon from "@mui/icons-material/Add";
 import SendIcon from "@mui/icons-material/Send";
@@ -54,7 +54,7 @@ import {
   Card,
   ButtonBase,
   ListItem,
-  TextField
+  TextField,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import NotificationsIcon from "@mui/icons-material/Notifications";
@@ -69,6 +69,7 @@ import {
 import ChatService from "../services/ChatService";
 import ReviewCard from "./ReviewCard";
 import QuestionCard from "./QuestionCard";
+import Navbar from "./Navbar";
 
 class CourseView extends Component {
   constructor(props) {
@@ -228,103 +229,7 @@ class CourseView extends Component {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Box sx={{ display: "flex" }}>
-          <AppBar>
-            <Toolbar
-              sx={{
-                pr: "24px", // keep right padding when drawer closed
-              }}
-            >
-              <Button
-                onClick={() => {
-                  this.toLandingpage(this.state.student.email);
-                }}
-              >
-                <Typography
-                  component="h1"
-                  variant="h5"
-                  noWrap
-                  color="secondary"
-                  sx={{ flexGrow: 1 }}
-                  fontWeight={800}
-                >
-                  BOILERADVSR
-                </Typography>
-              </Button>
-              <ButtonGroup
-                disableElevation="true"
-                variant="contained"
-                color="secondary"
-                sx={{ marginRight: 50, p: 4 }}
-              >
-                <Button
-                  sx={{
-                    backgroundColor: "#ffffff",
-                    fontWeight: 700,
-                    mr: 1,
-                    ml: 1,
-                  }}
-                  onClick={() => {this.toSearchCourses(this.state.student.email);}}
-                >
-                  Find a Course
-                </Button>
-                <Button
-                  sx={{
-                    backgroundColor: "#ffffff",
-                    fontWeight: 700,
-                    mr: 1,
-                    ml: 1,
-                  }}
-                >
-                  Suggest a Semester
-                </Button>
-                <Button
-                  sx={{
-                    backgroundColor: "#ffffff",
-                    fontWeight: 700,
-                    mr: 1,
-                    ml: 1,
-                  }}
-                  onClick={() => this.toPlanofstudy(this.state.student.email)}
-                >
-                  Plan of Study
-                </Button>
-                <Button onClick={() => { this.toCalendar(this.state.student.email); }}
-                    sx={{
-                      backgroundColor: "#ffffff",
-                      fontWeight: 700,
-                      mr: 1,
-                      ml: 1,
-                    }}
-                  >
-                    Calendar
-                  </Button>
-              </ButtonGroup>
-
-              <Button
-                color="inherit"
-                onClick={() => {
-                  this.toDashboard(this.state.student.email);
-                }}
-              >
-                <Badge badgeContent={notifications && notifications.length} color="secondary">
-                  <Avatar
-                    variant="circle"
-                    src="https://media.istockphoto.com/id/1171169127/photo/headshot-of-cheerful-handsome-man-with-trendy-haircut-and-eyeglasses-isolated-on-gray.jpg?s=612x612&w=0&k=20&c=yqAKmCqnpP_T8M8I5VTKxecri1xutkXH7zfybnwVWPQ="
-                    alt="profilepic"
-                    sx={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      textAlign: "center",
-                      verticalAlign: "middle",
-                      height: 40,
-                      width: 40,
-                    }}
-                  />
-                </Badge>
-              </Button>
-            </Toolbar>
-          </AppBar>
+          <Navbar id={this.state.id} />
 
           <Box
             component="main"
@@ -469,10 +374,12 @@ class CourseView extends Component {
                           readOnly
                           value={course.averageRating || 0}
                           precision={0.25}
-                          icon={<StarIcon/>}
-                          emptyIcon={<StarBorderIcon  style={{color: '#EBD99F'}}/>}
+                          icon={<StarIcon />}
+                          emptyIcon={
+                            <StarBorderIcon style={{ color: "#EBD99F" }} />
+                          }
                           size="small"
-                          style={{color: '#EBD99F'}}
+                          style={{ color: "#EBD99F" }}
                         ></Rating>
                       </Grid>
                       <Grid
@@ -625,7 +532,6 @@ class CourseView extends Component {
                       <Grid item xs={0} md={0} lg={0}></Grid>
                     </Grid>
 
-
                     <Grid container sx={{ marginBottom: 2, marginTop: 2 }}>
                       <Grid item xs={1} md={1} lg={1}></Grid>
 
@@ -646,7 +552,6 @@ class CourseView extends Component {
                       </Grid>
                       <Grid item xs={1} md={1} lg={1}></Grid>
                     </Grid>
-
 
                     <Grid container sx={{ marginBottom: 2, marginTop: 2 }}>
                       <Grid item xs={1} md={1} lg={1}></Grid>
@@ -670,8 +575,6 @@ class CourseView extends Component {
                       </Grid>
                       <Grid item xs={1} md={1} lg={1}></Grid>
                     </Grid>
-
-
 
                     <Grid container sx={{ marginBottom: 2, marginTop: 2 }}>
                       <Grid item xs={2} md={2} lg={2}></Grid>
@@ -772,6 +675,32 @@ class CourseView extends Component {
                       <Grid item xs={0} md={0} lg={0}></Grid>
                     </Grid>
 
+                    <Grid container sx={{ marginBottom: 2, marginTop: 2 }}>
+                      <Grid item xs={2} md={2} lg={2}></Grid>
+
+                      <Grid
+                        item
+                        xs={8}
+                        md={8}
+                        lg={8}
+                        sx={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          textAlign: "center",
+                          verticalAlign: "middle",
+                        }}
+                      >
+                        <TextField
+                          fullWidth
+                          multiline
+                          maxRows={5}
+                          variant="filled"
+                          label="Your Question"
+                        ></TextField>
+                      </Grid>
+                      <Grid item xs={2} md={2} lg={2}></Grid>
+                    </Grid>
                     <Grid container sx={{ marginBottom: 2, marginTop: 2 }}>
                       <Grid item xs={2} md={2} lg={2}></Grid>
 
