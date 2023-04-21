@@ -139,6 +139,17 @@ class StudentService {
         })
     }
 
+    addEmptySem(id, year, season)  {
+        return axios({
+            method: 'post',
+            url: STUDENT_API_BASE_URL + '/' + id + '/plan/addNewSemester',
+            data: {
+                year: year,
+                season: season,
+            }
+        })
+    }
+
 
     getProfilePic(email) {
         return axios.get("/upload/" + email + "/profile-picture",
