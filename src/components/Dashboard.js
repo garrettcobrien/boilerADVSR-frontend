@@ -21,12 +21,16 @@ import TwitterIcon from "@mui/icons-material/Twitter";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import GoogleIcon from "@mui/icons-material/Google";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import EditIcon from '@mui/icons-material/Edit';
+import EditIcon from "@mui/icons-material/Edit";
+import MenuIcon from "@mui/icons-material/Menu";
 import Drawer from "@mui/material/Drawer";
 import Divider from "@mui/material/Divider";
 import List from "@mui/material/List";
-import { mainListItems, secondaryListItems } from "./listItems";
-import profilePic from "./profilepic.jpeg";
+import Menu from "@mui/material/Menu";
+
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import Navbar from "./Navbar"
+
 
 import {
   ThemeProvider,
@@ -46,6 +50,7 @@ import {
   Avatar,
   Link,
   TextField,
+  MenuItem,
 } from "@mui/material";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { Form, Input } from "reactstrap";
@@ -91,8 +96,8 @@ class Dashboard extends Component {
     });
 
     StudentService.getPlanofStudy(this.state.id).then((res) => {
-      this.setState({degrees: res.data.degrees})
-    })
+      this.setState({ degrees: res.data.degrees });
+    });
   }
 
   //Navigation functions
@@ -109,9 +114,9 @@ class Dashboard extends Component {
     this.props.history.push(`/students/editprofile/${id}`);
   }
   toChat(id, connectionID) {
-    this.props.history.push(`/students/chat/${id}/${connectionID}`)
+    this.props.history.push(`/students/chat/${id}/${connectionID}`);
   }
-  toSearchCourses(id){
+  toSearchCourses(id) {
     this.props.history.push(`/students/courses/${id}`);
   }
   toCalendar(id) {
@@ -175,37 +180,48 @@ class Dashboard extends Component {
 
   searchConnections() {
     console.log("search toggled");
-    StudentService.getSearchConnections(this.state.id, this.state.searchDepartment).then((res) => {
-      this.setState({searchedConnectionsList: res.data});
-    })
+    StudentService.getSearchConnections(
+      this.state.id,
+      this.state.searchDepartment
+    ).then((res) => {
+      this.setState({ searchedConnectionsList: res.data });
+    });
   }
 
   getSuggestedConnections() {
-    this.state.degrees?.forEach(mydegree => {
+    this.state.degrees?.forEach((mydegree) => {
       console.log(mydegree);
       if (mydegree.degreeType == "MAJOR") {
-        StudentService.getSearchConnections(this.state.id, mydegree.degreeTitle).then((res) => {
-          this.setState({connectionsSuggested: res.data});
+        StudentService.getSearchConnections(
+          this.state.id,
+          mydegree.degreeTitle
+        ).then((res) => {
+          this.setState({ connectionsSuggested: res.data });
         });
       }
-  });
+    });
   }
 
   onChangeSearchDepartment(e) {
     const searchDepartment = e.target.value;
     console.log(searchDepartment);
     this.setState({
-        searchDepartment: searchDepartment
+      searchDepartment: searchDepartment,
     });
   }
 
-
   //profile pic
-
 
   render() {
     //Objects
-    const { student, courses, searchedConnectionsList, connectionsSuggested, searchDepartment, degrees} = this.state;
+    const {
+      student,
+      courses,
+      searchedConnectionsList,
+      connectionsSuggested,
+      searchDepartment,
+      degrees,
+    } = this.state;
     const notifications = this.state.student.notifications;
     console.log(this.state.searchDepartment);
     console.log(this.state.connectionsSuggested);
@@ -222,7 +238,16 @@ class Dashboard extends Component {
             <b>{course.creditHours}</b>
           </TableCell>
           <TableCell>
-            <Button onClick={() => {this.toCoursepage(course.courseIdDepartment, course.courseIdNumber, student.email, course.courseID)}}>
+            <Button
+              onClick={() => {
+                this.toCoursepage(
+                  course.courseIdDepartment,
+                  course.courseIdNumber,
+                  student.email,
+                  course.courseID
+                );
+              }}
+            >
               View
             </Button>
           </TableCell>
@@ -241,19 +266,16 @@ class Dashboard extends Component {
         <TableRow>
           <TableCell>
             <IconButton>
-              <AccountCircleIcon
-                sx={{ color: "#ffffff" }}
-                fontSize="small"
-              />
+              <AccountCircleIcon sx={{ color: "#ffffff" }} fontSize="small" />
             </IconButton>
           </TableCell>
           <TableCell>{connection}</TableCell>
           <TableCell>
-            <IconButton type="submit" onClick={() => this.toChat(student.email, connection)}>
-              <ChatIcon
-                fontSize="small"
-                sx={{ color: "#EBD99F" }}
-              />
+            <IconButton
+              type="submit"
+              onClick={() => this.toChat(student.email, connection)}
+            >
+              <ChatIcon fontSize="small" sx={{ color: "#EBD99F" }} />
             </IconButton>
           </TableCell>
         </TableRow>
@@ -266,26 +288,42 @@ class Dashboard extends Component {
         <TableRow>
           <TableCell>{request}</TableCell>
           <TableCell>
-              <Form onSubmit={() => this.handleRequest(student.email, request, "accept")}>
-                <Button sx={{
-                            backgroundColor: "#ffffff",
-                            fontWeight: 700,
-                            mr: 0,
-                            ml: 1,
-                        }} 
-                        size="small" type="submit" >Accept</Button>
-              </Form>
+            <Form
+              onSubmit={() =>
+                this.handleRequest(student.email, request, "accept")
+              }
+            >
+              <Button
+                sx={{
+                  backgroundColor: "#ffffff",
+                  fontWeight: 700,
+                  mr: 0,
+                  ml: 1,
+                }}
+                size="small"
+                type="submit"
+              >
+                Accept
+              </Button>
+            </Form>
           </TableCell>
           <TableCell>
-              <Form onSubmit={() => this.handleRequest(student.email, request, "")}>
-                  <Button sx={{
-                            backgroundColor: "#ffffff",
-                            fontWeight: 700,
-                            mr: 1,
-                            ml: 0,
-                        }} 
-                        size="small" type="submit" >Decline</Button>
-              </Form>
+            <Form
+              onSubmit={() => this.handleRequest(student.email, request, "")}
+            >
+              <Button
+                sx={{
+                  backgroundColor: "#ffffff",
+                  fontWeight: 700,
+                  mr: 1,
+                  ml: 0,
+                }}
+                size="small"
+                type="submit"
+              >
+                Decline
+              </Button>
+            </Form>
           </TableCell>
         </TableRow>
       );
@@ -297,10 +335,7 @@ class Dashboard extends Component {
         <TableRow>
           <TableCell>
             <IconButton>
-              <AccountCircleIcon
-                sx={{ color: "#ffffff" }}
-                fontSize="small"
-              />
+              <AccountCircleIcon sx={{ color: "#ffffff" }} fontSize="small" />
             </IconButton>
           </TableCell>
           <TableCell>{notif}</TableCell>
@@ -316,106 +351,9 @@ class Dashboard extends Component {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Box sx={{ display: "flex" }}>
-          <AppBar>
-            <Toolbar
-              sx={{
-                pr: "24px", // keep right padding when drawer closed
-              }}
-            >
-              <Button
-                onClick={() => {
-                  this.toLandingpage(student.email);
-                }}
-              >
-                <Typography
-                  component="h1"
-                  variant="h5"
-                  noWrap
-                  color="secondary"
-                  sx={{ flexGrow: 1 }}
-                  fontWeight={800}
-                >
-                  BOILERADVSR
-                </Typography>
-              </Button>
-              <ButtonGroup
-                disableElevation="true"
-                variant="contained"
-                color="secondary"
-                sx={{ marginRight: 50, p: 4 }}
-              >
-                <Button onClick={() => {this.toSearchCourses(this.state.student.email);}}
-                  sx={{
-                    backgroundColor: "#ffffff",
-                    fontWeight: 700,
-                    mr: 1,
-                    ml: 1,
-                  }}
-                >
-                  Find a Course
-                </Button>
-                <Button
-                  sx={{
-                    backgroundColor: "#ffffff",
-                    fontWeight: 700,
-                    mr: 1,
-                    ml: 1,
-                  }}
-                >
-                  Suggest a Semester
-                </Button>
-                <Button onClick={() => {this.toPlanofstudy(this.state.student.email);}}
-                  sx={{
-                    backgroundColor: "#ffffff",
-                    fontWeight: 700,
-                    mr: 1,
-                    ml: 1,
-                  }}
-                >
-                  Plan of Study
-                </Button>
-                <Button
-                  sx={{
-                    backgroundColor: "#ffffff",
-                    fontWeight: 700,
-                    mr: 1,
-                    ml: 1,
-                  }}
-                >
-                  Transcript
-                </Button>
-                <Button onClick={() => {this.toCalendar(this.state.student.email);}}
-                  sx={{
-                    backgroundColor: "#ffffff",
-                    fontWeight: 700,
-                    mr: 1,
-                    ml: 1,
-                  }}
-                >
-                  Calendar
-                </Button>
-              </ButtonGroup>
 
-              <Button color="inherit">
-                <Badge badgeContent={notifications && notifications.length} color="secondary">
-                  <Avatar
-                    variant="circle"
-                    src="https://media.istockphoto.com/id/1171169127/photo/headshot-of-cheerful-handsome-man-with-trendy-haircut-and-eyeglasses-isolated-on-gray.jpg?s=612x612&w=0&k=20&c=yqAKmCqnpP_T8M8I5VTKxecri1xutkXH7zfybnwVWPQ="
-                    alt="profilepic"
-                    sx={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      textAlign: "center",
-                      verticalAlign: "middle",
-                      height: 40,
-                      width: 40,
-                    }}
-                  />
-                </Badge>
-              </Button>
-            </Toolbar>
-          </AppBar>
+
+          <Navbar id={this.state.id}/>
 
           <Box
             component="main"
@@ -426,28 +364,23 @@ class Dashboard extends Component {
             }}
           >
             <Toolbar />
-            <Container maxWidth="md" sx={{ mt: 4, mb: 4 }}>
-              <Grid container spacing={3}>
-               {/* Chart */}
- 
-                <Grid item xs={2} md={2} lg={2}></Grid>
-                <Grid item xs={8} md={8} lg={8}>
-                  <Container></Container>
-                </Grid>
-                <Grid item xs={2} md={2} lg={2}></Grid>
+            <Container sx={{ mt: 8, mb: 8 }}>
+              <Grid container spacing={3} marginBottom={0}>
+                {/* Chart */}
 
-                <Grid item xs={12} md={7} lg={8}>
+                {/* Left */}
+                <Grid item xs={12} md={4} lg={4} sx={{ height: "auto" }}>
                   <Paper
                     sx={{
                       p: 2,
                       flexDirection: "column",
-                      height: "auto",
                       display: "flex",
                       justifyContent: "center",
                       alignItems: "center",
                       textAlign: "center",
                       verticalAlign: "middle",
                       bowShadow: 3,
+                      height: "auto",
                     }}
                   >
                     <Stack
@@ -457,6 +390,7 @@ class Dashboard extends Component {
                         alignItems: "center",
                         textAlign: "center",
                         verticalAlign: "middle",
+                        height: "auto",
                       }}
                     >
                       <Typography
@@ -493,7 +427,7 @@ class Dashboard extends Component {
                         >
                           <Avatar
                             variant="rounded"
-                            src="https://media.istockphoto.com/id/1171169127/photo/headshot-of-cheerful-handsome-man-with-trendy-haircut-and-eyeglasses-isolated-on-gray.jpg?s=612x612&w=0&k=20&c=yqAKmCqnpP_T8M8I5VTKxecri1xutkXH7zfybnwVWPQ="
+                            src={this.state.student.profilePicture}
                             alt="profilepic"
                             sx={{
                               display: "flex",
@@ -516,7 +450,7 @@ class Dashboard extends Component {
                           alignItems: "center",
                           textAlign: "center",
                           verticalAlign: "middle",
-                          marginBottom: 1,
+                          marginBottom: 0,
                           width: 20,
                         }}
                       >
@@ -552,7 +486,14 @@ class Dashboard extends Component {
                         </Stack>
                       </Container>
 
-                      <Typography variant="h7" color="secondary" fontWeight={700} sx={{marginTop: 3}}>Account Actions</Typography>
+                      <Typography
+                        variant="h7"
+                        color="secondary"
+                        fontWeight={700}
+                        sx={{ marginTop: 0 }}
+                      >
+                        Account Actions
+                      </Typography>
 
                       <Grid
                         sx={{
@@ -564,25 +505,37 @@ class Dashboard extends Component {
                           marginBottom: 1,
                         }}
                       >
-                        <Button onClick={() => {this.toEditProfile(this.state.student.email);}}
+                        <Button
+                          onClick={() => {
+                            this.toEditProfile(this.state.student.email);
+                          }}
                           size="small"
                           color="secondary"
                           variant="contained"
-                          sx={{ backgroundColor: '#ffffff', width: 100, margin: 1, padding: 1 }}
-                          startIcon={
-                            <EditIcon sx={{ color: "#EBD99F" }} />
-                          }
+                          sx={{
+                            backgroundColor: "#ffffff",
+                            width: 100,
+                            margin: 1,
+                            padding: 1,
+                          }}
+                          startIcon={<EditIcon sx={{ color: "#EBD99F" }} />}
                         >
                           Edit
                         </Button>
-                        <Button onClick={() => {this.delete(this.state.student.email);}}
+                        <Button
+                          onClick={() => {
+                            this.delete(this.state.student.email);
+                          }}
                           size="small"
                           color="secondary"
                           variant="contained"
-                          sx={{ backgroundColor: '#ffffff', width: 100, margin: 1, padding: 1 }}
-                          startIcon={
-                            <DeleteIcon sx={{ color: "#EBD99F" }} />
-                          }
+                          sx={{
+                            backgroundColor: "#ffffff",
+                            width: 100,
+                            margin: 1,
+                            padding: 1,
+                          }}
+                          startIcon={<DeleteIcon sx={{ color: "#EBD99F" }} />}
                         >
                           Delete
                         </Button>
@@ -590,103 +543,132 @@ class Dashboard extends Component {
                     </Stack>
                   </Paper>
                 </Grid>
-                {/* Recent Deposits */}
+
+                {/* Middle */}
                 <Grid
                   item
                   xs={12}
-                  md={5}
+                  md={4}
                   lg={4}
-                  sx={{ verticalAlign: "middle" }}
+                  sx={{
+                    height: 540,
+                  }}
                 >
                   <Paper
                     sx={{
-                      p: 1.5,
+                      p: 2,
                       height: "auto",
                       display: "flex",
                       flexDirection: "column",
                       boxShadow: 3,
+                      marginBottom: 3,
+                    }}
+                  >
+                    <Stack>
+                      <Typography
+                        variant="h5"
+                        fontWeight={700}
+                        color="secondary"
+                      >
+                        Classmates
+                      </Typography>
+                      <Table>
+                        <TableHead></TableHead>
+                        <TableBody>{connectionList}</TableBody>
+                      </Table>
+                    </Stack>
+                  </Paper>
+
+                  <Paper
+                    sx={{
+                      p: 2,
+                      height: "auto",
+                      display: "flex",
+                      flexDirection: "column",
+                      boxShadow: 3,
+                      marginBottom: 3,
+                    }}
+                  >
+                    <Stack>
+                      <Typography
+                        variant="h5"
+                        fontWeight={700}
+                        color="secondary"
+                      >
+                        Incomming Connection Requests
+                      </Typography>
+                      <Table>
+                        <TableHead></TableHead>
+                        <TableBody>{connectionList}</TableBody>
+                      </Table>
+                    </Stack>
+                  </Paper>
+
+                  <Paper
+                    sx={{
+                      p: 2,
+                      height: "auto",
+                      display: "flex",
+                      flexDirection: "column",
+                      boxShadow: 3,
+                      marginBottom: 3,
+                    }}
+                  >
+                    <Stack>
+                      <Typography
+                        variant="h5"
+                        fontWeight={700}
+                        color="secondary"
+                      >
+                        Notifications
+                      </Typography>
+                      <Table>
+                        <TableHead></TableHead>
+                        <TableBody>{connectionList}</TableBody>
+                      </Table>
+                    </Stack>
+                  </Paper>
+                </Grid>
+
+                {/* Right */}
+                <Grid item xs={12} md={4} lg={4} sx={{ height: 450 }}>
+                  <Paper
+                    sx={{
+                      padding: 2,
+                      height: "auto",
+                      display: "flex",
+                      flexDirection: "column",
+                      boxShadow: 3,
+                      marginBottom: 3,
                     }}
                   >
                     <Typography variant="h5" fontWeight={700} color="secondary">
-                      Classmates
+                      Suggested Classmates
                     </Typography>
-                    <Table size="medium">
-                      <TableHead></TableHead>
-                      <TableBody>
-                        {connectionList}
-                      </TableBody>
-                    </Table>
-                    <Typography paddingTop={3} variant="h5" fontWeight={700} color="secondary">
-                      Incomming Connection Requests
-                    </Typography>
-                    <Table size="medium">
-                      <TableBody>
-                        {this.state.student.connectionRequests && requestList}
-                      </TableBody>
-                    </Table>
-                  </Paper>
-                </Grid>
-                <br></br>
-                    <Card alignItems="center" justifyContent="center" sx={{padding: 5}}>
-                        <br></br>
-                        <Typography variant="h5">Suggested Friends List</Typography>
-                        <Button onClick={this.getSuggestedConnections}>Generate Suggested Connections List</Button>
-                        <ul className="list-group">
-                            {connectionsSuggested &&
-                                connectionsSuggested.map((connection, index) => (
-                                    <li
-                                        className={
-                                            "list-group-item "
-                                        }
-                                        onClick={() => {this.requestConnection(student.email, connection)}}
-                                        key={index}
-                                    >
-                                       <Typography color="secondary"> {connection} </Typography>
-                                    </li>
-                                ))}
-                        </ul>
-                <br></br>
-                <TextField
-                    type="text"
-                    variant="outlined"
-                    placeholder="Search by department"
-                    value={searchDepartment}
-                    onChange={this.onChangeSearchDepartment}
-                />
-                <div className="input-group-append">
-                    <Button sx={{margin: 2}} type="button" variant="contained" onClick={this.searchConnections}>
-                        Search
-                    </Button>          
-                </div>
-                <br></br>
-                <div className="col-md-8">
-                    <Typography color="secondary" varient="h3">Searched Friends List</Typography>
+                    <Button onClick={this.getSuggestedConnections}>
+                      Generate Suggested Connections List
+                    </Button>
                     <ul className="list-group">
-                        {searchedConnectionsList &&
-                            searchedConnectionsList.map((connection, index) => (
-                                <li
-                                    className={
-                                        "list-group-item "
-                                    }
-                                    onClick={() => {this.requestConnection(student.email, connection)}}
-                                    key={index}
-                                >
-                                    <Typography color="primary"> {connection} </Typography>
-                                </li>
-                            ))}
+                      {connectionsSuggested &&
+                        connectionsSuggested.map((connection, index) => (
+                          <li
+                            className={"list-group-item "}
+                            onClick={() => {
+                              this.requestConnection(student.email, connection);
+                            }}
+                            key={index}
+                          >
+                            <Typography color="secondary">
+                              {" "}
+                              {connection}{" "}
+                            </Typography>
+                          </li>
+                        ))}
                     </ul>
-                </div>
-                </Card>
-                <Grid
-                  item
-                  xs={12}
-                  md={5}
-                  lg={4}
-                  sx={{ verticalAlign: "middle" }}
-                >
+                  </Paper>
                   <Paper
                     sx={{
-                      p: 1.5,
+                      padding: 2,
                       height: "auto",
                       display: "flex",
                       flexDirection: "column",
@@ -694,20 +676,58 @@ class Dashboard extends Component {
                     }}
                   >
                     <Typography variant="h5" fontWeight={700} color="secondary">
-                      Notifications
+                      Find Classmates by Department
                     </Typography>
-
-                    <Table size="small">
-                      <TableHead></TableHead>
-                      <TableBody>
-                        {notificationsList}
-                      </TableBody>
-                    </Table>
+                    <TextField
+                      type="text"
+                      variant="outlined"
+                      placeholder="Search by department"
+                      value={searchDepartment}
+                      onChange={this.onChangeSearchDepartment}
+                    />
+                    <div className="input-group-append">
+                      <Button
+                        sx={{ margin: 2 }}
+                        type="button"
+                        variant="contained"
+                        onClick={this.searchConnections}
+                      >
+                        Search
+                      </Button>
+                    </div>
+                    <br></br>
+                    <div className="col-md-8">
+                      <Typography color="secondary" varient="h3">
+                        Searched Friends List
+                      </Typography>
+                      <ul className="list-group">
+                        {searchedConnectionsList &&
+                          searchedConnectionsList.map((connection, index) => (
+                            <li
+                              className={"list-group-item "}
+                              onClick={() => {
+                                this.requestConnection(
+                                  student.email,
+                                  connection
+                                );
+                              }}
+                              key={index}
+                            >
+                              <Typography color="primary">
+                                {" "}
+                                {connection}{" "}
+                              </Typography>
+                            </li>
+                          ))}
+                      </ul>
+                    </div>
                   </Paper>
                 </Grid>
+              </Grid>
 
-                {/* Recent Orders */}
-                <Grid item xs={12}>
+              {/* Backlog */}
+              <Grid container spacing={3} marginTop={0}>
+                <Grid item xs={12} md={12} lg={12}>
                   <Paper
                     sx={{
                       p: 2,
