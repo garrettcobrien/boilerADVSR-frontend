@@ -227,8 +227,8 @@ class SearchCourses extends Component {
               <Container maxWidth="lg" sx={{ mt: 10, mb: 4 }}>
                 {/* Top Wide Container and Paper */}
                 <Grid container spacing={3} sx={{ marginBottom: 2 }}>
-                  <Grid item xs={0} md={1} lg={1}></Grid>
-                  <Grid item xs={12} md={10} lg={10}>
+                  
+                  <Grid item xs={12} md={6} lg={6}>
                     <Paper
                       sx={{
                         p: 2,
@@ -281,39 +281,35 @@ class SearchCourses extends Component {
                       </Grid>
 
                       <Grid container spacing={1} sx={{ marginBottom: 2 }}>
-                        <Grid item xs={3} md={3} lg={3}></Grid>
-                        <Grid item xs={8} md={8} lg={8} sx={{
+                        <Grid item xs={1} md={1} lg={1}></Grid>
+                        <Grid item xs={10} md={10} lg={10} sx={{
                           display: "flex",
                           justifyContent: "center",
                           alignItems: "center",
                           textAlign: "center",
                           verticalAlign: "middle",
                         }}>
-                          <List sx={{
-                            p: 2,
+                          <Grid container sx={{
+                            p: 0,
                             overflow: "auto",
-                            maxHeight: 300,
+                            height: "auto",
+                            maxHeight: 330,     
+                            justifyContent: "center"   
                           }}>
                             {courses &&
                               courses.map((course) => (
-                                <ListItem>
-                                  <CourseCard courseId={course.courseID} rating={course.averageRating} title={course.courseTitle} id={student.email} course={course}/>
-                                </ListItem>
+                                <Grid item xs={12} md={12} lg={12} sx={{justifyContent: "center", alignItems: "center"}}>
+                                  <CourseCard sx={{height: "100%"}} courseId={course.courseID} rating={course.averageRating} title={course.courseTitle} id={student.email} course={course}/>
+                                </Grid>
                               ))
                             }
-                          </List>
+                          </Grid>
                         </Grid>
                         <Grid item xs={1} md={1} lg={1}></Grid>
                       </Grid>
                     </Paper>
                   </Grid>
-                  <Grid item xs={0} md={1} lg={1}></Grid>
-                </Grid>
-
-                {/* Middle Wide Container and Paper */}
-                <Grid container spacing={3} sx={{ marginBottom: 2 }}>
-                  <Grid item xs={0} md={1} lg={1}></Grid>
-                  <Grid item xs={12} md={10} lg={10}>
+                  <Grid item xs={12} md={6} lg={6}>
                     <Paper
                       sx={{
                         p: 2,
@@ -392,26 +388,27 @@ class SearchCourses extends Component {
 
                       <Grid container spacing={1} sx={{ marginBottom: 2 }}>
                         <Grid item xs={3} md={3} lg={3}></Grid>
-                        <Grid item xs={8} md={8} lg={8} sx={{
+                        <Grid item xs={10} md={10} lg={10} sx={{
                           display: "flex",
                           justifyContent: "center",
                           alignItems: "center",
                           textAlign: "center",
                           verticalAlign: "middle",
                         }}>
-                          <List sx={{
-                            p: 2,
+                          <Grid container sx={{
+                            p: 0,
                             overflow: "auto",
-                            maxHeight: 300,
+                            height: "auto",
+                            maxHeight: 330,        
                           }}>
                             {coursesSuggested &&
                               coursesSuggested.map((course) => (
-                                <ListItem>
+                                <Grid item xs={12} md={12} lg={12}>
                                   <CourseCard courseId={course.courseID} rating={course.averageRating} title={course.courseTitle} id={student.email} course={course}/>
-                                </ListItem>
+                                </Grid>
                               ))
                             }
-                          </List>
+                          </Grid>
                         </Grid>
                         <Grid item xs={1} md={1} lg={1}></Grid>
                       </Grid>
@@ -419,47 +416,8 @@ class SearchCourses extends Component {
 
                     </Paper>
                   </Grid>
-                  <Grid item xs={0} md={1} lg={1}></Grid>
                 </Grid>
 
-                {/* Bottom Containers and Papers */}
-                <Grid container spacing={3} sx={{ marginBottom: 2 }}>
-                  <Grid item xs={0} md={1} lg={1}></Grid>
-                  {/* Bottom Left Container and Paper */}
-                  <Grid item xs={12} md={5} lg={5}>
-                    <Paper
-                      sx={{
-                        p: 2,
-                        flexDirection: "column",
-                        height: "auto",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        textAlign: "center",
-                        verticalAlign: "middle",
-                      }}
-                      elevation={8}
-                    ></Paper>
-                  </Grid>
-
-                  {/* Bottom Right Container and Paper */}
-                  <Grid item xs={12} md={5} lg={5}>
-                    <Paper
-                      sx={{
-                        p: 2,
-                        flexDirection: "column",
-                        height: "auto",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        textAlign: "center",
-                        verticalAlign: "middle",
-                      }}
-                      elevation={8}
-                    ></Paper>
-                  </Grid>
-                  <Grid item xs={0} md={2} lg={3}></Grid>
-                </Grid>
               </Container>
             </Box>
           </Box>

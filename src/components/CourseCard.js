@@ -90,14 +90,15 @@ class CourseCard extends Component {
           sx={{
             p: 2,
             flexDirection: "column",
-            height: "auto",
+            minHeight: 200,
+            height: "100%",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
             textAlign: "center",
             verticalAlign: "middle",
-            width: 400,
-            marginBottom: 1,
+            width: 350,
+            marginBottom: 4,
             backgroundColor: "#1b1b1b",
           }}
           elevation={5}
@@ -110,7 +111,7 @@ class CourseCard extends Component {
               lg={7}
               sx={{
                 display: "flex",
-                justifyContent: "center",
+                justifyContent: "left",
                 alignItems: "center",
                 textAlign: "left",
                 verticalAlign: "middle",
@@ -134,9 +135,7 @@ class CourseCard extends Component {
               sx={{
                 display: "flex",
                 justifyContent: "center",
-                alignItems: "center",
                 textAlign: "center",
-                verticalAlign: "middle",
                 marginLeft: 1,
               }}
             >
@@ -172,6 +171,7 @@ class CourseCard extends Component {
                 </Button>
               </Stack>
             </Grid>
+            <Grid item></Grid>
           </Grid>
         </Paper>
       </div>
