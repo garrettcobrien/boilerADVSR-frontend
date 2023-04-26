@@ -460,7 +460,7 @@ class Dashboard extends Component {
                         <Avatar
                           src={this.state.student.profilePicture}
                           alt="profilepic"
-                          sx={{ height: "50%", width: "auto" }}
+                          sx={{height: 215, width: 215}}
                         />
                       </Grid>
 
