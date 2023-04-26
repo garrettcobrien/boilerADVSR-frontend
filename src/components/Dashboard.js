@@ -928,7 +928,7 @@ class Dashboard extends Component {
                                   <Button
                                     onClick={() => this.requestConnection(
                                       this.state.id,
-                                      connection.id
+                                      connection
                                     )}
                                     color="secondary"
                                   >
@@ -1117,7 +1117,7 @@ class Dashboard extends Component {
                                       <Button
                                         onClick={() => this.requestConnection(
                                           this.state.id,
-                                          connection.id
+                                          connection
                                         )}
                                         color="secondary"
                                       >
