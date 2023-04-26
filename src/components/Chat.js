@@ -80,13 +80,19 @@ import SentMessage from "./SentMessage";
 import ReceivedMessage from "./RecievedMessage";
 import Navbar from "./Navbar";
 
+
 class Chat extends Component {
+  emptyStudent = {
+    firstName: '',
+    lastName: '',
+  }
+
   constructor(props) {
     super(props);
     this.state = {
       id: this.props.match.params.id,
       connectionID: this.props.match.params.connectionID,
-      connectionStudent: {},
+      connectionStudent: this.emptyStudent,
       chat: {},
       student: {},
       text: "",
@@ -100,16 +106,23 @@ class Chat extends Component {
   }
 
   componentDidMount() {
-    ChatService.getChat(this.props.match.params.id, this.props.match.params.connectionID).then(res => {
-      this.setState({ chat: res.data });
-    });
-    ChatService.removeNotif(this.state.id, this.state.connectionID);
-    StudentService.getStudentById(this.props.match.params.id).then(res => {
-      this.setState({ student: res.data });
-    });
-    StudentService.getStudentById(this.props.match.params.connectionID).then(res => {
-      this.setState({ connectionStudent: res.data });
-    });
+    if (this.props.match.params.connectionID === "new") {
+      StudentService.getStudentById(this.props.match.params.id).then(res => {
+        this.setState({ student: res.data });
+      });
+    }
+    else {
+      StudentService.getStudentById(this.props.match.params.id).then(res => {
+        this.setState({ student: res.data });
+      });
+      ChatService.getChat(this.props.match.params.id, this.props.match.params.connectionID).then(res => {
+        this.setState({ chat: res.data });
+      });
+      StudentService.getStudentById(this.props.match.params.connectionID).then(res => {
+        this.setState({ connectionStudent: res.data });
+      });
+    }
+
   }
 
   toProfile(id) {
@@ -141,13 +154,136 @@ class Chat extends Component {
 
   render() {
     const { id, connectionID, chat, text } = this.state;
+    let avatar;
+    if (this.state.connectionStudent.firstName !== "")
+      avatar =
+        <Grid item xs={11} md={5} lg={5}>
+          <Grid component={Paper} container spacing={0} sx={{ backgroundColor: "primary", marginBottom: 0, paddingBottom: 2, paddingTop: 2, marginTop: 0 }}>
+            <Grid
+              item
+              xs={2}
+              md={2}
+              lg={2}
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                textAlign: "center",
+                verticalAlign: "middle",
+              }}
+            >
+
+            </Grid>
+            <Avatar
+              src={this.state.connectionStudent.profilePicture}
+              alt="profilepic"
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                textAlign: "center",
+                verticalAlign: "middle",
+                height: 45,
+                width: 45,
+              }}
+            />
+            <Grid
+              item
+              xs={5}
+              md={5}
+              lg={5}
+              sx={{
+                display: "flex",
+                justifyContent: "left",
+                alignItems: "center",
+                textAlign: "left",
+                verticalAlign: "middle",
+              }}
+            >
+              <Typography color="secondary" fontWeight={600} variant="h5">{this.state.connectionStudent.firstName + " " + this.state.connectionStudent.lastName}</Typography>
+            </Grid>
+
+            <Grid
+              item
+              xs={5}
+              md={5}
+              lg={5}
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                textAlign: "center",
+                verticalAlign: "middle",
+              }}
+            ></Grid>
+          </Grid>
+          <List sx={{ padding: -2, width: 466, backgroundColor: '#1b1b1b', overflow: "auto", maxHeight: 300, marginTop: 1 }}>
+            <Grid container>
+              <Grid item xs={6} md={6} lg={6}></Grid>
+              {chat.messages &&
+                chat.messages.map((message) => {
+
+                  if (message.senderId === this.state.student.email)
+                    return <ListItem>
+                      <Grid container>
+                        <Grid item xs={6} md={6} lg={6}></Grid>
+                        <Grid item xs={6} md={6} lg={6}>
+                          <SentMessage message={message.text} receiver={message.senderId} student={this.state.student} />
+                        </Grid>
+                      </Grid>
+                    </ListItem>
+                  return (<ListItem>
+                    <Grid container>
+                      <Grid item xs={6} md={6} lg={6}>
+                        <ReceivedMessage message={message.text} receiver={message.senderId} student={this.state.student} />
+                      </Grid>
+                      <Grid item xs={6} md={6} lg={6}></Grid>
+                    </Grid>
+                  </ListItem>)
+                })}
+            </Grid>
+          </List>
+          <Grid component={Paper} container spacing={0} sx={{ backgroundColor: "primary", marginBottom: 0, marginTop: 1, paddingBottom: 2, paddingTop: 2 }}>
+            <Grid
+              item
+              xs={10}
+              md={10}
+              lg={10}
+              sx={{
+                display: "flex",
+                justifyContent: "left",
+                alignItems: "center",
+                textAlign: "left",
+                verticalAlign: "middle",
+              }}
+            >
+              <TextField fullWidth color="secondary" variant="filled" focused sx={{ marginLeft: 2, marginRight: 2, backgroundColor: "#1b1b1bF" }} value={text} onChange={this.handleInput} />
+            </Grid>
+            <Grid
+              item
+              xs={2}
+              md={2}
+              lg={2}
+              sx={{
+                display: "flex",
+                justifyContent: "left",
+                alignItems: "center",
+                textAlign: "left",
+                verticalAlign: "middle",
+                paddingLeft: 1
+              }}
+            >
+              <IconButton style={{ backgroundColor: "#EBD99F", color: "#1b1b1b" }} type="submit" onClick={() => this.addMessage(this.state.id, text, this.state.chat.id)}><SendIcon /></IconButton>
+            </Grid>
+          </Grid>
+        </Grid>
 
     return (
       <div>
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <Box sx={{ display: "flex" }}>
-            <Navbar id={this.state.id}/>
+            <Navbar id={this.state.id} />
 
             <Box
               component="main"
@@ -215,144 +351,26 @@ class Chat extends Component {
                     >
                       {/* Connections List */}
                       <Typography variant="h4">Classmates</Typography>
-                      <List>
-                        {this.state.student.connectionsIds?.map((connection) => (
-                          <ListItem >
-                            <Typography>{connection}</Typography>
-                            <IconButton type="submit" onClick={() => this.toChat(this.state.student.email, connection)}>
-                              <ChatIcon
-                                fontSize="small"
-                                sx={{ color: "#EBD99F" }}
-                              />
-                            </IconButton>
-                          </ListItem>
-                        ))}
-                      </List>
+                      <form >
+                        <List>
+                          {this.state.student.connectionsIds?.map((connection) => (
+                            <ListItem >
+                              <Typography>{connection}</Typography>
+                              <IconButton type="submit" onClick={() => this.toChat(this.state.student.email, connection)}>
+                                <ChatIcon
+                                  fontSize="small"
+                                  sx={{ color: "#EBD99F" }}
+                                />
+                              </IconButton>
+                            </ListItem>
+                          ))}
+                        </List></form>
                     </Paper>
                   </Grid>
 
 
                   {/* Bottom Right Container and Paper - Chat View */}
-                  <Grid item xs={11} md={5} lg={5}>
-                    <Grid component={Paper} container spacing={0} sx={{ backgroundColor: "primary", marginBottom: 0, paddingBottom: 2, paddingTop: 2, marginTop: 0 }}>
-                      <Grid
-                        item
-                        xs={2}
-                        md={2}
-                        lg={2}
-                        sx={{
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                          textAlign: "center",
-                          verticalAlign: "middle",
-                        }}
-                      >
-                        <Avatar
-                          src={this.state.connectionStudent.profilePicture}
-                          alt="profilepic"
-                          sx={{
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            textAlign: "center",
-                            verticalAlign: "middle",
-                            height: 45,
-                            width: 45,
-                          }}
-                        />
-                      </Grid>
-
-                      <Grid
-                        item
-                        xs={5}
-                        md={5}
-                        lg={5}
-                        sx={{
-                          display: "flex",
-                          justifyContent: "left",
-                          alignItems: "center",
-                          textAlign: "left",
-                          verticalAlign: "middle",
-                        }}
-                      >
-                        <Typography color="secondary" fontWeight={600} variant="h5">{this.state.connectionStudent.firstName + " " + this.state.connectionStudent.lastName}</Typography>
-                      </Grid>
-
-                      <Grid
-                        item
-                        xs={5}
-                        md={5}
-                        lg={5}
-                        sx={{
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                          textAlign: "center",
-                          verticalAlign: "middle",
-                        }}
-                      ></Grid>
-                    </Grid>
-                    <List sx={{ padding: -2, width: 466, backgroundColor: '#1b1b1b', overflow: "auto", maxHeight: 300, marginTop: 1 }}>
-                      <Grid container>
-                        <Grid item xs={6} md={6} lg={6}></Grid>
-                        {chat.messages &&
-                          chat.messages.map((message) => {
-
-                            if (message.senderId === this.state.student.email)
-                              return <ListItem>
-                                <Grid container>
-                                  <Grid item xs={6} md={6} lg={6}></Grid>
-                                  <Grid item xs={6} md={6} lg={6}>
-                                    <SentMessage message={message.text} receiver={message.senderId} student={this.state.student} />
-                                  </Grid>
-                                </Grid>
-                              </ListItem>
-                            return (<ListItem>
-                              <Grid container>
-                                <Grid item xs={6} md={6} lg={6}>
-                                  <ReceivedMessage message={message.text} receiver={message.senderId} student={this.state.student} />
-                                </Grid>
-                                <Grid item xs={6} md={6} lg={6}></Grid>
-                              </Grid>
-                            </ListItem>)
-                          })}
-                      </Grid>
-                    </List>
-                    <Grid component={Paper} container spacing={0} sx={{ backgroundColor: "primary", marginBottom: 0, marginTop: 1, paddingBottom: 2, paddingTop: 2 }}>
-                      <Grid
-                        item
-                        xs={10}
-                        md={10}
-                        lg={10}
-                        sx={{
-                          display: "flex",
-                          justifyContent: "left",
-                          alignItems: "center",
-                          textAlign: "left",
-                          verticalAlign: "middle",
-                        }}
-                      >
-                        <TextField fullWidth color="secondary" variant="filled" focused sx={{ marginLeft: 2, marginRight: 2, backgroundColor: "#1b1b1bF" }} value={text} onChange={this.handleInput} />
-                      </Grid>
-                      <Grid
-                        item
-                        xs={2}
-                        md={2}
-                        lg={2}
-                        sx={{
-                          display: "flex",
-                          justifyContent: "left",
-                          alignItems: "center",
-                          textAlign: "left",
-                          verticalAlign: "middle",
-                          paddingLeft: 1
-                        }}
-                      >
-                        <IconButton style={{ backgroundColor: "#EBD99F", color: "#1b1b1b" }} type="submit" onClick={() => this.addMessage(this.state.id, text, this.state.chat.id)}><SendIcon /></IconButton>
-                      </Grid>
-                    </Grid>
-                  </Grid>
+                  {avatar}
                   <Grid item xs={2} md={2} lg={2}></Grid>
                 </Grid>
               </Container>

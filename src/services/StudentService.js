@@ -162,24 +162,8 @@ class StudentService {
     }
 
 
-    getProfilePic(email) {
-        return axios.get("/upload/" + email + "/profile-picture",
-        {
-            responseType: 'arraybuffer',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/pdf'
-            }
-        })
-        .then((response) => {
-            const url = window.URL.createObjectURL(new Blob([response.data]));
-            const link = document.createElement('a');
-            link.href = url;
-            link.setAttribute('download', 'file.pdf'); //or any other extension
-            document.body.appendChild(link);
-            link.click();
-        })
-        .catch((error) => console.log(error));
+    getProfilePic(id) {
+        return axios.get(STUDENT_API_BASE_URL + '/' + id + '/profile/picture');
     }
 
     changeDegree(id, degree, operation) {

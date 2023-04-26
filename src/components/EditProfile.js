@@ -131,16 +131,19 @@ class EditProfile extends Component {
             <div>
                 <ThemeProvider theme={theme}>
                     <CssBaseline />
+                    <Button variant="contained" color="secondary" type="submit" onClick={() => this.handleSubmit(student, id)} >Back to Profile</Button>{' '}
+
                     <Container
                         maxwidth="xs"
                         alignItems="center"
                         justifyContent="center"
-                        sx={{ padding: 10 }}
+                        sx={{ padding: 5, marginLeft: 10 }}
                     >
                         <Typography
                             color="secondary"
                             variant="h3"
                             fontWeight={700}
+                            sx={{ marginBottom: 5}}
                         >
                             Edit Profile
                         </Typography>
@@ -290,7 +293,7 @@ class EditProfile extends Component {
                             </FormGroup>
                             <Grid container spacing={1} sx={{ marginBottom: 2 }}>
                                 
-                                    <Button variant="contained" disabled={!(this.state.hasChanged)} color="secondary" type="button" onClick={() => this.saveInfo()}>Search</Button>
+                                    <Button variant="contained" disabled={!(this.state.hasChanged)} color="secondary" type="button" onClick={() => this.saveInfo()}>Save</Button>
                                 
                             </Grid>
                         </Form>

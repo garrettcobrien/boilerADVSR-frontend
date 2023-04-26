@@ -56,6 +56,7 @@ import {
 } from "@mui/material";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { Form, Input } from "reactstrap";
+import ChatService from "../services/ChatService";
 
 class Navbar extends Component {
   constructor(props) {
@@ -63,11 +64,13 @@ class Navbar extends Component {
     this.state = {
       id: this.props.id,
       student: {},
+      profilePicture: "",
 
       courses: [],
       reviews: [],
       connectionsSuggested: [],
       searchedConnectionsList: [],
+      notifications: 0,
 
       searchDepartment: "",
       degrees: [],
@@ -96,11 +99,15 @@ class Navbar extends Component {
     StudentService.getStudentById(this.state.id).then((res) => {
       this.setState({ student: res.data });
       this.setState({ courses: res.data.backLog });
+      this.setState({ notifications: res.data.notifications})
     });
 
     StudentService.getPlanofStudy(this.state.id).then((res) => {
       this.setState({ degrees: res.data.degrees });
     });
+    StudentService.getProfilePic(this.state.id).then((res) => {
+      this.setState({ profilePicture: res.data});
+    })
   }
 
   //Navigation functions
@@ -118,7 +125,10 @@ class Navbar extends Component {
     this.props.history.push(`/students/planofstudy/${id}`);
   }
   toChat(id, connectionID) {
-    this.props.history.push(`/students/chat/${id}/${connectionID}`);
+    if (this.props.connectionID !== undefined) {
+        ChatService.removeNotif(this.props.id, this.props.connectionID);
+        this.setState({notifications: this.state.notifications - 1});
+    }
   }
   toSearchCourses(id) {
     this.props.history.push(`/students/courses/${id}`);
@@ -215,8 +225,8 @@ class Navbar extends Component {
   }
 
   render() {
-    const notifications = this.state.student.notifications;
-
+    const {notifications} = this.state
+    const { profilePicture } = this.state;
     return (
       <AppBar sx={{ padding: 0 }}>
         <Toolbar
@@ -308,27 +318,7 @@ class Navbar extends Component {
                     <Typography fontWeight={300} fontSize={18}>Plan</Typography>
                   </Link>
                 </Grid>
-                <Grid
-                  item
-                  xs={3}
-                  md={3}
-                  lg={3}
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    textAlign: "center",
-                    verticalAlign: "middle",
-                  }}
-                >
-                  <Link
-                    component={RouterLink}
-                    to={`/students/suggest/${this.props.id}`}
-                    sx={{ color: "#ffffff" }}
-                  >
-                    <Typography fontWeight={300} fontSize={18}>Suggest</Typography>
-                  </Link>
-                </Grid>
+                
               </Grid>
               {/* <ButtonGroup>
                 <Button
@@ -402,7 +392,7 @@ class Navbar extends Component {
               }}
             >
               <Grid container spacing={0}>
-                <Grid item xs={2} md={2} lg={2}></Grid>
+                <Grid item xs={3} md={3} lg={3}></Grid>
                 <Grid
                   item
                   xs={2}
@@ -426,7 +416,7 @@ class Navbar extends Component {
                     >
                       <Avatar
                         variant="circle"
-                        src={this.state.student.profilePicture}
+                        src={this.state.profilePicture}
                         alt="profilepic"
                         sx={{
                           display: "flex",
@@ -459,6 +449,8 @@ class Navbar extends Component {
                     {this.state.student.firstName} {this.state.student.lastName}
                   </Typography>
                 </Grid>
+                
+
                 <Grid
                   item
                   xs={1}
@@ -472,22 +464,13 @@ class Navbar extends Component {
                     verticalAlign: "middle",
                   }}
                 >
-                  <NotificationsIcon sx={{ color: "#EBD99F" }} />
-                </Grid>
-                <Grid
-                  item
-                  xs={1}
-                  md={1}
-                  lg={1}
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    textAlign: "center",
-                    verticalAlign: "middle",
-                  }}
-                >
+                  <Button
+                    component={RouterLink}
+                    onClick={() => this.toChat(this.props.id, this.props.connectionID)}
+                    to={`/students/chat/${this.props.id}/${this.props.connectionID === undefined ? "new" : this.props.connectionID}`}
+                  >
                   <ChatIcon sx={{ color: "#EBD99F" }} />
+                  </Button>
                 </Grid>
                 <Grid
                   item

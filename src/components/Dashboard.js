@@ -56,6 +56,7 @@ import {
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { Form, Input } from "reactstrap";
 import { Logout } from "@mui/icons-material";
+import ChatService from "../services/ChatService";
 class Dashboard extends Component {
   constructor(props) {
     super(props);
@@ -67,10 +68,13 @@ class Dashboard extends Component {
       reviews: [],
       connectionsSuggested: [],
       searchedConnectionsList: [],
+      connectionPfps: [""],
 
       searchDepartment: "",
       suggested: "suggested",
       degrees: [],
+      hasBeenClicked: "visible",
+      hasBeenClickedD: "hidden",
       anchorElNav: null,
       anchorElUser: null,
     };
@@ -103,6 +107,7 @@ class Dashboard extends Component {
     StudentService.getPlanofStudy(this.state.id).then((res) => {
       this.setState({ degrees: res.data.degrees });
     });
+    this.setState({hasBeenClicked: "visible"});    
     //this.forceUpdate();
   }
 
@@ -120,6 +125,7 @@ class Dashboard extends Component {
     this.props.history.push(`/students/editprofile/${id}`);
   }
   toChat(id, connectionID) {
+    ChatService.removeNotif(this.state.id, this.state.connectionID);
     this.props.history.push(`/students/chat/${id}/${connectionID}`);
   }
   toSearchCourses(id) {
@@ -195,6 +201,7 @@ class Dashboard extends Component {
   }
 
   getSuggestedConnections() {
+    this.setState({hasBeenClicked: "hidden"});
     this.state.degrees?.forEach((mydegree) => {
       console.log(mydegree);
       if (mydegree.degreeType == "MAJOR") {
@@ -230,11 +237,24 @@ class Dashboard extends Component {
       connectionsSuggested,
       searchDepartment,
       degrees,
+      connectionPfps,
+      hasBeenClicked
+
     } = this.state;
     const notifications = this.state.student.notifications;
     console.log(this.state.searchDepartment);
     console.log(this.state.connectionsSuggested);
-    this.getSuggestedConnections();
+    
+    // Attempt at profile picture
+    // let list = [];
+    // if (student && student.connectionsIds && connectionPfps.length > student.connectionsIds) {
+    //   this.state.student.connectionsIds?.forEach(connection => {
+    //     StudentService.getProfilePic(connection).then((res) => {
+    //               connectionPfps.push(res.data);
+    //     })
+    //   });
+    // }
+    
 
     //Course backlog
     const courseList = courses?.map((course) => {
@@ -278,11 +298,11 @@ class Dashboard extends Component {
     });
 
     //Active Connections List
-    const connectionList = student.connectionsIds?.map((connection) => {
+    const connectionList = student.connectionsIds?.map((connection, index) => {
       return (
         <TableRow>
           <TableCell>
-            <Avatar src={StudentService.getProfilePic(connection)} />
+            <Avatar src={connectionPfps.at(index)} />
           </TableCell>
           <TableCell>{connection}</TableCell>
           <TableCell>
@@ -739,10 +759,12 @@ class Dashboard extends Component {
                       >
                         Notifications
                       </Typography>
+                      <TableContainer sx={{maxHeight: 400}}>
                       <Table sx={{ width: 300 }}>
                         <TableHead></TableHead>
                         <TableBody>{notificationsList}</TableBody>
                       </Table>
+                      </TableContainer>
                     </Stack>
                   </Paper>
                 </Grid>
@@ -781,10 +803,12 @@ class Dashboard extends Component {
                       >
                         Classmates
                       </Typography>
+                      <TableContainer sx={{maxHeight: 400}}>
                       <Table sx={{ width: 300 }}>
                         <TableHead></TableHead>
                         <TableBody>{connectionList}</TableBody>
                       </Table>
+                      </TableContainer>
                     </Stack>
                   </Paper>
                 </Grid>
@@ -823,10 +847,12 @@ class Dashboard extends Component {
                       >
                         Requests
                       </Typography>
+                      <TableContainer sx={{ maxHeight: 400}}>
                       <Table>
                         <TableHead></TableHead>
                         <TableBody>{requestList}</TableBody>
                       </Table>
+                      </TableContainer>
                     </Stack>
                   </Paper>
                 </Grid>
@@ -864,6 +890,22 @@ class Dashboard extends Component {
                       >
                         Suggested Classmates
                       </Typography>
+                      <Button color="secondary" variant="contained" size="small" 
+                      sx={{
+                    backgroundColor: "#2c2c2c",
+                    color: "#EBD99F",
+                    width: "auto",
+                    margin: 1,
+                    fontSize: 15,
+                    fontWeight: 600,
+                    visibility: hasBeenClicked,
+                    display: hasBeenClicked==="hidden" ? "none" : "show"
+                  }} 
+                  
+                  type="button" onClick={() => this.getSuggestedConnections()}>
+                      View
+                    </Button>
+                    <TableContainer sx={{maxHeight: 400}}>
                       <Table sx={{ width: 450 }}>
                         <TableHead></TableHead>
                         <TableBody>
@@ -874,23 +916,15 @@ class Dashboard extends Component {
                                   <Avatar />
                                 </TableCell>
                                 <TableCell>
-                                  <Button
-                                    onClick={() => {
-                                      this.requestConnection(
-                                        student.email,
-                                        connection
-                                      );
-                                    }}
-                                  >
+                                  
                                     <Typography color="secondary">
                                       {" "}
                                       {connection}{" "}
                                     </Typography>
-                                  </Button>
                                 </TableCell>
                                 <TableCell>
                                   <Button
-                                    onClick={StudentService.requestConnection(
+                                    onClick={() => this.requestConnection(
                                       this.state.id,
                                       connection.id
                                     )}
@@ -903,6 +937,7 @@ class Dashboard extends Component {
                             ))}
                         </TableBody>
                       </Table>
+                      </TableContainer>
                     </Stack>
                   </Paper>
                 </Grid>
@@ -1007,7 +1042,7 @@ class Dashboard extends Component {
                           color="secondary"
                           type="button"
                           variant="contained"
-                          onClick={this.searchConnections}
+                          onClick={() => this.searchConnections()}
                           startIcon={<EditIcon sx={{ color: "#EBD99F" }} />}
                         >
                           Search
@@ -1051,6 +1086,7 @@ class Dashboard extends Component {
                           paddingLeft: 0,
                         }}
                       >
+                        <TableContainer sx={{maxHeight: 400}}>
                         <Table>
                           <TableBody>
                             {searchedConnectionsList &&
@@ -1077,7 +1113,7 @@ class Dashboard extends Component {
                                     </TableCell>
                                     <TableCell>
                                       <Button
-                                        onClick={StudentService.requestConnection(
+                                        onClick={() => this.requestConnection(
                                           this.state.id,
                                           connection.id
                                         )}
@@ -1091,6 +1127,7 @@ class Dashboard extends Component {
                               )}
                           </TableBody>
                         </Table>
+                        </TableContainer>
                       </Grid>
                     </Grid>
                   </Paper>

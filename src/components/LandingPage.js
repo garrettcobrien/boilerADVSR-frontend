@@ -144,9 +144,6 @@ class LandingPage extends Component {
                       <Button color="secondary" variant="contained" onClick={() => {this.toSearchCourses(this.state.student.email);}}>
                         Find a Course
                       </Button>
-                      <Button color="secondary" variant="contained" onClick={() => {this.toSuggest(this.state.student.email);}}>
-                        Suggest a Semester
-                      </Button>
                       <Button color="secondary" variant="contained" onClick={() => this.toPlanofstudy(this.state.student.email)}>
                         Plan of Study
                       </Button>
