@@ -298,7 +298,7 @@ class CourseView extends Component {
                       {course.courseTitle}
                     </Typography>
                     <Grid container sx={{ marginBottom: 0 }} spacing={1}>
-                      <Grid item xs={3} md={3} lg={3}></Grid>
+                      <Grid item xs={4} md={4} lg={4}></Grid>
                       <Grid
                         item
                         xs={2}
@@ -314,21 +314,7 @@ class CourseView extends Component {
                       >
                         <Typography fontSize={12}>Average Rating: {course.averageRating}</Typography>
                       </Grid>
-                      <Grid
-                        item
-                        xs={2}
-                        md={2}
-                        lg={2}
-                        sx={{
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                          textAlign: "center",
-                          verticalAlign: "middle",
-                        }}
-                      >
-                        <Typography fontSize={12}>Average GPA: {course.averageGPA}</Typography>
-                      </Grid>
+                    
 
                       <Grid
                         item
@@ -362,10 +348,10 @@ class CourseView extends Component {
                         <Typography fontSize={12}>Share</Typography>
                       </Grid>
 
-                      <Grid item xs={3} md={3} lg={3}></Grid>
+                      <Grid item xs={4} md={4} lg={4}></Grid>
                     </Grid>
                     <Grid container sx={{ marginBottom: 2 }} spacing={1}>
-                      <Grid item xs={3} md={3} lg={3}></Grid>
+                      <Grid item xs={4} md={4} lg={4}></Grid>
                       <Grid
                         item
                         xs={2}
@@ -391,32 +377,7 @@ class CourseView extends Component {
                           style={{ color: "#EBD99F" }}
                         ></Rating>
                       </Grid>
-                      <Grid
-                        item
-                        xs={2}
-                        md={2}
-                        lg={2}
-                        sx={{
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                          textAlign: "center",
-                          verticalAlign: "middle",
-                        }}
-                      >
-                        <Tooltip title="3.2">
-                          <Rating
-                            readOnly
-                            value={course.averageGPA || 0}
-                            precision={0.1}
-
-                            icon={<CircleIcon />}
-                            emptyIcon={<CircleOutlinedIcon style={{ color: '#EBD99F' }} />}
-                            size="small"
-                            style={{ color: '#EBD99F' }}
-                          ></Rating>
-                        </Tooltip>
-                      </Grid>
+                      
 
                       <Grid
                         item
@@ -478,7 +439,7 @@ class CourseView extends Component {
                         
                       </Grid>
 
-                      <Grid item xs={3} md={3} lg={3}></Grid>
+                      <Grid item xs={4} md={4} lg={4}></Grid>
                     </Grid>
                   </Paper>
                 </Grid>
@@ -596,17 +557,18 @@ class CourseView extends Component {
                       </Grid>
                       <Grid item xs={1} md={1} lg={1}></Grid>
                     </Grid>
-
-                    <Grid container sx={{ marginBottom: 2, marginTop: 2 }}>
-                      <Grid item xs={2} md={2} lg={2}></Grid>
-                      <form onSubmit={() =>
+                    <form onSubmit={() =>
                         this.addReview(course.courseID, this.state.student.email, textReview, rating)
                       }>
+                    <Grid container sx={{ marginBottom: 2, marginTop: 2 }}>
+                      
+                      <Grid item xs={0} md={0} lg={0}></Grid>
+                      
                         <Grid
                           item
-                          xs={8}
-                          md={8}
-                          lg={8}
+                          xs={10}
+                          md={10}
+                          lg={10}
                           sx={{
                             display: "flex",
                             justifyContent: "center",
@@ -626,8 +588,8 @@ class CourseView extends Component {
                           </Button>
                         </Grid>
                         <Grid item xs={2} md={2} lg={2}></Grid>
-                      </form>
-                    </Grid>
+                      
+                    </Grid></form>
                   </Paper>
                 </Grid>
                 <Grid item xs={12} md={5} lg={5}>

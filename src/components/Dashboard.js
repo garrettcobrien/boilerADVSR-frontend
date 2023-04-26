@@ -64,7 +64,7 @@ class Dashboard extends Component {
       id: this.props.match.params.id,
       student: {},
 
-      courses: [{}],
+      courses: [],
       reviews: [],
       connectionsSuggested: [],
       searchedConnectionsList: [],
@@ -173,9 +173,11 @@ class Dashboard extends Component {
   }
 
   remove(id, courseID) {
-    StudentService.removeBacklog(id, courseID).then((res) => {
-      this.setState({ courses: res.data });
-    });
+    StudentService.removeBacklog(id, courseID);
+    StudentService.getStudentById(id).then((res) => {
+      this.setState({courses: res.data.backLog});
+    })
+    //this.forceUpdate();
   }
 
   handleRequest(id, connectionID, status) {
@@ -715,7 +717,7 @@ class Dashboard extends Component {
                                   <TableCell></TableCell>
                                 </TableRow>
                               </TableHead>
-                              <TableBody>{courseList || ""}</TableBody>
+                              <TableBody>{courseList}</TableBody>
                             </Table>
                           </TableContainer>
                         </Grid>
