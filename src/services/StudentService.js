@@ -217,14 +217,20 @@ class StudentService {
     }
 
     getSearchConnections(id, dep) {
-        console.log(dep);
+        console.log("dep :" + dep);
+        if (dep === "suggested") {
+            return axios.get(STUDENT_API_BASE_URL + '/' + id + '/search/suggested');
+        }
         if (dep === "") {
             return axios.get(STUDENT_API_BASE_URL + '/' + id + '/search/all');
         }
+        
         else {
             return axios.get(STUDENT_API_BASE_URL + '/' + id + '/search/all?department=' + dep);
         }
     }
+
+
 }
 
 

@@ -260,7 +260,7 @@ class Register extends Component {
                   autoComplete="aboutMe"
                   color="secondary"
                   focused
-                  sx={{ marginLeft: 5 }}
+                  style={{width: "505px"}}
                   variant="filled"
                   InputProps={{
                     startAdornment: (
@@ -279,10 +279,10 @@ class Register extends Component {
                   id="linkedIn"
                   value={item.linkedIn || ""}
                   onChange={this.handleChange}
+                  style={{width: "505px"}}
                   autoComplete="linkedIn"
                   color="secondary"
                   focused
-                  sx={{ marginLeft: 5 }}
                   variant="filled"
                   InputProps={{
                     startAdornment: (

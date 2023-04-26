@@ -51,6 +51,7 @@ import {
   Link,
   TextField,
   MenuItem,
+  ListItem,
 } from "@mui/material";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { Form, Input } from "reactstrap";
@@ -67,6 +68,7 @@ class Dashboard extends Component {
       searchedConnectionsList: [],
 
       searchDepartment: "",
+      suggested: "suggested",
       degrees: [],
       anchorElNav: null,
       anchorElUser: null,
@@ -90,6 +92,7 @@ class Dashboard extends Component {
     this.remove = this.remove.bind(this);
   }
 
+
   componentDidMount() {
     StudentService.getStudentById(this.state.id).then((res) => {
       this.setState({ student: res.data });
@@ -99,7 +102,7 @@ class Dashboard extends Component {
     StudentService.getPlanofStudy(this.state.id).then((res) => {
       this.setState({ degrees: res.data.degrees });
     });
-    this.forceUpdate();
+    //this.forceUpdate();
   }
 
   //Navigation functions
@@ -649,29 +652,28 @@ class Dashboard extends Component {
                     <Typography variant="h5" fontWeight={700} color="secondary">
                       Suggested Classmates
                     </Typography>
-                    <Button onClick={this.getSuggestedConnections}>
+                    <Button type="button" onClick={this.getSuggestedConnections}>
                       Generate Suggested Connections List
                     </Button>
-                    <ul className="list-group">
+                    <List className="list-group">
                       {connectionsSuggested &&
                         connectionsSuggested.map((connection, index) => (
-                          <li
+                          <ListItem
                             className={"list-group-item "}
-                            onClick={() => {
-                              this.requestConnection(student.email, connection);
-                            }}
                             key={index}
                           >
                             <Typography color="secondary">
                               {" "}
                               {connection}{" "}
                             </Typography>
-                            <Button onClick={StudentService.requestConnection(this.state.id, connection.id)}>
+                            <Button onClick={() => {
+                              this.requestConnection(student.email, connection);
+                            }}>
                               Add
                             </Button>
-                          </li>
+                          </ListItem>
                         ))}
-                    </ul>
+                    </List>
                   </Paper>
                   <Paper
                     sx={{
@@ -720,7 +722,7 @@ class Dashboard extends Component {
                                 {" "}
                                 {connection}{" "}
                               </Typography>
-                              <Button onClick={StudentService.requestConnection(this.state.id, connection.id)}>
+                              <Button onClick={() => this.requestConnection(this.state.id, connection.id)}>
                               Add
                             </Button>
                             </li>

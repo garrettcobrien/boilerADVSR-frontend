@@ -194,7 +194,7 @@ export default class QuestionCard extends Component {
                 >
                   {/* <Avatar
                     variant="circle"
-                    
+                    src={this.props.qPic}
                     alt="profilepic"
                     sx={{
                       display: "flex",
@@ -242,7 +242,6 @@ export default class QuestionCard extends Component {
             <Divider color="#EBD99F" sx={{ marginTop: 2, marginBottom: 0 }} />
             {this.props.responses &&
               this.props.responses.map((response) => (
-                <ListItem>
                 <ListItem sx={{ p: 0 }}>
                   <Grid container sx={{ marginBottom: 1, marginTop: 1 }}>
                     <Grid
@@ -284,35 +283,33 @@ export default class QuestionCard extends Component {
                       </Typography>
                     </Grid>
                   </Grid>
-                </ListItem>
-                <ListItem sx={{ p: 0 }}> 
-                <Grid container sx={{ marginBottom: 0, marginTop: 0 }} spacing={1}>
-                <Grid
-                  item
-                  sx={{
-                    display: "flex",
-                    justifyContent: "left",
-                    alignItems: "center",
-                    textAlign: "left",
-                    verticalAlign: "middle",
-                  }}
-                >
-                  <Typography fontSize={11}>by </Typography>
-                </Grid>
-                <Grid
-                  item
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    textAlign: "center",
-                    verticalAlign: "middle",
-                    marginLeft: 0,
-                  }}
-                >
-                  <Avatar
+                  <Grid container sx={{ marginBottom: 0, marginTop: 0 }} spacing={1}>
+                    <Grid
+                      item
+                      sx={{
+                        display: "flex",
+                        justifyContent: "left",
+                        alignItems: "center",
+                        textAlign: "left",
+                        verticalAlign: "middle",
+                      }}
+                    >
+                      <Typography fontSize={11}>by </Typography>
+                    </Grid>
+                    <Grid
+                      item
+                      sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        textAlign: "center",
+                        verticalAlign: "middle",
+                        marginLeft: 0,
+                      }}
+                    >
+                      {/* <Avatar
                     variant="circle"
-                    src="https://media.istockphoto.com/id/1171169127/photo/headshot-of-cheerful-handsome-man-with-trendy-haircut-and-eyeglasses-isolated-on-gray.jpg?s=612x612&w=0&k=20&c=yqAKmCqnpP_T8M8I5VTKxecri1xutkXH7zfybnwVWPQ="
+                    src={this.props.qPic}
                     alt="profilepic"
                     sx={{
                       display: "flex",
@@ -323,41 +320,40 @@ export default class QuestionCard extends Component {
                       height: 25,
                       width: 25,
                     }}
-                  />
-                </Grid>
+                  /> */}
+                    </Grid>
 
-                <Grid
-                  item
-                  sx={{
-                    display: "flex",
-                    justifyContent: "left",
-                    alignItems: "center",
-                    textAlign: "left",
-                    verticalAlign: "middle",
-                  }}
-                >
-                  <Typography variant="h8" fontSize={11} fontWeight={500}>
-                    {response.userID}
-                  </Typography>
-                </Grid>
-                <Grid
-                  item
-                  sx={{
-                    display: "flex",
-                    justifyContent: "left",
-                    alignItems: "center",
-                    textAlign: "left",
-                    verticalAlign: "middle",
-                  }}
-                >
-                  <Typography variant="h11" color="secondary" fontSize={11}>
-                    {response.degrees}
-                  </Typography>
-                </Grid>
-                <Grid item></Grid>
-              </Grid>
-              </ListItem>
-              </ListItem>
+                    <Grid
+                      item
+                      sx={{
+                        display: "flex",
+                        justifyContent: "left",
+                        alignItems: "center",
+                        textAlign: "left",
+                        verticalAlign: "middle",
+                      }}
+                    >
+                      <Typography variant="h8" fontSize={11} fontWeight={500}>
+                        {response.userID}
+                      </Typography>
+                    </Grid>
+                    <Grid
+                      item
+                      sx={{
+                        display: "flex",
+                        justifyContent: "left",
+                        alignItems: "center",
+                        textAlign: "left",
+                        verticalAlign: "middle",
+                      }}
+                    >
+                      <Typography variant="h11" color="secondary" fontSize={11}>
+                        {response.degrees}
+                      </Typography>
+                    </Grid>
+                    <Grid item></Grid>
+                  </Grid>
+                </ListItem>
               ))
             }
             <ListItem>

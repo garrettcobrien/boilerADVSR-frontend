@@ -2,7 +2,7 @@ import { Component } from "react";
 import StudentService from "../services/StudentService";
 import APIService from "../services/APIService";
 import { Button, Form, FormGroup, Label } from "reactstrap";
-import { MenuItem, Select, Typography } from "@mui/material";
+import { FormControl, InputLabel, MenuItem, Select, Typography } from "@mui/material";
 import { Container, ThemeProvider } from "@mui/system";
 import CssBaseline from "@mui/material/CssBaseline";
 
@@ -87,14 +87,14 @@ class Degrees extends Component {
                 variant="h3"
                 fontWeight={700}
               >
-                Next Step to Completing Your Account
+                Welcome to BoilerADVSR!
               </Typography>
               <Typography
                 color="text"
                 variant="h6"
                 fontWeight={400}
               >
-                Let's add your majors, minors, or concentrations.
+                Next step let's add your majors, minors, or concentrations.
               </Typography>
             </Container>
           <Container sx={{ padding: 0 }}>
@@ -107,9 +107,10 @@ class Degrees extends Component {
                 Search Degrees by Department and Type then Add to List Below
               </Typography>
               <Form >
-                    <FormGroup >
+                    <FormControl fullWidth variant="filled">
                         {/* Adding more degrees */}
-                        <Select id="category" label="Please Select a Type of Department" value={dep} onChange={this.handleChangeDep}>
+                        <InputLabel id="sort-label">Department</InputLabel>
+                        <Select labelId="sort-label" label="Department" value={dep} onChange={this.handleChangeDep}>
                             {departments &&
                                 departments.map((department) => (
                                     <MenuItem color="primary" key={department} value={department}> {department} </MenuItem>
@@ -130,7 +131,7 @@ class Degrees extends Component {
                                 </label>
                             ))
                         }
-                    </FormGroup>
+                    </FormControl>
                 </Form>
                 <br></br>
                 <Form>
