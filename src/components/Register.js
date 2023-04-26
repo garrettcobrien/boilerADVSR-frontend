@@ -1,112 +1,316 @@
-/*
-    Registers a USER account
-    (student or teacher)
-*/
-import React, { Component } from 'react';
-import { Button, Container, Form, FormGroup, Input, Label, FormFeedback } from 'reactstrap';
-import StudentService from '../services/StudentService';
-
+import React, { Component } from "react";
+import { Redirect, withRouter } from "react-router-dom";
+import { Form, FormGroup, Input, Label, FormFeedback } from "reactstrap";
+import { Container, ThemeProvider } from "@mui/system";
+import AppNavbar from "./AppNavbar";
+import StudentService from "../services/StudentService";
+import { Typography, Button, CssBaseline, TextField, InputAdornment, Link } from "@mui/material";
+import theme from "../theme";
+import MailOutlineIcon from "@mui/icons-material/MailOutline";
+import PasswordIcon from '@mui/icons-material/Password';
+import BadgeOutlinedIcon from '@mui/icons-material/BadgeOutlined';
 class Register extends Component {
+  emptyItem = {
+    firstName: "",
+    lastName: "",
+    email: "",
+    confirmEmail: "",
+    password: "",
+    confirmPassword: "",
+    aboutMe:"",
+    linkedIn:"",
+    validate: {
+      emailState: "",
+    },
+  };
 
-    emptyItem = {
-        firstName: '',
-        lastName: '',
-        email: '',
-        password: '',
-        validate: {
-            emailState: '',
-        },
+  constructor(props) {
+    super(props);
+    this.state = {
+      item: this.emptyItem,
     };
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.toLogin = this.toLogin.bind(this);
+  }
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            item: this.emptyItem
-        };
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-    } 
-    
-    //create handle change for each input
-    handleChange(event) {
-        const { target } = event;
-        const value = target.type === 'checkbox' ? target.checked : target.value;
-        const { name } = target;
-        let item = {...this.state.item};
-        item[name] = value;
-        this.setState({item});
+  //create handle change for each input
+  handleChange(event) {
+    const { target } = event;
+    const value = target.type === "checkbox" ? target.checked : target.value;
+    const { name } = target;
+    let item = { ...this.state.item };
+    item[name] = value;
+    this.setState({ item });
+  }
+
+  validateEmail(e) {
+    const emailRex = /[a-z0-9]@purdue\.edu$/;
+
+    const { validate } = this.state.item;
+
+    if (emailRex.test(e.target.value)) {
+      validate.emailState = "has-success";
+    } else {
+      validate.emailState = "has-danger";
     }
 
-    validateEmail(e) {
-        const emailRex = /[a-z0-9]@purdue\.edu$/;
-    
-        const { validate } = this.state.item;
-    
-        if (emailRex.test(e.target.value)) {
-          validate.emailState = 'has-success';
-        } else {
-          validate.emailState = 'has-danger';
+    this.setState({ validate });
+  }
+
+  toLogin() {
+    //implement attemping to get the first to see if it exists before sending them to dashboard
+    this.props.history.push(`/`);
+  }
+
+  handleSubmit(item) {
+    /* Send them too create their profile page */
+    if (item.validate.emailState === "has-success" && item.email === item.confirmEmail && item.password === item.confirmPassword) {
+      const temp = {};
+      StudentService.getStudentById(item.email).then((res) => {
+          temp = res.data;
+      }).catch((reason) => {
+          if (reason.response.status !== 200) {
+          StudentService.createStudent(item).then((res) => {
+            this.setState({ student: res.data });
+            this.props.history.push(`/students/addDegrees/${res.data.email}`);
+          });
         }
-    
-        this.setState({ validate });
+        else {
+          alert("Email already in use");
+        }
+      });
     }
-
-    
-
-    handleSubmit(item) {   
-        /* Send them too create their profile page */
-        StudentService.createStudent(item).then( res => {
-            this.setState({student: res.data});
-        })
-        this.props.history.push(`/`);
+    else {
+      console.log("ERROR");
+      alert("Invaild Credentials");
     }
-    
+  }
 
-    render() {
-        const {item} = this.state;
-        return <div>
-            <Container>
-                <h1>Welcome New Student</h1>
-                <Form>
-                    <FormGroup>
-                        <Label for="firstName">first name</Label>
-                        <Input type="fristName" name="firstName" id="firstName" value={item.firstName || ''}
-                               onChange={this.handleChange} autoComplete="firstname"/>
-                    </FormGroup>
-                    <FormGroup>
-                        <Label for="lastName">last name</Label>
-                        <Input type="lastName" name="lastName" id="lastName" value={item.lastName || ''}
-                               onChange={this.handleChange} autoComplete="lastname"/>
-                    </FormGroup>
-                    <FormGroup>
-                        <Label for="email">email</Label>
-                        <Input type="email" name="email" id="email"  
-                               valid={item.validate.emailState === "has-success"}
-                               invalid={item.validate.emailState === "has-danger"}
-                               value={item.email}
-                               onChange={(e) => {
-                                 this.validateEmail(e);
-                                 this.handleChange(e);
-                               }}/>
-                            <FormFeedback>
-                                Uh oh! That is not a valid Purdue email.
-                            </FormFeedback>
-                            <FormFeedback valid>
-                                That's a nice looking email you've got there.
-                            </FormFeedback>
-                    </FormGroup>
-                    <FormGroup>
-                        <Label for="password">Password</Label>
-                        <Input type="password" name="password" id="password" value={item.password || ''}
-                               onChange={this.handleChange} autoComplete="password"/>
-                    </FormGroup>
-                    <FormGroup>
-                        <Button color="primary" type="submit" onClick={ () => this.handleSubmit(item)} >Create</Button>{' '}
-                    </FormGroup>
-                </Form>
+  render() {
+    const { item } = this.state;
+    return (
+      <div>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <Container
+                          maxwidth="xs"
+                          alignItems="center"
+                          justifyContent="center"
+                          sx={{ padding: 10 }}>
+            <Typography
+                color="secondary"
+                variant="h3"
+                fontWeight={700}
+              >
+                New to BOILERADVSR?
+              </Typography>
+              <Typography
+                color="text"
+                variant="h6"
+                fontWeight={400}
+              >
+                Let's set up your account.
+              </Typography>
             </Container>
-        </div>
-    }
-
+          <Container sx={{ padding: 0 }}>
+          <Typography
+                color="secondary"
+                variant="h3"
+                fontWeight={700}
+                style={{paddingBottom: 35}}
+              >
+                Sign Up
+              </Typography>
+            <Form>
+              <FormGroup>
+                <TextField
+                  label="First Name"
+                  type="firstName"
+                  name="firstName"
+                  id="firstName"
+                  value={item.firstName || ""}
+                  onChange={this.handleChange}
+                  autoComplete="firstname"
+                  color="secondary"
+                  focused
+                  variant="filled"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <BadgeOutlinedIcon fontSize="small" sx={{color: '#ffffff'}} />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+                <TextField
+                  label="Last Name"
+                  type="lastName"
+                  name="lastName"
+                  id="lastName"
+                  value={item.lastName || ""}
+                  onChange={this.handleChange}
+                  autoComplete="lastname"
+                  color="secondary"
+                  focused
+                  sx={{ marginLeft: 5 }}
+                  variant="filled"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <BadgeOutlinedIcon fontSize="small" sx={{color: '#ffffff'}} />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </FormGroup>
+              <FormGroup>
+                <TextField
+                  label="Email"
+                  type="email"
+                  name="email"
+                  id="email"
+                  value={item.email || ''}
+                  onChange={(e) => {
+                    this.validateEmail(e);
+                    this.handleChange(e);
+                  }}
+                  color="secondary"
+                  focused
+                  variant="filled"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <MailOutlineIcon fontSize="small" sx={{color: '#ffffff'}} />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+                <TextField
+                  label="Confirm Email"
+                  type="email"
+                  name="confirmEmail"
+                  id="confirmEmail"
+                  sx={{ marginLeft: 5 }}
+                    value={item.confirmEmail || ''}
+                  onChange={(e) => {
+                    this.handleChange(e);
+                  }}
+                  color="secondary"
+                  focused
+                  variant="filled"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <MailOutlineIcon fontSize="small" sx={{color: '#ffffff'}} />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </FormGroup>
+              <FormGroup>
+                <TextField
+                  label="Password"
+                  type="password"
+                  name="password"
+                  id="password"
+                  value={item.password || ""}
+                  onChange={this.handleChange}
+                  autoComplete="password"
+                  color="secondary"
+                  focused
+                  variant="filled"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <PasswordIcon fontSize="small" sx={{color: '#ffffff'}} />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+                <TextField
+                  label="Confirm Password"
+                  type="password"
+                  name="confirmPassword"
+                  id="confirmPassword"
+                    value={item.confirmPassword || ""}
+                    onChange={this.handleChange}
+                  autoComplete="password"
+                  color="secondary"
+                  focused
+                  sx={{ marginLeft: 5 }}
+                  variant="filled"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <PasswordIcon fontSize="small" sx={{color: '#ffffff'}} />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </FormGroup>
+              <FormGroup>
+                <TextField
+                  label="About Me"
+                  type="aboutMe"
+                  name="aboutMe"
+                  id="aboutMe"
+                  value={item.aboutMe || ""}
+                  onChange={this.handleChange}
+                  autoComplete="aboutMe"
+                  color="secondary"
+                  focused
+                  style={{width: "505px"}}
+                  variant="filled"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <BadgeOutlinedIcon fontSize="small" sx={{color: '#ffffff'}} />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </FormGroup>
+              <FormGroup>
+                <TextField
+                  label="LinkedIn"
+                  type="linkedIn"
+                  name="linkedIn"
+                  id="linkedIn"
+                  value={item.linkedIn || ""}
+                  onChange={this.handleChange}
+                  style={{width: "505px"}}
+                  autoComplete="linkedIn"
+                  color="secondary"
+                  focused
+                  variant="filled"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <BadgeOutlinedIcon fontSize="small" sx={{color: '#ffffff'}} />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </FormGroup>
+              <FormGroup>
+                <Button
+                  style={{ marginTop: 10 }}
+                  variant="contained"
+                  color="secondary"
+                  type="button"
+                  onClick={() => this.handleSubmit(item)}                  
+                >
+                  <Typography color="primary">Submit</Typography>
+                </Button>{" "}
+                
+              </FormGroup>
+              <Typography variant="h6" fontWeight={500}>Already have an account? <Link onClick={() => this.toLogin()} underline="hover" color="secondary">Return to login</Link></Typography>
+            </Form>
+          </Container>
+        </ThemeProvider>
+      </div>
+    );
+  }
 }
-export default Register;
+export default withRouter(Register);

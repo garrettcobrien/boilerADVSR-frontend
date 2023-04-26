@@ -3,6 +3,7 @@ import axios from 'axios'
 const COURSE_API_BASE_URL = "http://localhost:8081/courses";
 
 class CourseService {
+
     //get all courses
     getCourses() {
         return axios.get(COURSE_API_BASE_URL);
@@ -15,7 +16,12 @@ class CourseService {
 
     //search by department
     getDepartment(department) {
-        return axios.get(COURSE_API_BASE_URL + '?department=' + department);
+        if (department === "") {
+            return axios.get(COURSE_API_BASE_URL);
+        }
+        else {
+            return axios.get(COURSE_API_BASE_URL + '?department=' + department);
+        }
     }
 
     //add review
@@ -31,6 +37,34 @@ class CourseService {
                 rating: rating
             }
         });
+    }
+
+    addQuestion(courseID, id, text, discID) {
+        console.log("courseID:" + courseID + " id:" + " text:" + text + " discID:" + discID)
+        if (discID === "") {
+            return axios({
+                method: 'put',
+                url: COURSE_API_BASE_URL + '/' + courseID + '/addquestion',
+                data: {
+                    studentID: id,
+                    question: text,
+                    type: "Question",
+                    discussion: "Question"
+                }
+            });
+        }
+        else {
+            return axios({
+                method: 'put',
+                url: COURSE_API_BASE_URL + '/' + courseID + '/addquestion',
+                data: {
+                    studentID: id,
+                    question: text,
+                    type: "Response",
+                    discussion: discID
+                }
+            });
+        }
     }
 }
 
