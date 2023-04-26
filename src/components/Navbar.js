@@ -29,7 +29,10 @@ import List from "@mui/material/List";
 import Menu from "@mui/material/Menu";
 
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import { Link as RouterLink, LinkProps as RouterLinkProps } from 'react-router-dom';
+import {
+  Link as RouterLink,
+  LinkProps as RouterLinkProps,
+} from "react-router-dom";
 
 import {
   ThemeProvider,
@@ -215,19 +218,44 @@ class Navbar extends Component {
     const notifications = this.state.student.notifications;
 
     return (
-      <AppBar sx={{ padding: 2 }}>
+      <AppBar sx={{ padding: 0 }}>
         <Toolbar
           sx={{
-            pr: "24px", // keep right padding when drawer closed
+            pr: "24px",
           }}
         >
           <Grid container spacing={3}>
             {/* Left Third */}
             <Grid
               item
-              xs={5}
-              md={5}
-              lg={5}
+              xs={2}
+              md={2}
+              lg={2}
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                textAlign: "center",
+                verticalAlign: "middle",
+              }}
+            >
+              <Button
+                component={RouterLink}
+                to={`/students/landingpage/${this.props.id}`}
+              >
+                <img
+                  src="https://i.ibb.co/sJ4dbbn/advsr-text-logo.png"
+                  width={170}
+                  height={29}
+                ></img>
+              </Button>
+            </Grid>
+            {/* Middle Third */}
+            <Grid
+              item
+              xs={4}
+              md={4}
+              lg={4}
               sx={{
                 paddingTop: 1,
                 display: "flex",
@@ -237,7 +265,72 @@ class Navbar extends Component {
                 verticalAlign: "middle",
               }}
             >
-              <ButtonGroup>
+              <Grid container spacing={3}>
+                <Grid
+                  item
+                  xs={3}
+                  md={3}
+                  lg={3}
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    textAlign: "center",
+                    verticalAlign: "middle",
+                  }}
+                >
+                  <Link
+                    component={RouterLink}
+                    to={`/students/courses/${this.props.id}`}
+                    sx={{ color: "#ffffff" }}
+                  >
+                    <Typography fontWeight={300} fontSize={18}>Find</Typography>
+                  </Link>
+                </Grid>
+                <Grid
+                  item
+                  xs={3}
+                  md={3}
+                  lg={3}
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    textAlign: "center",
+                    verticalAlign: "middle",
+                  }}
+                >
+                  <Link
+                    component={RouterLink}
+                    to={`/students/planofstudy/${this.props.id}`}
+                    sx={{ color: "#ffffff" }}
+                  >
+                    <Typography fontWeight={300} fontSize={18}>Plan</Typography>
+                  </Link>
+                </Grid>
+                <Grid
+                  item
+                  xs={3}
+                  md={3}
+                  lg={3}
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    textAlign: "center",
+                    verticalAlign: "middle",
+                  }}
+                >
+                  <Link
+                    component={RouterLink}
+                    to={`/students/suggest/${this.props.id}`}
+                    sx={{ color: "#ffffff" }}
+                  >
+                    <Typography fontWeight={300} fontSize={18}>Suggest</Typography>
+                  </Link>
+                </Grid>
+              </Grid>
+              {/* <ButtonGroup>
                 <Button
                   component={RouterLink}
                   to={`/students/courses/${this.props.id}`}
@@ -289,33 +382,7 @@ class Navbar extends Component {
                 >
                   Plan of Study
                 </Button>
-              </ButtonGroup>
-            </Grid>
-
-            {/* Middle Third */}
-            <Grid
-              item
-              xs={2}
-              md={2}
-              lg={2}
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                textAlign: "center",
-                verticalAlign: "middle",
-              }}
-            >
-              <Button
-                component={RouterLink}
-                to={`/students/landingpage/${this.props.id}`}
-              >
-                <img
-                  src="https://i.ibb.co/sJ4dbbn/advsr-text-logo.png"
-                  width={170}
-                  height={29}
-                ></img>
-              </Button>
+              </ButtonGroup> */}
             </Grid>
 
             <Grid item xs={2} md={2} lg={2}></Grid>
@@ -323,9 +390,9 @@ class Navbar extends Component {
             {/* Right Third */}
             <Grid
               item
-              xs={3}
-              md={3}
-              lg={3}
+              xs={4}
+              md={4}
+              lg={4}
               sx={{
                 display: "flex",
                 justifyContent: "center",
@@ -335,66 +402,7 @@ class Navbar extends Component {
               }}
             >
               <Grid container spacing={0}>
-                <Grid
-                  item
-                  xs={3}
-                  md={3}
-                  lg={3}
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    textAlign: "center",
-                    verticalAlign: "middle",
-                  }}
-                ></Grid>
-                <Grid
-                  item
-                  xs={2}
-                  md={2}
-                  lg={2}
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    textAlign: "center",
-                    verticalAlign: "middle",
-                  }}
-                >
-                  <NotificationsIcon sx={{ color: "#EBD99F" }} />
-                </Grid>
-                <Grid
-                  item
-                  xs={2}
-                  md={2}
-                  lg={2}
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    textAlign: "center",
-                    verticalAlign: "middle",
-                  }}
-                >
-                  <ChatIcon sx={{ color: "#EBD99F" }} />
-                </Grid>
-                <Grid
-                  item
-                  xs={2}
-                  md={2}
-                  lg={2}
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    textAlign: "center",
-                    verticalAlign: "middle",
-                  }}
-                >
-                  <IconButton component={RouterLink} to={`/students/calendar/${this.props.id}`}>
-                    <CalendarMonthIcon sx={{ color: "#EBD99F" }} />
-                  </IconButton>
-                </Grid>
+                <Grid item xs={2} md={2} lg={2}></Grid>
                 <Grid
                   item
                   xs={2}
@@ -412,7 +420,10 @@ class Navbar extends Component {
                     component={RouterLink}
                     to={`/students/dashboard/${this.state.id}`}
                   >
-                    <Badge badgeContent={notifications && notifications.length} color="secondary">
+                    <Badge
+                      badgeContent={notifications && notifications.length}
+                      color="secondary"
+                    >
                       <Avatar
                         variant="circle"
                         src={this.state.student.profilePicture}
@@ -431,6 +442,74 @@ class Navbar extends Component {
                     </Badge>
                   </Button>
                 </Grid>
+                <Grid
+                  item
+                  xs={4}
+                  md={4}
+                  lg={4}
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    textAlign: "center",
+                    verticalAlign: "middle",
+                  }}
+                >
+                  <Typography fontWeight={300} fontSize={18} color="#ffffff">
+                    {this.state.student.firstName} {this.state.student.lastName}
+                  </Typography>
+                </Grid>
+                <Grid
+                  item
+                  xs={1}
+                  md={1}
+                  lg={1}
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    textAlign: "center",
+                    verticalAlign: "middle",
+                  }}
+                >
+                  <NotificationsIcon sx={{ color: "#EBD99F" }} />
+                </Grid>
+                <Grid
+                  item
+                  xs={1}
+                  md={1}
+                  lg={1}
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    textAlign: "center",
+                    verticalAlign: "middle",
+                  }}
+                >
+                  <ChatIcon sx={{ color: "#EBD99F" }} />
+                </Grid>
+                <Grid
+                  item
+                  xs={1}
+                  md={1}
+                  lg={1}
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    textAlign: "center",
+                    verticalAlign: "middle",
+                  }}
+                >
+                  <IconButton
+                    component={RouterLink}
+                    to={`/students/calendar/${this.props.id}`}
+                  >
+                    <CalendarMonthIcon sx={{ color: "#EBD99F" }} />
+                  </IconButton>
+                </Grid>
+                <Grid item xs={2} md={2} lg={2}></Grid>
               </Grid>
             </Grid>
           </Grid>

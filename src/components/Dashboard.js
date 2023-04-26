@@ -26,11 +26,11 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Drawer from "@mui/material/Drawer";
 import Divider from "@mui/material/Divider";
 import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
 import Menu from "@mui/material/Menu";
 
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import Navbar from "./Navbar"
-
+import Navbar from "./Navbar";
 
 import {
   ThemeProvider,
@@ -51,10 +51,11 @@ import {
   Link,
   TextField,
   MenuItem,
-  ListItem,
+  TableContainer,
 } from "@mui/material";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { Form, Input } from "reactstrap";
+import { Logout } from "@mui/icons-material";
 class Dashboard extends Component {
   constructor(props) {
     super(props);
@@ -167,7 +168,7 @@ class Dashboard extends Component {
 
   remove(id, courseID) {
     StudentService.removeBacklog(id, courseID).then((res) => {
-      this.setState({courses: res.data})
+      this.setState({ courses: res.data });
     });
   }
 
@@ -202,7 +203,9 @@ class Dashboard extends Component {
           mydegree.degreeTitle
         ).then((res) => {
           this.setState({ connectionsSuggested: res.data });
-          console.log("Suggested connections " + this.state.connectionsSuggested);
+          console.log(
+            "Suggested connections " + this.state.connectionsSuggested
+          );
         });
       }
     });
@@ -231,6 +234,7 @@ class Dashboard extends Component {
     const notifications = this.state.student.notifications;
     console.log(this.state.searchDepartment);
     console.log(this.state.connectionsSuggested);
+    this.getSuggestedConnections();
 
     //Course backlog
     const courseList = courses?.map((course) => {
@@ -244,7 +248,9 @@ class Dashboard extends Component {
             <b>{course.creditHours || ""}</b>
           </TableCell>
           <TableCell>
-            <Button type="submit"
+            <Button
+              type="submit"
+              sx={{ backgroundColor: "#EBD99F" }}
               onClick={() => {
                 this.toCoursepage(
                   course.courseIdDepartment,
@@ -258,7 +264,12 @@ class Dashboard extends Component {
             </Button>
           </TableCell>
           <TableCell>
-            <IconButton type="submit" onClick={() => this.remove(this.state.student.email, course.courseID)}>
+            <IconButton
+              type="submit"
+              onClick={() =>
+                this.remove(this.state.student.email, course.courseID)
+              }
+            >
               <DeleteIcon sx={{ color: "#ffffff" }} />
             </IconButton>
           </TableCell>
@@ -271,9 +282,7 @@ class Dashboard extends Component {
       return (
         <TableRow>
           <TableCell>
-            <IconButton>
-              <AccountCircleIcon sx={{ color: "#ffffff" }} fontSize="small" />
-            </IconButton>
+            <Avatar src={StudentService.getProfilePic(connection)} />
           </TableCell>
           <TableCell>{connection}</TableCell>
           <TableCell>
@@ -357,9 +366,7 @@ class Dashboard extends Component {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Box sx={{ display: "flex" }}>
-
-
-          <Navbar id={this.state.id}/>
+          <Navbar id={this.state.id} />
 
           <Box
             component="main"
@@ -369,37 +376,56 @@ class Dashboard extends Component {
               overflow: "auto",
             }}
           >
-            <Toolbar />
-            <Container sx={{ mt: 8, mb: 8 }}>
-              <Grid container spacing={3} marginBottom={0}>
-                {/* Chart */}
-
-                {/* Left */}
-                <Grid item xs={12} md={4} lg={4} sx={{ height: "auto" }}>
+            <Container sx={{ marginTop: 0, marginBottom: 0 }}>
+              <Grid
+                container
+                spacing={3}
+                sx={{ marginBottom: 0, marginTop: 4, height: "auto" }}
+              >
+                {/* Title Card */}
+                <Grid
+                  item
+                  xs={6}
+                  md={6}
+                  lg={6}
+                  sx={{
+                    marginTop: 4,
+                    paddingTop: 0,
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    textAlign: "center",
+                    verticalAlign: "middle",
+                    height: "auto",
+                  }}
+                >
                   <Paper
                     sx={{
-                      p: 2,
-                      flexDirection: "column",
+                      paddingTop: 1,
                       display: "flex",
                       justifyContent: "center",
                       alignItems: "center",
                       textAlign: "center",
                       verticalAlign: "middle",
-                      bowShadow: 3,
-                      height: "auto",
+                      height: "80%",
+                      width: "100%",
                     }}
                   >
-                    <Stack
-                      sc={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        textAlign: "center",
-                        verticalAlign: "middle",
-                        height: "auto",
+                    <Grid
+                      container
+                      spacing={0}
+                      sx={{
+                        p: 1,
+                        marginTop: 4,
+                        marginBottom: 6,
+                        marginLeft: 0,
                       }}
                     >
-                      <Typography
+                      <Grid
+                        item
+                        xs={6}
+                        md={6}
+                        lg={6}
                         sx={{
                           display: "flex",
                           justifyContent: "center",
@@ -408,228 +434,312 @@ class Dashboard extends Component {
                           verticalAlign: "middle",
                           marginBottom: 2,
                         }}
-                        variant="h3"
-                        fontWeight={700}
-                        color="secondary"
                       >
-                        {this.state.student.firstName}{" "}
-                        {this.state.student.lastName}
-                      </Typography>
-
-                      <Grid container spacing={3} sx={{ marginBottom: 2 }}>
-                        <Grid item xs={4} md={4} lg={4}></Grid>
-                        <Grid
-                          item
-                          xs={4}
-                          md={4}
-                          lg={4}
-                          sx={{
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            textAlign: "center",
-                            verticalAlign: "middle",
-                          }}
-                        >
-                          <Avatar
-                            variant="rounded"
-                            src={this.state.student.profilePicture}
-                            alt="profilepic"
-                            sx={{
-                              display: "flex",
-                              justifyContent: "center",
-                              alignItems: "center",
-                              textAlign: "center",
-                              verticalAlign: "middle",
-                              height: 150,
-                              width: 150,
-                            }}
-                          />
-                        </Grid>
-                        <Grid item xs={4} md={4} lg={4}></Grid>
+                        <Avatar
+                          src={this.state.student.profilePicture}
+                          alt="profilepic"
+                          sx={{ height: "50%", width: "auto" }}
+                        />
                       </Grid>
 
-                      <Container
+                      <Grid
+                        item
+                        xs={6}
+                        md={6}
+                        lg={6}
                         sx={{
                           display: "flex",
-                          justifyContent: "center",
+                          justifyContent: "left",
                           alignItems: "center",
-                          textAlign: "center",
+                          textAlign: "left",
                           verticalAlign: "middle",
-                          marginBottom: 0,
-                          width: 20,
+                          marginLeft: 0,
                         }}
                       >
                         <Stack>
-                          <Tooltip title="Copy Email">
-                            <Button
-                              startIcon={
-                                <EmailIcon sx={{ color: "#EBD99F" }} />
-                              }
-                              sx={{ color: "#ffffff" }}
-                              onClick={() => {
-                                navigator.clipboard.writeText(
-                                  this.state.student.email
-                                );
+                          <Typography
+                            variant="h3"
+                            fontWeight={700}
+                            color="secondary"
+                          >
+                            {this.state.student.firstName}{" "}
+                            {this.state.student.lastName}
+                          </Typography>
+                          <Typography
+                            variant="h6"
+                            fontWeight={400}
+                            color="text"
+                          >
+                            {this.state.student.email}
+                          </Typography>
+                          <Grid container>
+                            <Grid
+                              item
+                              xs={2}
+                              md={2}
+                              lg={2}
+                              sx={{
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                textAlign: "center",
+                                verticalAlign: "middle",
                               }}
                             >
-                              {this.state.student.email}
-                            </Button>
-                          </Tooltip>
-                          <Tooltip title="View LinkedInProfile">
-                            <Button
-                              startIcon={
-                                <LinkedInIcon sx={{ color: "#EBD99F" }} />
-                              }
-                              sx={{ color: "#ffffff" }}
-                              onClick={() => {
-                                window.location = linkedInUrl;
+                              <Tooltip title="Copy Email">
+                                <Button
+                                  startIcon={
+                                    <EmailIcon sx={{ color: "#EBD99F" }} />
+                                  }
+                                  sx={{ color: "#ffffff" }}
+                                  onClick={() => {
+                                    navigator.clipboard.writeText(
+                                      this.state.student.email
+                                    );
+                                  }}
+                                  size="large"
+                                ></Button>
+                              </Tooltip>
+                            </Grid>
+
+                            <Grid
+                              item
+                              xs={2}
+                              md={2}
+                              lg={2}
+                              sx={{
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                textAlign: "center",
+                                verticalAlign: "middle",
                               }}
                             >
-                              {linkedInUsername}
-                            </Button>
-                          </Tooltip>
-                          <Typography><b>About Me:</b> {student.aboutMe}</Typography>
+                              <Tooltip title="View LinkedInProfile">
+                                <Button
+                                  startIcon={
+                                    <LinkedInIcon sx={{ color: "#EBD99F" }} />
+                                  }
+                                  sx={{ color: "#ffffff" }}
+                                  onClick={() => {
+                                    window.location = linkedInUrl;
+                                  }}
+                                  size="large"
+                                ></Button>
+                              </Tooltip>
+                            </Grid>
+                          </Grid>
+
+                          <Typography
+                            sx={{ marginBottom: 1, marginTop: 0 }}
+                            fontWeight={600}
+                            fontSize={20}
+                            color="secondary"
+                          >
+                            Account Actions
+                          </Typography>
+
+                          <Button
+                            onClick={() => {
+                              this.toEditProfile(this.state.student.email);
+                            }}
+                            size="small"
+                            color="secondary"
+                            variant="contained"
+                            sx={{
+                              backgroundColor: "#ffffff",
+                              padding: 1,
+                              width: "50%",
+                              marginTop: 1,
+                            }}
+                            startIcon={<EditIcon sx={{ color: "#EBD99F" }} />}
+                          >
+                            Edit
+                          </Button>
+
+                          <Button
+                            onClick={() => {
+                              this.delete(this.state.student.email);
+                            }}
+                            size="small"
+                            color="secondary"
+                            variant="contained"
+                            sx={{
+                              backgroundColor: "#ffffff",
+                              padding: 1,
+                              width: "50%",
+                              marginTop: 1,
+                            }}
+                            startIcon={<DeleteIcon sx={{ color: "#EBD99F" }} />}
+                          >
+                            Delete
+                          </Button>
+
+                          <Button
+                            onClick={() => {}}
+                            size="small"
+                            color="secondary"
+                            variant="contained"
+                            sx={{
+                              backgroundColor: "#ffffff",
+                              padding: 1,
+                              width: "50%",
+                              marginTop: 1,
+                            }}
+                            startIcon={<Logout sx={{ color: "#EBD99F" }} />}
+                          >
+                            Log Out
+                          </Button>
                         </Stack>
-                      </Container>
-
-                      <Typography
-                        variant="h7"
-                        color="secondary"
-                        fontWeight={700}
-                        sx={{ marginTop: 0 }}
-                      >
-                        Account Actions
-                      </Typography>
-
-                      <Grid
-                        sx={{
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                          textAlign: "center",
-                          verticalAlign: "middle",
-                          marginBottom: 1,
-                        }}
-                      >
-                        <Button
-                          onClick={() => {
-                            this.toEditProfile(this.state.student.email);
-                          }}
-                          size="small"
-                          color="secondary"
-                          variant="contained"
-                          sx={{
-                            backgroundColor: "#ffffff",
-                            width: 100,
-                            margin: 1,
-                            padding: 1,
-                          }}
-                          startIcon={<EditIcon sx={{ color: "#EBD99F" }} />}
-                        >
-                          Edit
-                        </Button>
-                        <Button
-                          onClick={() => {
-                            this.delete(this.state.student.email);
-                          }}
-                          size="small"
-                          color="secondary"
-                          variant="contained"
-                          sx={{
-                            backgroundColor: "#ffffff",
-                            width: 100,
-                            margin: 1,
-                            padding: 1,
-                          }}
-                          startIcon={<DeleteIcon sx={{ color: "#EBD99F" }} />}
-                        >
-                          Delete
-                        </Button>
                       </Grid>
-                    </Stack>
+                    </Grid>
                   </Paper>
                 </Grid>
 
-                {/* Middle */}
+                {/* Course Backlog */}
                 <Grid
                   item
-                  xs={12}
+                  xs={6}
+                  md={6}
+                  lg={6}
+                  sx={{
+                    marginTop: 4,
+                    paddingTop: 0,
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    textAlign: "center",
+                    verticalAlign: "middle",
+                    height: "auto",
+                  }}
+                  height={"auto"}
+                >
+                  <Paper
+                    sx={{
+                      paddingTop: 4,
+                      paddingBottom: 4,
+                      flexDirection: "column",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      textAlign: "center",
+                      verticalAlign: "middle",
+                      height: "auto",
+                    }}
+                    height={"auto"}
+                  >
+                    <Container>
+                      <Grid
+                        container
+                        spacing={0}
+                        padding={0}
+                        sx={{ height: "auto" }}
+                      >
+                        <Grid
+                          item
+                          xs={12}
+                          md={12}
+                          lg={12}
+                          sx={{
+                            justifyContent: "center",
+                            textAlign: "center",
+                            height: "auto",
+                            paddingTop: 0,
+                            paddingLeft: 0,
+                            marginLeft: 0,
+                          }}
+                          paddingLeft={0}
+                          paddingTop={0}
+                        >
+                          <Typography
+                            variant="h3"
+                            fontWeight={700}
+                            color="secondary"
+                          >
+                            Course Backlog
+                          </Typography>
+                        </Grid>
+                      </Grid>
+                      <Grid container spacing={1}>
+                        <Grid
+                          item
+                          xs={12}
+                          md={12}
+                          lg={12}
+                          sx={{
+                            justifyContent: "center",
+                            textAlign: "center",
+                            height: "auto",
+                          }}
+                        >
+                          <TableContainer
+                            sx={{
+                              width: "auto",
+                              maxHeight: 400,
+                              marginTop: 2,
+                            }}
+                          >
+                            <Table stickyHeader>
+                              <TableHead>
+                                <TableRow>
+                                  <TableCell>
+                                    <b>Course</b>
+                                  </TableCell>
+                                  <TableCell>
+                                    <b>Title</b>
+                                  </TableCell>
+                                  <TableCell>
+                                    <b>Credits</b>
+                                  </TableCell>
+                                  <TableCell></TableCell>
+                                  <TableCell></TableCell>
+                                </TableRow>
+                              </TableHead>
+                              <TableBody>{courseList || ""}</TableBody>
+                            </Table>
+                          </TableContainer>
+                        </Grid>
+                      </Grid>
+                    </Container>
+                  </Paper>
+                </Grid>
+
+                {/* Notifcations */}
+                <Grid
+                  item
+                  xs={4}
                   md={4}
                   lg={4}
                   sx={{
-                    height: 540,
+                    marginTop: 0,
+                    paddingTop: 0,
+                    display: "flex",
+                    justifyContent: "center",
+                    textAlign: "center",
                   }}
                 >
                   <Paper
                     sx={{
+                      paddingTop: 1,
+                      display: "flex",
+                      justifyContent: "center",
+                      textAlign: "center",
+                      marginBottom: 3,
+                      marginTop: 2,
+                      height: 280,
+                      width: "100%",
                       p: 2,
-                      height: "auto",
-                      display: "flex",
-                      flexDirection: "column",
-                      boxShadow: 3,
-                      marginBottom: 3,
                     }}
                   >
                     <Stack>
                       <Typography
-                        variant="h5"
-                        fontWeight={700}
-                        color="secondary"
-                      >
-                        Classmates
-                      </Typography>
-                      <Table>
-                        <TableHead></TableHead>
-                        <TableBody>{connectionList}</TableBody>
-                      </Table>
-                    </Stack>
-                  </Paper>
-
-                  <Paper
-                    sx={{
-                      p: 1,
-                      height: "auto",
-                      display: "flex",
-                      flexDirection: "column",
-                      boxShadow: 3,
-                      marginBottom: 3,
-                    }}
-                  >
-                    <Stack>
-                      <Typography
-                        variant="h5"
-                        fontWeight={700}
-                        color="secondary"
-                      >
-                        Incoming Connection Requests
-                      </Typography>
-                      <Table>
-                        <TableHead></TableHead>
-                        <TableBody>{requestList}</TableBody>
-                      </Table>
-                    </Stack>
-                  </Paper>
-
-                  <Paper
-                    sx={{
-                      p: 2,
-                      height: "auto",
-                      display: "flex",
-                      flexDirection: "column",
-                      boxShadow: 3,
-                      marginBottom: 3,
-                    }}
-                  >
-                    <Stack>
-                      <Typography
-                        variant="h5"
+                        variant="h3"
                         fontWeight={700}
                         color="secondary"
                       >
                         Notifications
                       </Typography>
-                      <Table>
+                      <Table sx={{ width: 300 }}>
                         <TableHead></TableHead>
                         <TableBody>{notificationsList}</TableBody>
                       </Table>
@@ -637,133 +747,352 @@ class Dashboard extends Component {
                   </Paper>
                 </Grid>
 
-                {/* Right */}
-                <Grid item xs={12} md={4} lg={4} sx={{ height: 450 }}>
+                {/* Classmates */}
+                <Grid
+                  item
+                  xs={4}
+                  md={4}
+                  lg={4}
+                  sx={{
+                    paddingTop: 1,
+                    display: "flex",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }}
+                >
                   <Paper
                     sx={{
-                      padding: 2,
-                      height: "auto",
+                      paddingTop: 1,
                       display: "flex",
-                      flexDirection: "column",
-                      boxShadow: 3,
+                      justifyContent: "center",
+                      textAlign: "center",
                       marginBottom: 3,
+                      marginTop: 2,
+                      height: 280,
+                      width: "100%",
+                      p: 2,
                     }}
                   >
-                    <Typography variant="h5" fontWeight={700} color="secondary">
-                      Suggested Classmates
-                    </Typography>
-                    <Button type="button" onClick={this.getSuggestedConnections}>
-                      Generate Suggested Connections List
-                    </Button>
-                    <List className="list-group">
-                      {connectionsSuggested &&
-                        connectionsSuggested.map((connection, index) => (
-                          <ListItem
-                            className={"list-group-item "}
-                            key={index}
-                          >
-                            <Typography color="secondary">
-                              {" "}
-                              {connection}{" "}
-                            </Typography>
-                            <Button onClick={() => {
-                              this.requestConnection(student.email, connection);
-                            }}>
-                              Add
-                            </Button>
-                          </ListItem>
-                        ))}
-                    </List>
-                  </Paper>
-                  <Paper
-                    sx={{
-                      padding: 2,
-                      height: "auto",
-                      display: "flex",
-                      flexDirection: "column",
-                      boxShadow: 3,
-                    }}
-                  >
-                    <Typography variant="h5" fontWeight={700} color="secondary">
-                      Find Classmates by Department
-                    </Typography>
-                    <TextField
-                      type="text"
-                      variant="outlined"
-                      placeholder="Search by department"
-                      value={searchDepartment}
-                      onChange={this.onChangeSearchDepartment}
-                    />
-                      <Button
-                        sx={{ margin: 2 }}
-                        type="button"
-                        variant="contained"
-                        onClick={this.searchConnections}
+                    <Stack>
+                      <Typography
+                        variant="h3"
+                        fontWeight={700}
+                        color="secondary"
                       >
-                        Search
-                      </Button>
-                      <Typography color="secondary" varient="h5">
-                        Searched Friends List
+                        Classmates
                       </Typography>
-                      <ul className="list-group">
-                        {searchedConnectionsList &&
-                          searchedConnectionsList.map((connection, index) => (
-                            <li
-                              className={"list-group-item"}
-                              onClick={() => {
-                                this.requestConnection(
-                                  student.email,
-                                  connection
-                                );
-                              }}
-                              key={index}
-                            >
-                              <Typography color="secondary">
-                                {" "}
-                                {connection}{" "}
-                              </Typography>
-                              <Button onClick={() => this.requestConnection(this.state.id, connection.id)}>
-                              Add
-                            </Button>
-                            </li>
-                          ))}
-                      </ul>
+                      <Table sx={{ width: 300 }}>
+                        <TableHead></TableHead>
+                        <TableBody>{connectionList}</TableBody>
+                      </Table>
+                    </Stack>
                   </Paper>
                 </Grid>
-              </Grid>
 
-              {/* Backlog */}
-              <Grid container spacing={3} marginTop={0}>
-                <Grid item xs={12} md={12} lg={12}>
+                {/* Requests */}
+                <Grid
+                  item
+                  xs={4}
+                  md={4}
+                  lg={4}
+                  sx={{
+                    paddingTop: 1,
+                    display: "flex",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }}
+                >
                   <Paper
                     sx={{
-                      p: 2,
+                      paddingTop: 1,
                       display: "flex",
-                      flexDirection: "column",
-                      boxShadow: 3,
+                      justifyContent: "center",
+                      textAlign: "center",
+                      marginBottom: 3,
+                      marginTop: 2,
+                      height: 280,
+                      width: "100%",
+                      p: 2,
                     }}
                   >
-                    <Typography variant="h3" fontWeight={700} color="secondary">
-                      Course Backlog
-                    </Typography>
-                    <Table>
-                      <TableHead>
-                        <TableRow>
-                          <TableCell>
-                            <b>Course</b>
-                          </TableCell>
-                          <TableCell>
-                            <b>Title</b>
-                          </TableCell>
-                          <TableCell>
-                            <b>Credits</b>
-                          </TableCell>
-                          <TableCell></TableCell>
-                          <TableCell></TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>{courseList || ""}</TableBody>
-                    </Table>
+                    <Stack>
+                      <Typography
+                        variant="h3"
+                        fontWeight={700}
+                        color="secondary"
+                      >
+                        Requests
+                      </Typography>
+                      <Table>
+                        <TableHead></TableHead>
+                        <TableBody>{requestList}</TableBody>
+                      </Table>
+                    </Stack>
+                  </Paper>
+                </Grid>
+
+                {/* Suggested */}
+                <Grid
+                  item
+                  xs={6}
+                  md={6}
+                  lg={6}
+                  sx={{
+                    paddingTop: 1,
+                    display: "flex",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }}
+                >
+                  <Paper
+                    sx={{
+                      paddingTop: 1,
+                      display: "flex",
+                      justifyContent: "center",
+                      textAlign: "center",
+                      marginBottom: 3,
+                      height: "100%",
+                      width: "100%",
+                      p: 2,
+                    }}
+                  >
+                    <Stack sx={{ justifyContent: "center" }}>
+                      <Typography
+                        variant="h3"
+                        fontWeight={700}
+                        color="secondary"
+                      >
+                        Suggested Classmates
+                      </Typography>
+                      <Table sx={{ width: 450 }}>
+                        <TableHead></TableHead>
+                        <TableBody>
+                          {connectionsSuggested &&
+                            connectionsSuggested.map((connection, index) => (
+                              <TableRow>
+                                <TableCell>
+                                  <Avatar />
+                                </TableCell>
+                                <TableCell>
+                                  <Button
+                                    onClick={() => {
+                                      this.requestConnection(
+                                        student.email,
+                                        connection
+                                      );
+                                    }}
+                                  >
+                                    <Typography color="secondary">
+                                      {" "}
+                                      {connection}{" "}
+                                    </Typography>
+                                  </Button>
+                                </TableCell>
+                                <TableCell>
+                                  <Button
+                                    onClick={StudentService.requestConnection(
+                                      this.state.id,
+                                      connection.id
+                                    )}
+                                    color="secondary"
+                                  >
+                                    Add
+                                  </Button>
+                                </TableCell>
+                              </TableRow>
+                            ))}
+                        </TableBody>
+                      </Table>
+                    </Stack>
+                  </Paper>
+                </Grid>
+
+                {/* By department */}
+                <Grid
+                  item
+                  xs={6}
+                  md={6}
+                  lg={6}
+                  sx={{
+                    paddingTop: 1,
+                    display: "flex",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }}
+                >
+                  <Paper
+                    sx={{
+                      paddingTop: 1,
+                      display: "flex",
+                      justifyContent: "center",
+                      textAlign: "center",
+                      marginBottom: 3,
+                      marginTop: 0,
+                      minHeight: 280,
+                      height: "auto",
+                      width: "100%",
+                      p: 2,
+                    }}
+                  >
+                    <Grid container spacing={0} sx={{ p: 1 }}>
+                      <Grid
+                        item
+                        xs={12}
+                        md={12}
+                        lg={12}
+                        sx={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          textAlign: "center",
+                          verticalAlign: "middle",
+                          paddingLeft: 0,
+                          marginBottom: 2,
+                        }}
+                      >
+                        <Typography
+                          variant="h3"
+                          fontWeight={700}
+                          color="secondary"
+                        >
+                          Find Classmates
+                        </Typography>
+                      </Grid>
+                      <Grid
+                        item
+                        xs={12}
+                        md={12}
+                        lg={12}
+                        sx={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          textAlign: "center",
+                          verticalAlign: "middle",
+                          paddingLeft: 0,
+                          marginBottom: 2,
+                        }}
+                      >
+                        <TextField
+                          type="text"
+                          variant="outlined"
+                          placeholder="Department Name"
+                          value={searchDepartment}
+                          onChange={this.onChangeSearchDepartment}
+                          sx={{ marginTop: 0 }}
+                        />
+                      </Grid>
+                      <Grid
+                        item
+                        xs={12}
+                        md={12}
+                        lg={12}
+                        sx={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          textAlign: "center",
+                          verticalAlign: "middle",
+                          paddingLeft: 0,
+                          marginBottom: 2,
+                        }}
+                      >
+                        <Button
+                          sx={{
+                            backgroundColor: "#ffffff",
+                            width: 300,
+                            margin: 1,
+                            padding: 1,
+                          }}
+                          color="secondary"
+                          type="button"
+                          variant="contained"
+                          onClick={this.searchConnections}
+                          startIcon={<EditIcon sx={{ color: "#EBD99F" }} />}
+                        >
+                          Search
+                        </Button>
+                      </Grid>
+                      <Grid
+                        item
+                        xs={12}
+                        md={12}
+                        lg={12}
+                        sx={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          textAlign: "center",
+                          verticalAlign: "middle",
+                          paddingLeft: 0,
+                          marginBottom: 2,
+                        }}
+                      >
+                        <Typography
+                          variant="h7"
+                          color="secondary"
+                          fontWeight={700}
+                          sx={{ marginTop: 0 }}
+                        >
+                          Results
+                        </Typography>
+                      </Grid>
+                      <Grid
+                        item
+                        xs={12}
+                        md={12}
+                        lg={12}
+                        sx={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          textAlign: "center",
+                          verticalAlign: "middle",
+                          paddingLeft: 0,
+                        }}
+                      >
+                        <Table>
+                          <TableBody>
+                            {searchedConnectionsList &&
+                              searchedConnectionsList.map(
+                                (connection, index) => (
+                                  <TableRow>
+                                    <TableCell>
+                                      <Avatar />
+                                    </TableCell>
+                                    <TableCell>
+                                      <Button
+                                        onClick={() => {
+                                          this.requestConnection(
+                                            student.email,
+                                            connection
+                                          );
+                                        }}
+                                      >
+                                        <Typography color="secondary">
+                                          {" "}
+                                          {connection}{" "}
+                                        </Typography>
+                                      </Button>
+                                    </TableCell>
+                                    <TableCell>
+                                      <Button
+                                        onClick={StudentService.requestConnection(
+                                          this.state.id,
+                                          connection.id
+                                        )}
+                                        color="secondary"
+                                      >
+                                        Add
+                                      </Button>
+                                    </TableCell>
+                                  </TableRow>
+                                )
+                              )}
+                          </TableBody>
+                        </Table>
+                      </Grid>
+                    </Grid>
                   </Paper>
                 </Grid>
               </Grid>
