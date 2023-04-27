@@ -213,7 +213,8 @@ class Dashboard extends Component {
       if (mydegree.degreeType == "MAJOR") {
         StudentService.getSearchConnections(
           this.state.id,
-          mydegree.degreeTitle
+          //Changed from mydegree.degreeTitle to mydegree.department to fix
+          mydegree.department
         ).then((res) => {
           this.setState({ connectionsSuggested: res.data });
           console.log(
