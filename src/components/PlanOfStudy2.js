@@ -216,7 +216,7 @@ class PlanOfSudy extends Component {
                         color="secondary"
                         fontWeight={700}
                       >
-                        Cumulative GPA:
+                        Cumulative GPA:&nbsp;
                       </Typography>{" "}
                       <Typography variant="h6" color="#ffffff" fontWeight={500}>
                         {Math.round(planOfStudy.gpa * 100) / 100}
@@ -284,7 +284,7 @@ class PlanOfSudy extends Component {
                               {semester.season} {semester.year}
                             </Typography>
                             <Typography fontSize={18}>
-                              Semester GPA:{" "}
+                              Semester GPA: &nbsp;
                               {Math.round(semester.gpa * 100) / 100}
                             </Typography>
                             <List
