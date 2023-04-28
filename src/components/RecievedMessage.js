@@ -53,6 +53,7 @@ import {
   ButtonGroup,
   Card,
   ButtonBase,
+  Link,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import NotificationsIcon from "@mui/icons-material/Notifications";
@@ -68,25 +69,20 @@ import {
 import ChatService from "../services/ChatService";
 
 export default class ReceivedMessage extends Component {
+  
   render() {
-    return (
-      <div>
-        <Paper
-          sx={{
-            p: 2,
-            flexDirection: "column",
-            height: "auto",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            textAlign: "center",
-            verticalAlign: "middle",
-            width: "auto",
-            marginBottom: 1,
-            backgroundColor: "#EBD99F",
-          }}
-          elevation={5}
-        >
+    var message = "";
+    message = this.props.message;
+
+    let course = message.includes("LINK");
+
+    if (course) {
+      let parts = message.split("LINK: ");
+      console.log(parts[0]);
+      console.log(parts[1]);
+
+      return (
+        <div>
           <Grid container>
             <Grid
               item
@@ -99,13 +95,70 @@ export default class ReceivedMessage extends Component {
                 alignItems: "left",
                 textAlign: "left",
                 verticalAlign: "middle",
+                height: "auto",
+                width: "auto",
               }}
             >
-               <Typography color="primary" fontSize={14} fontWeight={550}>{this.props.message}</Typography>
+              <Paper sx={{backgroundColor: "#EBD99F", p: 1}}>
+                <Typography
+                  sx={{ width: "100%" }}
+                  color="primary"
+                  fontSize={14}
+                  fontWeight={550}
+                >
+                  {parts[0]}
+                </Typography>
+                {console.log(parts[1])}
+                <Link href={`http://${parts[1]}`}>View</Link>
+              </Paper>
             </Grid>
           </Grid>
-        </Paper>
-      </div>
-    );
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <Paper
+            sx={{
+              p: 2,
+              flexDirection: "column",
+              height: "auto",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              textAlign: "center",
+              verticalAlign: "middle",
+              width: "auto",
+              marginBottom: 1,
+              backgroundColor: "#EBD99F",
+            }}
+            elevation={5}
+          >
+            <Grid container>
+              <Grid
+                item
+                xs={12}
+                md={12}
+                lg={12}
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "left",
+                  textAlign: "left",
+                  verticalAlign: "middle",
+                }}
+              >
+                <Typography color="primary" fontSize={14} fontWeight={550}>
+                  {course}
+                </Typography>
+                <Typography color="primary" fontSize={14} fontWeight={550}>
+                  {this.props.message}
+                </Typography>
+              </Grid>
+            </Grid>
+          </Paper>
+        </div>
+      );
+    }
   }
 }
