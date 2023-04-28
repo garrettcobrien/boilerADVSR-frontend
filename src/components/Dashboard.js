@@ -89,6 +89,7 @@ class Dashboard extends Component {
     this.toEditProfile = this.toEditProfile.bind(this);
     this.toCoursepage = this.toCoursepage.bind(this);
     this.toCalendar = this.toCalendar.bind(this);
+    this.logout = this.logout.bind(this);
     this.requestConnection = this.requestConnection.bind(this);
     this.searchConnections = this.searchConnections.bind(this);
     this.onChangeSearchDepartment = this.onChangeSearchDepartment.bind(this);
@@ -133,6 +134,9 @@ class Dashboard extends Component {
   }
   toCalendar(id) {
     this.props.history.push(`/students/calendar/${id}`);
+  }
+  logout() {
+    this.props.history.push(`/`);
   }
   //end nav functions
 
@@ -209,7 +213,8 @@ class Dashboard extends Component {
       if (mydegree.degreeType == "MAJOR") {
         StudentService.getSearchConnections(
           this.state.id,
-          mydegree.degreeTitle
+          //Changed from mydegree.degreeTitle to mydegree.department to fix
+          mydegree.department
         ).then((res) => {
           this.setState({ connectionsSuggested: res.data });
           console.log(
@@ -598,7 +603,7 @@ class Dashboard extends Component {
                           </Button>
 
                           <Button
-                            onClick={() => {}}
+                            onClick={() => this.logout()}
                             size="small"
                             color="secondary"
                             variant="contained"
