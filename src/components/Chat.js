@@ -185,6 +185,7 @@ class Chat extends Component {
                 verticalAlign: "middle",
                 height: 45,
                 width: 45,
+                marginRight: 2
               }}
             />
             <Grid
