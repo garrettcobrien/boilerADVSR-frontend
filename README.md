@@ -1,70 +1,26 @@
-# Getting Started with Create React App
+# CS 30700 Project Charter
+## Team 15: Frederick Clarke, Brandon Hart, Garrett O’Brien, Abdul Saleh
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Problem Statement
+Selecting courses is often a daunting and stressful task for Purdue students. Between the wide selection, varying online reviews and confusing degree requirements, this process is one that has a clear need to be simplified so that students can spend more time focusing on their current courses and other interests rather than worrying about their future registration. The goal of our project is to simplify this process for students by suggesting classes based on criteria set by a student (including the degree requirement, number of credit hours, and time) and sorted based on reviews of the course/instructor by other Purdue students. This project will be unique in that it is an all-in-one service to find the best courses for a student rather than having to search around through university documentation and often-unreliable online forum reviews to gague opinions on a course or instructor.
 
-## Available Scripts
+## Project Objectives
+- Verify users are students at Purdue University
+- Retrieve scheduling information from official Purdue sources
+- Accept input criteria from users to filter and suggest courses that best fit their requirements
+- Rank courses suggested to a student based on reviews from other students
+- Allow students to review courses they have taken and professors by whom they have been instructed, as well as submit grading information
+- Suggest Ratemyprofessor pages and Reddit threads relevant to specific courses for users to further research a course
 
-In the project directory, you can run:
+## Stakeholders
+- Users: Purdue University students looking for courses to fit their requirements, academic advisors helping students find courses and looking to optimize registration process
+- Developers: Frederick Clarke, Brandon Hart, Garrett O’Brien, Abdul Saleh
+- Project Manager: Pranjal Punekar
+- Project Owners: Frederick Clarke, Brandon Hart, Garrett O’Brien, Abdul Saleh
 
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Project Deliverables
+- User-friendly and visually appealing React frontend
+- Spring/Node.js backend to perform API and database calls
+- Secure login/registration system with email verification to ensure users attend Purduea
+- Connection to Purdue University APIs to access up-to-date scheduling information
+- Well-designed MongoDB database to store user login information, course/instructor reviews, and build a user profile over time to more accurately suggest classes with reduced user input.
