@@ -125,7 +125,7 @@ class Dashboard extends Component {
     this.props.history.push(`/students/editprofile/${id}`);
   }
   toChat(id, connectionID) {
-    ChatService.removeNotif(this.state.id, this.state.connectionID);
+    ChatService.removeNotif(this.state.id, connectionID);
     this.props.history.push(`/students/chat/${id}/${connectionID}`);
   }
   toSearchCourses(id) {
@@ -1108,19 +1108,10 @@ class Dashboard extends Component {
                                         <Avatar />
                                       </TableCell>
                                       <TableCell>
-                                        <Button
-                                          onClick={() => {
-                                            this.requestConnection(
-                                              student.email,
-                                              connection
-                                            );
-                                          }}
-                                        >
                                           <Typography color="secondary">
                                             {" "}
                                             {connection}{" "}
                                           </Typography>
-                                        </Button>
                                       </TableCell>
                                       <TableCell>
                                         <Button
