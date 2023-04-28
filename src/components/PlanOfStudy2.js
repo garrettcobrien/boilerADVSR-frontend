@@ -284,7 +284,7 @@ class PlanOfSudy extends Component {
                               {semester.season} {semester.year}
                             </Typography>
                             <Typography fontSize={18}>
-                              Semester GPA:{" "}
+                              Semester GPA: &nbsp;
                               {Math.round(semester.gpa * 100) / 100}
                             </Typography>
                             <List
