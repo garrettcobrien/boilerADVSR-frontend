@@ -98,7 +98,6 @@ class Dashboard extends Component {
     this.remove = this.remove.bind(this);
   }
 
-
   componentDidMount() {
     StudentService.getStudentById(this.state.id).then((res) => {
       this.setState({ student: res.data });
@@ -108,7 +107,7 @@ class Dashboard extends Component {
     StudentService.getPlanofStudy(this.state.id).then((res) => {
       this.setState({ degrees: res.data.degrees });
     });
-    this.setState({hasBeenClicked: "visible"});    
+    this.setState({ hasBeenClicked: "visible" });
     //this.forceUpdate();
   }
 
@@ -179,8 +178,8 @@ class Dashboard extends Component {
   remove(id, courseID) {
     StudentService.removeBacklog(id, courseID);
     StudentService.getStudentById(id).then((res) => {
-      this.setState({courses: res.data.backLog});
-    })
+      this.setState({ courses: res.data.backLog });
+    });
     //this.forceUpdate();
   }
 
@@ -207,7 +206,7 @@ class Dashboard extends Component {
   }
 
   getSuggestedConnections() {
-    this.setState({hasBeenClicked: "hidden"});
+    this.setState({ hasBeenClicked: "hidden" });
     this.state.degrees?.forEach((mydegree) => {
       console.log(mydegree);
       if (mydegree.degreeType == "MAJOR") {
@@ -245,13 +244,12 @@ class Dashboard extends Component {
       searchDepartment,
       degrees,
       connectionPfps,
-      hasBeenClicked
-
+      hasBeenClicked,
     } = this.state;
     const notifications = this.state.student.notifications;
     console.log(this.state.searchDepartment);
     console.log(this.state.connectionsSuggested);
-    
+
     // Attempt at profile picture
     // let list = [];
     // if (student && student.connectionsIds && connectionPfps.length > student.connectionsIds) {
@@ -261,7 +259,6 @@ class Dashboard extends Component {
     //     })
     //   });
     // }
-    
 
     //Course backlog
     const courseList = courses?.map((course) => {
@@ -462,11 +459,11 @@ class Dashboard extends Component {
                           marginBottom: 2,
                         }}
                       >
-                        <Avatar
-                          src={this.state.student.profilePicture}
-                          alt="profilepic"
-                          sx={{height: 215, width: 215}}
-                        />
+                          <Avatar
+                            src={this.state.student.profilePicture}
+                            alt="profilepic"
+                            sx={{ height: 215, width: 215, marginBottom: 2 }}
+                          />
                       </Grid>
 
                       <Grid
@@ -492,13 +489,14 @@ class Dashboard extends Component {
                             {this.state.student.firstName}{" "}
                             {this.state.student.lastName}
                           </Typography>
-                          <Typography
+                          <Typography>{this.state.student.aboutMe}</Typography>
+                          {/* <Typography
                             variant="h6"
                             fontWeight={400}
                             color="text"
                           >
                             {this.state.student.email}
-                          </Typography>
+                          </Typography> */}
                           <Grid container>
                             <Grid
                               item
@@ -766,11 +764,11 @@ class Dashboard extends Component {
                       >
                         Notifications
                       </Typography>
-                      <TableContainer sx={{maxHeight: 400}}>
-                      <Table sx={{ width: 300 }}>
-                        <TableHead></TableHead>
-                        <TableBody>{notificationsList}</TableBody>
-                      </Table>
+                      <TableContainer sx={{ maxHeight: 400 }}>
+                        <Table sx={{ width: 300 }}>
+                          <TableHead></TableHead>
+                          <TableBody>{notificationsList}</TableBody>
+                        </Table>
                       </TableContainer>
                     </Stack>
                   </Paper>
@@ -810,11 +808,11 @@ class Dashboard extends Component {
                       >
                         Classmates
                       </Typography>
-                      <TableContainer sx={{maxHeight: 400}}>
-                      <Table sx={{ width: 300 }}>
-                        <TableHead></TableHead>
-                        <TableBody>{connectionList}</TableBody>
-                      </Table>
+                      <TableContainer sx={{ maxHeight: 400 }}>
+                        <Table sx={{ width: 300 }}>
+                          <TableHead></TableHead>
+                          <TableBody>{connectionList}</TableBody>
+                        </Table>
                       </TableContainer>
                     </Stack>
                   </Paper>
@@ -854,11 +852,11 @@ class Dashboard extends Component {
                       >
                         Requests
                       </Typography>
-                      <TableContainer sx={{ maxHeight: 400}}>
-                      <Table>
-                        <TableHead></TableHead>
-                        <TableBody>{requestList}</TableBody>
-                      </Table>
+                      <TableContainer sx={{ maxHeight: 400 }}>
+                        <Table>
+                          <TableHead></TableHead>
+                          <TableBody>{requestList}</TableBody>
+                        </Table>
                       </TableContainer>
                     </Stack>
                   </Paper>
@@ -897,53 +895,59 @@ class Dashboard extends Component {
                       >
                         Suggested Classmates
                       </Typography>
-                      <Button color="secondary" variant="contained" size="small" 
-                      sx={{
-                    backgroundColor: "#2c2c2c",
-                    color: "#EBD99F",
-                    width: "auto",
-                    margin: 1,
-                    fontSize: 15,
-                    fontWeight: 600,
-                    visibility: hasBeenClicked,
-                    display: hasBeenClicked==="hidden" ? "none" : "show"
-                  }} 
-                  
-                  type="button" onClick={() => this.getSuggestedConnections()}>
-                      View
-                    </Button>
-                    <TableContainer sx={{maxHeight: 400}}>
-                      <Table sx={{ width: 450 }}>
-                        <TableHead></TableHead>
-                        <TableBody>
-                          {connectionsSuggested &&
-                            connectionsSuggested.map((connection, index) => (
-                              <TableRow>
-                                <TableCell>
-                                  <Avatar />
-                                </TableCell>
-                                <TableCell>
-                                  
+                      <Button
+                        color="secondary"
+                        variant="contained"
+                        size="small"
+                        sx={{
+                          backgroundColor: "#2c2c2c",
+                          color: "#EBD99F",
+                          width: "auto",
+                          margin: 1,
+                          fontSize: 15,
+                          fontWeight: 600,
+                          visibility: hasBeenClicked,
+                          display:
+                            hasBeenClicked === "hidden" ? "none" : "show",
+                        }}
+                        type="button"
+                        onClick={() => this.getSuggestedConnections()}
+                      >
+                        View
+                      </Button>
+                      <TableContainer sx={{ maxHeight: 400 }}>
+                        <Table sx={{ width: 450 }}>
+                          <TableHead></TableHead>
+                          <TableBody>
+                            {connectionsSuggested &&
+                              connectionsSuggested.map((connection, index) => (
+                                <TableRow>
+                                  <TableCell>
+                                    <Avatar />
+                                  </TableCell>
+                                  <TableCell>
                                     <Typography color="secondary">
                                       {" "}
                                       {connection}{" "}
                                     </Typography>
-                                </TableCell>
-                                <TableCell>
-                                  <Button
-                                    onClick={() => this.requestConnection(
-                                      this.state.id,
-                                      connection
-                                    )}
-                                    color="secondary"
-                                  >
-                                    Add
-                                  </Button>
-                                </TableCell>
-                              </TableRow>
-                            ))}
-                        </TableBody>
-                      </Table>
+                                  </TableCell>
+                                  <TableCell>
+                                    <Button
+                                      onClick={() =>
+                                        this.requestConnection(
+                                          this.state.id,
+                                          connection
+                                        )
+                                      }
+                                      color="secondary"
+                                    >
+                                      Add
+                                    </Button>
+                                  </TableCell>
+                                </TableRow>
+                              ))}
+                          </TableBody>
+                        </Table>
                       </TableContainer>
                     </Stack>
                   </Paper>
@@ -1093,47 +1097,49 @@ class Dashboard extends Component {
                           paddingLeft: 0,
                         }}
                       >
-                        <TableContainer sx={{maxHeight: 400}}>
-                        <Table>
-                          <TableBody>
-                            {searchedConnectionsList &&
-                              searchedConnectionsList.map(
-                                (connection, index) => (
-                                  <TableRow>
-                                    <TableCell>
-                                      <Avatar />
-                                    </TableCell>
-                                    <TableCell>
-                                      <Button
-                                        onClick={() => {
-                                          this.requestConnection(
-                                            student.email,
-                                            connection
-                                          );
-                                        }}
-                                      >
-                                        <Typography color="secondary">
-                                          {" "}
-                                          {connection}{" "}
-                                        </Typography>
-                                      </Button>
-                                    </TableCell>
-                                    <TableCell>
-                                      <Button
-                                        onClick={() => this.requestConnection(
-                                          this.state.id,
-                                          connection
-                                        )}
-                                        color="secondary"
-                                      >
-                                        Add
-                                      </Button>
-                                    </TableCell>
-                                  </TableRow>
-                                )
-                              )}
-                          </TableBody>
-                        </Table>
+                        <TableContainer sx={{ maxHeight: 400 }}>
+                          <Table>
+                            <TableBody>
+                              {searchedConnectionsList &&
+                                searchedConnectionsList.map(
+                                  (connection, index) => (
+                                    <TableRow>
+                                      <TableCell>
+                                        <Avatar />
+                                      </TableCell>
+                                      <TableCell>
+                                        <Button
+                                          onClick={() => {
+                                            this.requestConnection(
+                                              student.email,
+                                              connection
+                                            );
+                                          }}
+                                        >
+                                          <Typography color="secondary">
+                                            {" "}
+                                            {connection}{" "}
+                                          </Typography>
+                                        </Button>
+                                      </TableCell>
+                                      <TableCell>
+                                        <Button
+                                          onClick={() =>
+                                            this.requestConnection(
+                                              this.state.id,
+                                              connection
+                                            )
+                                          }
+                                          color="secondary"
+                                        >
+                                          Add
+                                        </Button>
+                                      </TableCell>
+                                    </TableRow>
+                                  )
+                                )}
+                            </TableBody>
+                          </Table>
                         </TableContainer>
                       </Grid>
                     </Grid>
